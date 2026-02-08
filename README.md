@@ -13,7 +13,7 @@ The topic of our research project is identifying/predicting which communities ar
 
 ## Milestones
 
-1. Project Framing & Website Launch (6 Feb 2026)
+1. Project Framing & Website Launch (9 Feb 2026)
 2. Data Preparation/Collection & Cleaning (6 Mar 2026)
 3. Model Implementation (3 Apr 2026)
 4. Conclusion, Results, & Project Report (17 Apr 2026)
