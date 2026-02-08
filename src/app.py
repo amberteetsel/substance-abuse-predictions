@@ -75,7 +75,7 @@ with tab3:
     with c2:
         st.image("https://via.placeholder.com/150", width=150)
         st.bold("Isra Marcu")
-        st.write("Role: TBD)
+        st.write("Role: TBD")
         st.caption("[GitHub](https://github.com)")
 
     with c3:
@@ -83,3 +83,4 @@ with tab3:
         st.bold("Amber Teetsel")
         st.write("Role: TBD")
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
+
