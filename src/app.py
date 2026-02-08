@@ -79,9 +79,10 @@ with tab3:
         st.caption("[GitHub](https://github.com)")
 
     with c3:
-        st.image("https://via.placeholder.com/150", width=150)
+        st.image("bio/Teetsel_Headshot.jpeg", width=150)
         st.write("**Amber Teetsel**")
-        st.write("Role: TBD")
+        st.write("Role: Web Developer & Data Scientist")
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
+
 
 
