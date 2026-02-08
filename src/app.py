@@ -68,19 +68,20 @@ with tab3:
     
     with c1:
         st.image("https://via.placeholder.com/150", width=150)
-        st.bold("Andrea Cacares")
+        st.write("**Andrea Cacares**")
         st.write("Role: TBD")
         st.caption("[LinkedIn](https://linkedin.com)")
 
     with c2:
         st.image("https://via.placeholder.com/150", width=150)
-        st.bold("Isra Marcu")
+        st.write("**Isra Marcu**")
         st.write("Role: TBD")
         st.caption("[GitHub](https://github.com)")
 
     with c3:
         st.image("https://via.placeholder.com/150", width=150)
-        st.bold("Amber Teetsel")
+        st.write("**Amber Teetsel**")
         st.write("Role: TBD")
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
+
 
