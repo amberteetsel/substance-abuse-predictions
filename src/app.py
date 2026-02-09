@@ -1,17 +1,17 @@
 import streamlit as st
 import pandas as pd
 
-# Set page configuration
+# Page layout
 st.set_page_config(page_title="Substance Abuse/Overdose Analysis", layout="wide")
 
-# Title of the main application
-st.title("🔍 Data Mining Project: Substance Abuse & Overdose Death")
+# title
+st.title("Substance Abuse & Overdose Death")
 st.markdown("---")
 
-# Create the three tabs as requested
+# 3 tabs
 tab1, tab2, tab3 = st.tabs(["Introduction", "Research Questions", "Team Bios"])
 
-# --- TAB 1: INTRODUCTION ---
+# TAB 1: INTRODUCTION
 with tab1:
     st.header("Project Introduction")
     col1, col2 = st.columns([2, 1])
@@ -19,14 +19,14 @@ with tab1:
     with col1:
         st.subheader("Problem Statement")
         st.write("""
-        Phe topic of our research project is predicting which communities are at a higher risk of drug abuse and or drug overdose.
-        By using socioeconomic, demographic, drug type, and past drug overdose data, we can help identify communities to have a higher correlation with substance abuse.
+        The topic of our research project is predicting which communities are at a higher risk of drug abuse and or drug overdose.
+        By using socioeconomic, demographic, drug type, and past drug overdose data, we can help identify communities with high risk with substance abuse and/or overdose.
         Once these communities are identified, we will analyze the underlying factors that contribute to this elevated risk.
         Some of these factors could be housing insecurity, food insecurity, age, genetics, location, exposure to prescriptions drugs, or access to treatment. 
         """)
         
-        st.subheader("The Dataset")
-        st.info("💡 **Source:** [Link to Kaggle/UCI/Source]")
+        st.subheader("Potential Datasets")
+        st.info("💡 [Accidental Drug Related Deaths 2012-2024](https://catalog.data.gov/dataset/accidental-drug-related-deaths-2012-2018)")
         st.write("Our dataset contains X observations and Y features, focusing on...")
 
     with col2:
@@ -34,12 +34,12 @@ with tab1:
         st.image("https://via.placeholder.com/400x300.png?text=Project+Visual", 
                  caption="Project Overview Visual")
 
-# --- TAB 2: RESEARCH QUESTIONS ---
+# TAB 2: RESEARCH QUESTIONS
 with tab2:
     st.header("Research Questions")
     st.write("We are applying data mining techniques to answer the following:")
     
-    # Using a container for better organization
+    # container to hold questions
     with st.container():
         st.markdown("""
         1. What are the most common circumstances of death among substance users?
@@ -59,7 +59,7 @@ with tab2:
     st.subheader("Proposed Methodology")
     st.write("Methodology to follow")
 
-# --- TAB 3: TEAM BIOS ---
+# TAB 3: TEAM BIOS
 with tab3:
     st.header("The Team")
     
@@ -83,6 +83,7 @@ with tab3:
         st.write("**Amber Teetsel**")
         st.write("Role: Web Developer & Data Scientist")
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
+        st.caption("[GitHub](https://github.com/amberteetsel)")
 
 
 
