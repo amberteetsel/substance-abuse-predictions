@@ -67,10 +67,11 @@ with tab3:
     c1, c2, c3 = st.columns(3)
     
     with c1:
-        st.image("https://via.placeholder.com/150", width=150)
-        st.write("**Andrea Cacares**")
-        st.write("Role: TBD")
-        st.caption("[LinkedIn](https://linkedin.com)")
+        st.image("bio/AndreaCaceres_Headshot.jpg", width=150)
+        st.write("**Andrea Caceres**")
+        st.write("Role: Modeling and Visualization Lead")
+        st.caption("[LinkedIn](linkedin.com/in/andrea-caceres-609609256")
+        st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pensions analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
 
     with c2:
         st.image("bio/IsraMarcu_Headshot.JPG", width=150)
