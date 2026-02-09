@@ -70,8 +70,9 @@ with tab3:
         st.image("bio/AndreaCaceres_Headshot.jpg", width=150)
         st.write("**Andrea Caceres**")
         st.write("Role: Modeling and Visualization Lead")
-        st.caption("[LinkedIn](linkedin.com/in/andrea-caceres-609609256")
         st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pensions analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
+        st.caption("[GitHub](https://github.com/andreaycaceres)")
+        st.caption("[LinkedIn](https://linkedin.com/in/andrea-caceres-609609256")
 
     with c2:
         st.image("bio/IsraMarcu_Headshot.JPG", width=150)
@@ -87,6 +88,7 @@ with tab3:
         st.write("Role: Web Developer & Data Scientist")
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
         st.caption("[GitHub](https://github.com/amberteetsel)")
+
 
 
 
