@@ -73,10 +73,12 @@ with tab3:
         st.caption("[LinkedIn](https://linkedin.com)")
 
     with c2:
-        st.image("https://via.placeholder.com/150", width=150)
+        st.image("bio/IsraMarcu_Headshot.JPG", width=150)
         st.write("**Isra Marcu**")
-        st.write("Role: TBD")
-        st.caption("[GitHub](https://github.com)")
+        st.write("Role: Data & Analyzation Lead ")
+        st.write("Bio: Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Master’s in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
+        st.caption("[GitHub](https://github.com/isram1223)")
+        st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
     with c3:
         st.image("bio/Teetsel_Headshot.jpeg", width=150)
