@@ -3,6 +3,28 @@
 ## Project Overview
 The topic of our research project is identifying/predicting which communities are at risk of drug abuse and or drug overdose. Once these communities are identified, we will identify which factors cause these communities to have a higher risk of substance abuse. This research topic is important because substance abuse is prevalent in the United States. Drug overdose is the leading cause of death for Americans under 50 years old (Substance Abuse and Mental Health Services Administration, 2025). In 2024, only 1 in 5 people who suffer from drug abuse received treatment (SAMHSA, 2025). If we could help predict which communities are at risk and why, it could help distinguish where substance abuse treatment resources need to go and identify which factors that lead to substance abuse. This research benefits treatment providers, schools and community organizations, and public health agencies.
 
+## Setup
+
+1. **Clone Repository**
+    ``` bash
+    git clone [https://github.com/amberteetsel/substance-abuse-predictions.git](https://github.com/amberteetsel/substance-abuse-predictions.git)
+    cd substance_abuse_predictions
+    ```
+
+2. **Install Dependencies**
+    ```bash
+    pip3 install -r requirements.txt
+    ```
+
+
+3. **Run to View Website**
+This launches a browser-based app to display the project
+
+    ```bash
+    streamlit run src/app.py
+    ```
+
+
 ## Team
 
 **Andrea Cacares:** Modeling & Visualization Lead
