@@ -1,0 +1,16 @@
+[theme]
+# cu gold color
+primaryColor = "#CFB87C"
+
+# background color (white)
+backgroundColor = "#FFFFFF"
+
+# alternate gray color
+secondaryBackgroundColor = "#F2F2F2"
+
+# main text black
+textColor = "#000000"
+
+font = "sans serif"
+# force to default to light mode
+base = "light"
