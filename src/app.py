@@ -97,7 +97,7 @@ with tab4:
     c1, c2, c3 = st.columns(3)
     
     with c1:
-        st.image("bio/AndreaCaceres_Headshot.jpg", width=150)
+        st.image("resources/bio/AndreaCaceres_Headshot.jpg", width=150)
         st.write("**Andrea Caceres**")
         st.write("Role: Modeling & Visualization Lead")
         st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pension analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
@@ -105,7 +105,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/andrea-caceres-609609256/)")
 
     with c2:
-        st.image("bio/IsraMarcu_Headshot.JPG", width=150)
+        st.image("resources/bio/IsraMarcu_Headshot.JPG", width=150)
         st.write("**Isra Marcu**")
         st.write("Role: Data & Analyzation Lead ")
         st.write("Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Masters in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
@@ -113,7 +113,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
     with c3:
-        st.image("bio/Teetsel_Headshot.jpeg", width=150)
+        st.image("resources/bio/Teetsel_Headshot.jpeg", width=150)
         st.write("**Amber Teetsel**")
         st.write("Role: Web Developer & Data Scientist")
         st.write("Bio: Amber Teetsel is currently pursuiing a Master's in Data Science at the University of Colorado Boulder. She has Bachelor's degrees from Vanderbilt University in Mathematics, Finance, and Women's Studies. Amber began her career in financial services consulting, but her past 4 years of experience have been as data analyst for a multinational corporation.")
