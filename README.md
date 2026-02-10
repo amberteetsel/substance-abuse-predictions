@@ -7,7 +7,7 @@ The topic of our research project is identifying/predicting which communities ar
 
 1. **Clone Repository**
     ``` bash
-    git clone [https://github.com/amberteetsel/substance-abuse-predictions.git](https://github.com/amberteetsel/substance-abuse-predictions.git)
+    git clone https://github.com/amberteetsel/substance-abuse-predictions.git
     cd substance_abuse_predictions
     ```
 
