@@ -80,13 +80,13 @@ with tab3:
         st.write("Role: Modeling and Visualization Lead")
         st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pensions analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
         st.caption("[GitHub](https://github.com/andreaycaceres)")
-        st.caption("[LinkedIn](https://linkedin.com/in/andrea-caceres-609609256")
+        st.caption("[LinkedIn](https://www.linkedin.com/in/andrea-caceres-609609256/)")
 
     with c2:
         st.image("bio/IsraMarcu_Headshot.JPG", width=150)
         st.write("**Isra Marcu**")
         st.write("Role: Data & Analyzation Lead ")
-        st.write("Bio: Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Master’s in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
+        st.write("Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Master’s in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
         st.caption("[GitHub](https://github.com/isram1223)")
         st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
