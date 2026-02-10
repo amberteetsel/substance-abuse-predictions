@@ -8,8 +8,8 @@ st.set_page_config(page_title="Substance Abuse/Overdose Analysis", layout="wide"
 st.title("Substance Abuse & Overdose Death")
 st.markdown("---")
 
-# 3 tabs
-tab1, tab2, tab3, tab4 = st.tabs(["Introduction", "Research Questions", "Data", "Team Bios"])
+# Initialize tabs
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Introduction", "Research Questions", "Data", "Team Bios", "References"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -22,6 +22,10 @@ The topic of our research project is predicting which communities are at a highe
 This research topic is important because substance abuse is prevalent in the United States. Drug overdose is the leading cause of death for Americans under 50 years old (Substance Abuse and Mental Health Services Administration, 2025). In 2024, only 1 in 5 people who suffer from drug abuse received treatment (SAMHSA, 2025).
 If we could help predict which communities are at risk and why, it could help distinguish where substance abuse treatment resources need to go and identify which factors that lead to substance abuse. This research benefits treatment providers, schools and community organizations, and public health agencies.
     """)
+
+    # Drug Death Visual
+    st.image("resources/DrugDeathGraphic.png", width=1000)
+    st.caption("U.S. Drug Deaths by Substance [CDC](https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm)")
     
     # Stakeholders
     st.subheader("Who is Affected?")
@@ -121,6 +125,28 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/amber-teetsel/)")
 
 
+# TAB 5: CITATIONS/RESOURCES
+with tab5:
 
+    st.header("Works Cited")
+
+    sources = {
+        "Resource": ["Family, Individual, and Other Risk Factors Contributing to Risk of Substance Abuse in Young Adults: A Narrative Review",
+                     "Drug Overdose Deaths in the United States, 2002–2022",
+                     "SAMHSA Releases Annual National Survey on Drug Use and Health",
+                     "SAMHSA Overdose Prevention and Response Toolkit",
+                     "The Future of the United States Overdose Crisis: Challenges and Opportunities",
+                     "Provisional Drug Overdose Death Counts for Specific Drugs"
+        ],
+        "Link": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC9731175/",
+                 "https://stacks.cdc.gov/view/cdc/135849",
+                 "https://www.samhsa.gov/newsroom/press-announcements/20250728/samhsa-releases-annual-national-survey-on-drug-use-and-health",
+                 "https://library.samhsa.gov/sites/default/files/overdose-prevention-response-kit-pep23-03-00-001.pdf",
+                 "https://onlinelibrary.wiley.com/doi/10.1111/1468-0009.12602",
+                 "https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm"
+        ]
+    }
+
+    st.table(sources)
 
 
