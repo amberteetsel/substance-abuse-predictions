@@ -9,7 +9,7 @@ The topic of our research project is identifying/predicting which communities ar
 
 ## Team
 
-**Andrea Cacares:** Modeling & Visualization Lead
+**Andrea Caceres:** Modeling & Visualization Lead
 
 **Isra Marcu:** Data & Analyzation Lead
 
