@@ -5,11 +5,11 @@ The topic of our research project is identifying/predicting which communities ar
 
 ## Team
 
-### Andrea Cacares
+**Andrea Cacares:** Modeling & Visualization Lead
 
-### Isra Marcu
+**Isra Marcu:** Data & Analyzation Lead
 
-### Amber Teetsel
+**Amber Teetsel:** Web Developer & Data Scientist
 
 ## Milestones
 
