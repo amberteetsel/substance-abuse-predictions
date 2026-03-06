@@ -157,17 +157,33 @@ with tab5:
 
 
 # TAB 6: DATA EXPLORATION
+
+## Datasets to display
 nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
 nchs_clean = pd.read_csv('data/NCHS_Mortality_Cumulative.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
 
+    # FUNCTION FOR DATA EXPLORATION LAYOUT
     def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
+        """
+        Inputs will be displayed cleanly on the website
+        title - title of dataset
+        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
+        source_info - where dataset came from
+        collection_method - how you accessed the data (e.g. download, API, etc.)
+        description - briefly describe dataset contents and why it's relevant to the project
+        cleaning_steps - dictionary, {<step name> : <step description>}
+        visuals - list of dictionaries, [{'title': <name of visual>,
+                                        'desc': <description, insights, comments, etc.>,
+                                        'path': <path to image>}]
+        limitations - text describing any potential biases or limitations of data
+        """
         with st.expander(f"📊 Dataset: {title}", expanded=False):
             st.subheader(title)
             
-            # 1. Metadata Section
+            # Overview
             col_meta1, col_meta2 = st.columns(2)
             with col_meta1:
                 st.write(f"**Source:** {source_info}")
@@ -177,7 +193,7 @@ with tab6:
             
             st.markdown("---")
 
-            # 2. Side-by-Side Data Preview (The "Code Method")
+            # Raw vs. Clean comparison
             st.subheader("Data Transformation Preview")
             col_pre1, col_pre2 = st.columns(2)
             
@@ -197,7 +213,7 @@ with tab6:
 
             st.markdown("---")
 
-            # 3. Summary Statistics Section
+            # Summary Statistics
             st.subheader("Statistical Profile")
             st.write("Comparison of descriptive statistics before and after processing.")
             
@@ -220,7 +236,7 @@ with tab6:
 
             st.markdown("---")
             
-            # 4. Cleaning & Processing Steps
+            # Cleaning & Processing Steps
             st.subheader("Cleaning & Processing Logic")
             for step_title, step_desc in cleaning_steps.items():
                 st.markdown(f"**{step_title}**")
@@ -228,7 +244,7 @@ with tab6:
 
             st.markdown("---")
 
-            # 5. Visualizations
+            # Visuals
             st.subheader("Visual Analysis")
             if visuals:
                 for viz in visuals:
@@ -240,7 +256,7 @@ with tab6:
                 st.info("Visualizations for this dataset are currently in progress.")
 
 
-            # 6. Bias/Limitations
+            # Bias/Limitations
             st.subheader("Limitations")
             if limitations:
                 with st.container(border=True):
@@ -280,3 +296,9 @@ with tab6:
         ],
         limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
     )
+
+    # --- SECTION: DATASET2 ---
+    
+    # --- SECTION: DATASET3 ---
+    
+    # --- SECTION: DATASET4 ---
