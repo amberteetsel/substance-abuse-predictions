@@ -9,7 +9,7 @@ st.title("Substance Abuse & Overdose Death")
 st.markdown("---")
 
 # Initialize tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Introduction", "Research Questions", "Data", "Team Bios", "References"])
+tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -156,3 +156,119 @@ with tab5:
     st.table(sources)
 
 
+# TAB 6: DATA EXPLORATION
+nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
+nchs_clean = pd.read_csv('data/NCHS_Mortality_Cumulative.csv')
+
+with tab6:
+    st.header("Data Exploration & Preprocessing")
+
+    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals):
+        with st.expander(f"📊 Dataset: {title}", expanded=False):
+            st.subheader(title)
+            
+            # 1. Metadata Section
+            col_meta1, col_meta2 = st.columns(2)
+            with col_meta1:
+                st.write(f"**Source:** {source_info}")
+                st.write(f"**Collection Method:** {collection_method}")
+            with col_meta2:
+                st.markdown(f"**Description:** {description}")
+            
+            st.markdown("---")
+
+            # 2. Side-by-Side Data Preview (The "Code Method")
+            st.subheader("Data Transformation Preview")
+            col_pre1, col_pre2 = st.columns(2)
+            
+            with col_pre1:
+                st.write("🔍 **Raw Snapshot**")
+                st.dataframe(df_raw.head(5), use_container_width=True)
+                st.caption("Initial data types and values.")
+                with st.expander("View Raw Schema"):
+                    st.code(df_raw.dtypes)
+
+            with col_pre2:
+                st.write("✨ **Processed Snapshot**")
+                st.dataframe(df_clean.head(5), use_container_width=True)
+                st.caption("Post-cleaning, encoding, and scaling.")
+                with st.expander("View Processed Schema"):
+                    st.code(df_clean.dtypes)
+
+            st.markdown("---")
+
+            # 3. Summary Statistics Section
+            st.subheader("Statistical Profile")
+            st.write("Comparison of descriptive statistics before and after processing.")
+            
+            col_stat1, col_stat2 = st.columns(2)
+            with col_stat1:
+                st.write("**Raw Summary**")
+                raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                if not raw_stats.empty:
+                    st.table(raw_stats)
+                else:
+                    st.warning("No numeric data found in Raw dataset.")
+            
+            with col_stat2:
+                st.write("**Processed Summary**")
+                clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                if not clean_stats.empty:
+                    st.table(clean_stats)
+                else:
+                    st.warning("No numeric data found in Processed dataset.")
+
+            st.markdown("---")
+            
+            # 4. Cleaning & Processing Steps
+            st.subheader("Cleaning & Processing Logic")
+            for step_title, step_desc in cleaning_steps.items():
+                st.markdown(f"**{step_title}**")
+                st.info(step_desc)
+
+            st.markdown("---")
+
+            # 5. Visualizations
+            st.subheader("Visual Analysis")
+            if visuals:
+                for viz in visuals:
+                    with st.container(border=True):
+                        st.write(f"#### {viz['title']}")
+                        st.write(viz['desc'])
+                        st.image(viz['path'], use_container_width=True)
+            else:
+                st.info("Visualizations for this dataset are currently in progress.")
+
+    # --- SECTION: NCHS Drug Poisoning ---
+    data_source_section(
+        title="NCHS - Drug Poisoning Mortality by State",
+        df_raw=nchs_raw,
+        df_clean=nchs_clean,
+        source_info="CDC / National Center for Health Statistics",
+        collection_method="API (Socrata SODA)",
+        description="This dataset describes 1999-2016 drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates. It illuminates demographic and temporal trends in U.S. drug mortality rates.",
+        cleaning_steps={
+            "Handling Missing Data": "Age-adjusted rate is NA for rows that specify an age group (vs. All Ages). To remedy, we combined crude rate and adjusted rate columns with the understanding that data will need to be filtered by age group for subsequent analysis.",
+            "Data Types": "The API returns all data as objects so we converted columns such as death rate, year, population, etc. to numeric. Relevant categorical columns include State, Race, Age Group, and Sex.",
+            "Dimensionality Reduction": "Keep only year, categorical feature columns, and death rate calculations. Made age group less granular to simplify visualizations.",
+            "Handling Overlapping Totals": "Filter out 'United States' aggregate rows to isolate state-level data and prevent double-counting in statistical models.",
+            "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers (hotspots) across different decades. Added log transformation for death rate."
+        },
+        visuals = [
+            {'title': "Fig. 1",
+            'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp ~5 point jump between 2014 and 2016.",
+            'path': "resources/data_exploration_plots/mortality_1999_2016.jpeg"},
+            {'title': 'Fig. 2',
+            'desc':"The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
+            'path':"resources/data_exploration_plots/mortality_race_1999_2016.jpeg"},
+            {'title':'Fig. 3',
+            'desc': "Men have consistently suffered higher drug death rates than women. The death rate for men spiked from 2014-2016 along with the national rate, while the rate for women increased more gradually.",
+            'path':"resources/data_exploration_plots/mortality_sex_1999_2016.jpeg"},
+            {'title':'Fig. 4',
+            'desc': "Drug mortality rates are highest among 25-44 year olds, followed by 45-64 year olds.",
+            'path': "resources/data_exploration_plots/mortality_age_boxplot.jpeg"},
+            {'title':'Fig. 5',
+            'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases.",
+            'path': "resources/data_exploration_plots/state_outliers_2016.jpeg"}
+        ]
+    )
