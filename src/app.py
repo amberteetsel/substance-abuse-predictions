@@ -160,7 +160,7 @@ with tab5:
 
 ## Datasets to display
 nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
-nchs_clean = pd.read_csv('data/NCHS_Mortality_Cumulative.csv')
+nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
