@@ -163,7 +163,7 @@ nchs_clean = pd.read_csv('data/NCHS_Mortality_Cumulative.csv')
 with tab6:
     st.header("Data Exploration & Preprocessing")
 
-    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals):
+    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
         with st.expander(f"📊 Dataset: {title}", expanded=False):
             st.subheader(title)
             
@@ -239,6 +239,13 @@ with tab6:
             else:
                 st.info("Visualizations for this dataset are currently in progress.")
 
+
+            # 6. Bias/Limitations
+            st.subheader("Limitations")
+            if limitations:
+                with st.container(border=True):
+                    st.write(limitations)
+
     # --- SECTION: NCHS Drug Poisoning ---
     data_source_section(
         title="NCHS - Drug Poisoning Mortality by State",
@@ -270,5 +277,6 @@ with tab6:
             {'title':'Fig. 5',
             'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases.",
             'path': "resources/data_exploration_plots/state_outliers_2016.jpeg"}
-        ]
+        ],
+        limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
     )
