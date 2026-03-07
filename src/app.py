@@ -366,7 +366,12 @@ with tab6:
                 'path': "resources/data_exploration_plots_NCHS/state_outliers_2016.jpeg"
             }
         ],
-        limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
+        limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors.",
+        advanced = {
+            "image": "resources/data_exploration_plots_NCHS/QQ_death_rate.jpeg",
+            'Interpretation':"Death rate is fairly normal, barring outliers at the extremes."
+
+        }
     )
 
     # --- SECTION: TEDS-A ---
