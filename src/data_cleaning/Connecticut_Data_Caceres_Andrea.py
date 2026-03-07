@@ -208,6 +208,7 @@ plt.title("Log Transformed Drug Count Distribution")
 plt.xlabel("Log(Drug Count + 1)")
 plt.ylabel("Frequency")
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/Log_Transformed_Data_Count_Distribution.png")
 
 #Summary Statistics
 print(df.describe())
@@ -219,6 +220,7 @@ plt.figure(figsize=(7,6))
 stats.probplot(df["Age"], dist="norm", plot=plt)
 plt.title("Q-Q Plot of Age Distribution")
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/QQ_Plot.png")
 
 
 #Total Deaths Involving Each Drug
@@ -239,6 +241,7 @@ plt.xticks(rotation=45, ha="right")
 plt.yticks(rotation=0)
 plt.tight_layout()
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/heatmap.png")
 
 
 #How common is it for multiple drugs to be present in overdose cases?
@@ -253,6 +256,7 @@ plt.title("Number of Drugs Present in Each Case")
 plt.xlabel("Number of Drugs")
 plt.ylabel("Number of Cases")
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/Drug_Count_Distribution.png")
 
 #Total Deaths Involving Each Drug
 drug_sums = df[drugs].sum().sort_values(ascending=False)
@@ -263,6 +267,7 @@ plt.ylabel('Number of Deaths')
 plt.xlabel('Drug')
 plt.xticks(rotation=45)
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/Total_Deaths_Involving_Each_Drug.png")
 
 #How Many Drugs are Present in Each Case
 sns.countplot(data=df, x='Drug Count', palette="viridis")
@@ -270,6 +275,7 @@ plt.title('Number of Drugs Present in Each Case')
 plt.ylabel('Number of Cases')
 plt.xlabel('Number of Drugs')
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/Number_of_Drugs_Present.png")
 
 #Seasonality of Deaths
 month_labels = [
@@ -286,5 +292,6 @@ plt.title("Seasonality of Deaths")
 plt.xlabel("Month")
 plt.ylabel("Number of Deaths")
 plt.show()
+plt.savefig("../../resources/data_exploration_plots_CT/Seasonality_of_Deaths.png")
 
 # %%
