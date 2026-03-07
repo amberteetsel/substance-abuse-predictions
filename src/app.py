@@ -302,11 +302,11 @@ with tab6:
     
     # --- SECTION: DATASET3 ---
     ## Datasets to display
-connecticut_raw = pd.read_csv('c:\Users\jenny\Downloads\Connecticut_Accidental_Drug_Related_Deaths_Raw.csv')
-connecticut_clean = pd.read_csv('c:\Users\jenny\Downloads\DataMining\HW\Clean_Connecticut_Accidental_Drug_Related_Deaths.csv')
+connecticut_raw = pd.read_csv("c:/Users/jenny/Downloads/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
+connecticut_clean = pd.read_csv("c:/Users/jenny/Downloads/DataMining/HW/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
 
 with tab6:
-    st.header("Data Exploration & Preprocessing")
+    
 
     # FUNCTION FOR DATA EXPLORATION LAYOUT
     def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
@@ -430,7 +430,7 @@ with tab6:
             'path':"resources/data_exploration_plots_CT/Drug_Count_Distribution.png"},
             {'title': 'Fig. 9: Log Drug Count Distribution',
             'desc':"After the transformation, the distribution of data is more balanced and compressed, especially for cases with larger numbers of drugs involved. The majority of the cases center around the middle of the distribution which is approximately 2-4 substances.",
-            'path':"resources/data_exploration_plots_CT/Log_Transformed_Drug_Count_Distribution.png"},
+            'path':"resources/data_exploration_plots_CT/Log_Transformed_Data_Count_Distribution.png"},
             {'title':'Fig. 10: Total Deaths Involving Each Drug',
             'desc': "From this bar chart, we can see that the leading drug causing overdoses in Connecticut from 2012 to 2024 is Fentanyl, with Cocaine and Heroin being second and third leading drug.",
             'path':"resources/data_exploration_plots_CT/Total_Deaths_Involving_Each_Drug.png"},
