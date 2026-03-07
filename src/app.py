@@ -279,10 +279,6 @@ with tab6:
             "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers. Added log transformation for death rate for use in potential future linear models."
         },
         visuals = [
-            {'title': "Fig. 1",
-            'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp ~5 point jump between 2014 and 2016.",
-            'path': "resources/data_exploration_plots/mortality_1999_2016.jpeg"},
-            {'title': 'Fig. 2',
             {'title': "Fig. 1: U.S. Drug Mortality Rate",
             'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp approximately 5 point jump between 2014 and 2016.",
             'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"},
