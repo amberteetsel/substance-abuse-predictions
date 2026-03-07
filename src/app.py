@@ -269,16 +269,17 @@ with tab6:
         df_clean=nchs_clean,
         source_info="CDC / National Center for Health Statistics",
         collection_method="API (Socrata SODA)",
-        description="This dataset describes 1999-2016 drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates. It illuminates demographic and temporal trends in U.S. drug mortality rates.",
+        description="The dataset provides solid historical information (1999-2016) on drug deaths in the United States broken down by State, Age Group, Race (White, Hispanic, Black), and Sex (Male, Female). It enables us to see trends (geographic, demographic, temporal) in drug mortality during the early 21st century and can be useful in building an eventual predictive model.",
         cleaning_steps={
             "Handling Missing Data": "Age-adjusted rate is NA for rows that specify an age group (vs. All Ages). To remedy, we combined crude rate and adjusted rate columns with the understanding that data will need to be filtered by age group for subsequent analysis.",
+            "Outliers": "We identified many high outliers for death rate but decided to leave them in the data. Upon inspection, the numbers are consistent with the raw deaths/population numbers reported and tend to occur in states where we know the opioid and fentanyl crises had devastating effects (West Virginia, Ohio, etc.). Thus we feel the outliers are useful data points for understanding the true substance abuse landscape in the United States.",
             "Data Types": "The API returns all data as objects so we converted columns such as death rate, year, population, etc. to numeric. Relevant categorical columns include State, Race, Age Group, and Sex.",
             "Dimensionality Reduction": "Keep only year, categorical feature columns, and death rate calculations. Made age group less granular to simplify visualizations. Also simplified naming conventions for Race column.",
             "Handling Overlapping Totals": "Filter out 'United States' aggregate rows to isolate state-level data and prevent double-counting in statistical models.",
             "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers. Added log transformation for death rate for use in potential future linear models."
         },
         visuals = [
-            {'title': "Fig. 1: U.S. Drug Mortality Rate,
+            {'title': "Fig. 1: U.S. Drug Mortality Rate",
             'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp approximately 5 point jump between 2014 and 2016.",
             'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"},
             {'title': 'Fig. 2: Drug Mortality Rate by Race',
