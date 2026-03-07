@@ -279,17 +279,29 @@ with tab6:
             "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers. Added log transformation for death rate for use in potential future linear models."
         },
         visuals = [
+            {'title': "Fig. 1",
+            'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp ~5 point jump between 2014 and 2016.",
+            'path': "resources/data_exploration_plots/mortality_1999_2016.jpeg"},
+            {'title': 'Fig. 2',
             {'title': "Fig. 1: U.S. Drug Mortality Rate",
             'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp approximately 5 point jump between 2014 and 2016.",
             'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"},
             {'title': 'Fig. 2: Drug Mortality Rate by Race',
             'desc':"The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
+            'path':"resources/data_exploration_plots/mortality_race_1999_2016.jpeg"},
+            {'title':'Fig. 3',
             'path':"resources/data_exploration_plots_NCHS/mortality_race_1999_2016.jpeg"},
             {'title':'Fig. 3: Drug Mortality Rate by Sex',
             'desc': "Men have consistently suffered higher drug death rates than women. The death rate for men spiked from 2014-2016 along with the national rate, while the rate for women increased more gradually.",
+            'path':"resources/data_exploration_plots/mortality_sex_1999_2016.jpeg"},
+            {'title':'Fig. 4',
             'path':"resources/data_exploration_plots_NCHS/mortality_sex_1999_2016.jpeg"},
             {'title':'Fig. 4: Drug Mortality Rate by Age Group',
             'desc': "Drug mortality rates are highest among 25-44 year olds, followed by 45-64 year olds.",
+            'path': "resources/data_exploration_plots/mortality_age_boxplot.jpeg"},
+            {'title':'Fig. 5',
+            'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases.",
+            'path': "resources/data_exploration_plots/state_outliers_2016.jpeg"}
             'path': "resources/data_exploration_plots_NCHS/mortality_age_boxplot.jpeg"},
             {'title':'Fig. 5: Top 10 State Outliers for Drug Mortality',
             'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases. States ranked by z-score standardized age-adjusted death rate.",
@@ -298,8 +310,71 @@ with tab6:
         limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
     )
 
-    # --- SECTION: DATASET2 ---
-    
+    # --- SECTION: TEDS-A ---
+    data_source_section(
+        title="TEDS-A 2023 Treatment Episode Data Set",
+        df_raw="resources/tedsa_preview/raw_tedsa_preview.png",
+        df_clean="resources/tedsa_preview/cleaned_tedsa_preview.png",
+        source_info="[SAMHSA TEDS-A Dataset](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles?data_collection=1011)",
+        collection_method="Public-use dataset downloaded from SAMHSA website",
+        description=(
+            "TEDS-A is a national dataset of substance use treatment admissions, "
+            "this dataset includes demographic information as well as treatment information. It captures all admissions "
+            "to publicly funded treatment facilities in the U.S., helping to provide insight into substance"
+            "use patterns and treatment trends. This is collected to monitor states substance use treatment systems."
+        ),
+        cleaning_steps={
+            "Handling Missing Codes": "Converted SAMHSA missing codes (-9) to NaN. This was consistent across all questions.",
+            "Column Retention": "Almost all original columns were kept, a select few that were redundant or added no value were dropped.",
+            "Missing Column Values": "Columns missing atleast 50% of values were dropped, as they would not be helpful to computing results.",
+            "Missing Row Values": "Rows with any missing values were dropped as the sample size was 1.5 million, it would still remain large after this.",
+            "Renaming Columns": "Renamed columns to be more descriptive and human-readable by looking through the codebook provided on the website.",
+            "Label Recoding": "Mapped numeric codes to human-readable labels for age, sex, race, substances, DSM diagnoses, and other categorical features.",  
+            "Critical Value Filtering": "Dropped rows missing key variables such as AGE, SEX, SUB1, PSYPROB.",
+            "Data Types" : "Ensured all object datatypes were changed to categorical. Those that were floats were not changed to integers as they had been changed when NaN was added in place of -9.",
+            "Duplicates": "Ensured there were no duplicates.", 
+            "Scaling & Log Transform": "Applied StandardScaler and log1p transform on numeric variables such as prior_tx and arrests_30days. Other transformation was not needed as the data is on a standardized small scale."
+        },
+        outlier_detection={
+            "Boxplot": "resources/data_exploration_tedsa/boxplot_tedsa.png",
+            "Interpretation": "These outliers were not due to issues with the data but rather truthful outliers as the nature of the data does not allow for mistakes, using strict inputs.",
+            "Action": "Nothing will be done for these at this moment but when experimenting with models this may change."
+        },
+        summary_statistics={
+            "Summary": "The mean, median, standard deviation, minimum, maximum, skewness, kurtosis, count, amount of missing values were computed for all relevant variables.",
+            "Interpretation": "Age and educations are both roughly symmetric. Most of the variables are mildly skewed however there are some extremely skewed such as arrests_30days and self_help_30days."
+        },
+        correlation_analysis={
+            "Correlation Matrix": "resources/data_exploration_tedsa/corr_tedsa.png",
+            "Interpretation": "There are some strong correlations between variables such as route of administration and primary substance."
+        },
+        advanced_analysis={
+            "Q-Q Plot": "resources/data_exploration_tedsa/qq_tedsa.png",
+            "Interpretation": "The data does not look normal on the Q-Q Plot however it is not continuous so this makes sense and is not a red flag."
+        },
+        visuals = [
+            {'title': "Fig. 4",
+            'desc': "Alaskian Native females seem to have the highest co-occurance of mental-health problems at admission.",
+            'path': "resources/teds_visual/mh_race_tedsa.png"},
+            {'title': 'Fig. 5',
+            'desc':"Heatmap of age of first use with primary substance. Those whose first use was 30+ seem to gravitate to barbiturates.",
+            'path':"resources/teds_visual/age_sub_tedsa.png"},
+            {'title':'Fig. 6',
+            'desc': "Those with less education while being unemployed seem to have been arrested more within the past 30 days of admission.",
+            'path':"resources/teds_visual/employment_educ_tedsa.png"},
+        ],
+        additional_notes=(
+            "The dataset is quite large and complex, however the organization of the codebook helped tremendously with the process. "
+            "It is important to note that there may be some missed biases or issues that need to be addressed with later modeling."
+        ),
+        limitations=(
+            "This dataset represents treatment admissions rather than unique individuals, "
+            "so repeat admissions by the same person are counted separately. "
+            "Additionally because this dataset is so standardized there are missing values where answers were not applicable."
+            "There was not much freedom with the data collection process, thus limiting the ability to capture the full complexity of individual experiences."
+            "There are always potential biases due to systemic inequalities and prejudices."
+        )
+    )
     # --- SECTION: DATASET3 ---
     
     # --- SECTION: DATASET4 ---
