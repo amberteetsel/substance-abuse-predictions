@@ -208,3 +208,7 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .DS_Store
+data/tedsa_puf_2023_cleaned.csv
+data/tedsa_puf_2023_first_use.csv
+data/tedsa_puf_2006_2023.csv
+data/tedsd_puf_2023.csv
