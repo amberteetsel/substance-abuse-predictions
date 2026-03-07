@@ -15,6 +15,18 @@ The topic of our research project is identifying/predicting which communities ar
 
 **Amber Teetsel:** Web Developer & Data Scientist
 
+## Data Cleaning
+To run TEDS_Acleaning.py
+1. Download tedsa_puf_2023.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing
+2. Create a folder called data and place tedsa_puf_2023.csv in the folder
+3. Run the file (be patient, it is a large data set)
+4. Cleaned csv for this set will be found in the google drive
+
+To run Connecticut_Data_Caceres_Andrea.py and AmberDataCleaning.ipynb
+1. Download the cleaning file
+2. Run the file
+3. Cleaned csv for these datasets will be found in the data folder
+   
 ## Milestones
 
 1. Project Framing & Website Launch (9 Feb 2026)
