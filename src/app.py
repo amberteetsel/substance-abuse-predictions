@@ -477,37 +477,37 @@ with tab6:
         
         'desc':"This visual is to compare the transformation of Drug Count prior to the log transformation. From the shape, we can see that the distribution is right-skewed.",
         
-        'path':"resources/data_exploration_plots_CT/Drug_Count_Distribution.png"},
+        'path':"resources/data_exploration_plots_CT/Drug Count Distribution.png"},
         
         {'title': 'Fig. 9: Log Drug Count Distribution',
         
         'desc':"After the transformation, the distribution of data is more balanced and compressed, especially for cases with larger numbers of drugs involved. The majority of the cases center around the middle of the distribution which is approximately 2-4 substances.",
         
-        'path':"resources/data_exploration_plots_CT/Log_Transformed_Data_Count_Distribution.png"},
+        'path':"resources/data_exploration_plots_CT/Log Transformed Data Count Distribution.png"},
         
         {'title':'Fig. 10: Total Deaths Involving Each Drug',
         
         'desc': "From this bar chart, we can see that the leading drug causing overdoses in Connecticut from 2012 to 2024 is Fentanyl, with Cocaine and Heroin being second and third leading drug.",
         
-        'path':"resources/data_exploration_plots_CT/Total_Deaths_Involving_Each_Drug.png"},
+        'path':"resources/data_exploration_plots_CT/Total Deaths Involving Each Drug.png"},
         
         {'title':'Fig. 11: Seasonality of Overdose Deaths',
         
         'desc': "From this bar chart, we can see that the peak summer months, June and July, tend to have slightly higher overdose cases than the other months.",
         
-        'path': "resources/data_exploration_plots_CT/Seasonality_of_Deaths.png"},
+        'path': "resources/data_exploration_plots_CT/Seasonality of Deaths.png"},
         
         {'title':'Fig. 12: Number of Drugs Present in Each Overdose Case',
         
         'desc': "The histogram shows that the most common number of drugs present in each overdose case is 3. A large amount of overdose cases involve 2 to 5 drugs present, indicating that many overdoses involve multiple substances. The shape of the histogram is skewed to the right, with a tail towards 7 to 8 drugs.",
         
-        'path': "resources/data_exploration_plots_CT/Number_of_Drugs_Present.png"},
+        'path': "resources/data_exploration_plots_CT/Number of Drugs Present.png"},
         
         {'title':'Fig. 13: Q-Q Plot of Age Distribution',
         
         'desc': "From this Q-Q plot we can see that the red line depicts a normal distribution. The data points for Age seem to follow the line around the center of the data, but deviates in the lower and upper tails. This means that in younger and older ages occur less frequently than a normal dsitribution would expect.",
         
-        'path': "resources/data_exploration_plots_CT/QQ_Plot.png"}],
+        'path': "resources/data_exploration_plots_CT/QQ Plot.png"}],
         
         
         limitations="There are many ethical considerations that apply to this dataset because it contains very sensitive public health information involving deaths caused by overdoses. Another limitation is that there might be reporting biases amongst races and ethnicities. Plus, there are columns with several missing responses which may affect analysis and conclusions."
