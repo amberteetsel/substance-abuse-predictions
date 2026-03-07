@@ -161,12 +161,28 @@ with tab5:
 ## Datasets to display
 nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
 nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
+connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
+connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
 
     # FUNCTION FOR DATA EXPLORATION LAYOUT
-    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
+    def data_source_section(
+        title,
+        df_raw, df_clean,
+        source_info,
+        collection_method,
+        description,
+        cleaning_steps,
+        visuals,
+        limitations,
+        outliers=None,
+        sum_stats=None,
+        corr=None,
+        advanced=None,
+        notes=None
+    ):
         """
         Inputs will be displayed cleanly on the website
         title - title of dataset
@@ -199,42 +215,57 @@ with tab6:
             
             with col_pre1:
                 st.write("🔍 **Raw Snapshot**")
-                st.dataframe(df_raw.head(5), use_container_width=True)
-                st.caption("Initial data types and values.")
-                with st.expander("View Raw Schema"):
-                    st.code(df_raw.dtypes)
+
+                # If using DataFrames
+                if isinstance(df_raw, pd.DataFrame):
+                    
+                    st.dataframe(df_raw.head(5), use_container_width=True)
+                    st.caption("Initial data types and values.")
+                    with st.expander("View Raw Schema"):
+                        st.code(df_raw.dtypes)
+
+                # If using links/strings
+                elif isinstance(df_raw, str):
+
+                    st.image(df_raw, use_container_width=True)
+
 
             with col_pre2:
                 st.write("✨ **Processed Snapshot**")
-                st.dataframe(df_clean.head(5), use_container_width=True)
-                st.caption("Post-cleaning, encoding, and scaling.")
-                with st.expander("View Processed Schema"):
-                    st.code(df_clean.dtypes)
+
+                if isinstance(df_clean, pd.DataFrame):
+                    st.dataframe(df_clean.head(5), use_container_width=True)
+                    st.caption("Post-cleaning, encoding, and scaling.")
+                    with st.expander("View Processed Schema"):
+                        st.code(df_clean.dtypes)
+                elif isinstance(df_clean, str):
+                    st.image(df_clean, use_container_width=True)
 
             st.markdown("---")
 
             # Summary Statistics
-            st.subheader("Statistical Profile")
-            st.write("Comparison of descriptive statistics before and after processing.")
-            
-            col_stat1, col_stat2 = st.columns(2)
-            with col_stat1:
-                st.write("**Raw Summary**")
-                raw_stats = df_raw.select_dtypes(include=['number']).describe().T
-                if not raw_stats.empty:
-                    st.table(raw_stats)
-                else:
-                    st.warning("No numeric data found in Raw dataset.")
-            
-            with col_stat2:
-                st.write("**Processed Summary**")
-                clean_stats = df_clean.select_dtypes(include=['number']).describe().T
-                if not clean_stats.empty:
-                    st.table(clean_stats)
-                else:
-                    st.warning("No numeric data found in Processed dataset.")
-
-            st.markdown("---")
+            if (isinstance(df_raw, pd.DataFrame)) and (isinstance(df_clean, pd.DataFrame)):
+                st.subheader("Statistical Profile")
+                st.write("Comparison of descriptive statistics before and after processing.")
+                
+                col_stat1, col_stat2 = st.columns(2)
+                with col_stat1:
+                    st.write("**Raw Summary**")
+                    raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                    if not raw_stats.empty:
+                        st.table(raw_stats)
+                    else:
+                        st.warning("No numeric data found in Raw dataset.")
+                
+                with col_stat2:
+                    st.write("**Processed Summary**")
+                    clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                    if not clean_stats.empty:
+                        st.table(clean_stats)
+                    else:
+                        st.warning("No numeric data found in Processed dataset.")
+    
+                st.markdown("---")
             
             # Cleaning & Processing Steps
             st.subheader("Cleaning & Processing Logic")
@@ -255,11 +286,41 @@ with tab6:
             else:
                 st.info("Visualizations for this dataset are currently in progress.")
 
+            # Additional Analysis Sections
+            if outliers:
+                st.subheader("Outlier Detection")
+                with st.container(border=True):
+                    st.image(outliers['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {outliers['Interpretation']}")
+                    st.write(f"**Action:** {outliers['Action']}")
+                
+            if sum_stats:
+                st.subheader("Summary Statistics")
+                with st.container(border=True):
+                    st.write(f"**Summary:** {sum_stats['Interpretation']}")
+                    st.write(f"**Interpretation:** {sum_stats['Interpretation']}")
+                    
+            if corr:
+                st.subheader("Correlation Analysis")
+                with st.container(border=True):
+                    st.image(corr['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {corr['Interpretation']}")
+    
+            if advanced:
+                st.subheader("Advanced Analysis")
+                with st.container(border=True):
+                    st.image(advanced['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {advanced['Interpretation']}")
+                    
+            if notes:
+                st.subheader("Additional Notes")
+                with st.container(border=True):
+                    st.write(notes)
 
             # Bias/Limitations
             st.subheader("Limitations")
             if limitations:
-                with st.container(border=True):
+                with st.container():
                     st.write(limitations)
 
     # --- SECTION: NCHS Drug Poisoning ---
@@ -311,8 +372,8 @@ with tab6:
     # --- SECTION: TEDS-A ---
     data_source_section(
         title="TEDS-A 2023 Treatment Episode Data Set",
-        df_raw="resources/tedsa_preview/raw_tedsa_preview.png",
-        df_clean="resources/tedsa_preview/cleaned_tedsa_preview.png",
+        df_raw="resources/teda_preview/raw_tedsa_preview.png",
+        df_clean="resources/teda_preview/cleaned_tedsa_preview.png",
         source_info="[SAMHSA TEDS-A Dataset](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles?data_collection=1011)",
         collection_method="Public-use dataset downloaded from SAMHSA website",
         description=(
@@ -333,21 +394,21 @@ with tab6:
             "Duplicates": "Ensured there were no duplicates.", 
             "Scaling & Log Transform": "Applied StandardScaler and log1p transform on numeric variables such as prior_tx and arrests_30days. Other transformation was not needed as the data is on a standardized small scale."
         },
-        outlier_detection={
-            "Boxplot": "resources/data_exploration_tedsa/boxplot_tedsa.png",
+        outliers={
+            "image": "resources/data_exploration_tedsa/boxplot_tedsa.png",
             "Interpretation": "These outliers were not due to issues with the data but rather truthful outliers as the nature of the data does not allow for mistakes, using strict inputs.",
             "Action": "Nothing will be done for these at this moment but when experimenting with models this may change."
         },
-        summary_statistics={
+        sum_stats={
             "Summary": "The mean, median, standard deviation, minimum, maximum, skewness, kurtosis, count, amount of missing values were computed for all relevant variables.",
             "Interpretation": "Age and educations are both roughly symmetric. Most of the variables are mildly skewed however there are some extremely skewed such as arrests_30days and self_help_30days."
         },
-        correlation_analysis={
-            "Correlation Matrix": "resources/data_exploration_tedsa/corr_tedsa.png",
+        corr={
+            "image": "resources/data_exploration_tedsa/corr_tedsa.png",
             "Interpretation": "There are some strong correlations between variables such as route of administration and primary substance."
         },
-        advanced_analysis={
-            "Q-Q Plot": "resources/data_exploration_tedsa/qq_tedsa.png",
+        advanced={
+            "image": "resources/data_exploration_tedsa/qq_tedsa_png.png",
             "Interpretation": "The data does not look normal on the Q-Q Plot however it is not continuous so this makes sense and is not a red flag."
         },
         visuals = [
@@ -361,9 +422,8 @@ with tab6:
             'desc': "Those with less education while being unemployed seem to have been arrested more within the past 30 days of admission.",
             'path':"resources/teds_visual/employment_educ_tedsa.png"},
         ],
-        additional_notes=(
-            "The dataset is quite large and complex, however the organization of the codebook helped tremendously with the process. "
-            "It is important to note that there may be some missed biases or issues that need to be addressed with later modeling."
+        notes=(
+            "The dataset is quite large and complex, however the organization of the codebook helped tremendously with the process. It is important to note that there may be some missed biases or issues that need to be addressed with later modeling."
         ),
         limitations=(
             "This dataset represents treatment admissions rather than unique individuals, "
@@ -373,6 +433,80 @@ with tab6:
             "There are always potential biases due to systemic inequalities and prejudices."
         )
     )
+
+    
     # --- SECTION: DATASET3 ---
+    data_source_section(
+        title="Connecticut Accidental Drug Related Deaths",
+        df_raw=connecticut_raw,
+        df_clean=connecticut_clean,
+        source_info="Connecticut Open Data Portal",
+        collection_method="API (Socrata SODA)",
+        description="This dataset contains accidental drug related deaths reported in Connecticut including demographic information, substances detected in toxicology reports, and circumstances surrounding overdose deaths. It allows analysis of poly-drug overdoses, demographic trends, and seasonal patterns.",
+        
+        cleaning_steps={
+        
+        "Duplicate Removal": "Duplicate records were identified and removed so each death is counted once.",
+        
+        "Handling Missing Values": "Age values were converted to numeric and missing ages were filled with the median age. Missing categorical values were standardized where possible.",
+        
+        "Outlier Handling": "Extreme age values outside the range of 10–100 were removed to eliminate likely data entry errors.",
+        
+        "Binary Encoding": "Drug indicator columns were converted to binary format where 1 indicates the drug was present in the toxicology report.",
+        
+        "Feature Engineering": "A Drug Count variable was created by summing drug indicator columns to measure the number of substances involved in each overdose case.",
+        
+        "Normalization": "Age was standardized using z-score normalization and Drug Count was log-transformed to reduce skewness."
+        
+        },
+        
+        visuals = [
+        
+        {'title': 'Fig. 7: Drug Correlation Heatmap',
+         
+        'desc': "The heatmap shows that there is a weak positive correlation between Xylazine and Fentanyl. There is a strong correlation between Heroin and Heroin Morphine Codeine, meaning that the combination of Heroin Morphine and Codeine combination is prevalent.",
+        
+        'path': "resources/data_exploration_plots_CT/heatmap.png"},
+        
+        {'title': 'Fig. 8: Drug Count Distribution',
+        
+        'desc':"This visual is to compare the transformation of Drug Count prior to the log transformation. From the shape, we can see that the distribution is right-skewed.",
+        
+        'path':"resources/data_exploration_plots_CT/Drug_Count_Distribution.png"},
+        
+        {'title': 'Fig. 9: Log Drug Count Distribution',
+        
+        'desc':"After the transformation, the distribution of data is more balanced and compressed, especially for cases with larger numbers of drugs involved. The majority of the cases center around the middle of the distribution which is approximately 2-4 substances.",
+        
+        'path':"resources/data_exploration_plots_CT/Log_Transformed_Data_Count_Distribution.png"},
+        
+        {'title':'Fig. 10: Total Deaths Involving Each Drug',
+        
+        'desc': "From this bar chart, we can see that the leading drug causing overdoses in Connecticut from 2012 to 2024 is Fentanyl, with Cocaine and Heroin being second and third leading drug.",
+        
+        'path':"resources/data_exploration_plots_CT/Total_Deaths_Involving_Each_Drug.png"},
+        
+        {'title':'Fig. 11: Seasonality of Overdose Deaths',
+        
+        'desc': "From this bar chart, we can see that the peak summer months, June and July, tend to have slightly higher overdose cases than the other months.",
+        
+        'path': "resources/data_exploration_plots_CT/Seasonality_of_Deaths.png"},
+        
+        {'title':'Fig. 12: Number of Drugs Present in Each Overdose Case',
+        
+        'desc': "The histogram shows that the most common number of drugs present in each overdose case is 3. A large amount of overdose cases involve 2 to 5 drugs present, indicating that many overdoses involve multiple substances. The shape of the histogram is skewed to the right, with a tail towards 7 to 8 drugs.",
+        
+        'path': "resources/data_exploration_plots_CT/Number_of_Drugs_Present.png"},
+        
+        {'title':'Fig. 13: Q-Q Plot of Age Distribution',
+        
+        'desc': "From this Q-Q plot we can see that the red line depicts a normal distribution. The data points for Age seem to follow the line around the center of the data, but deviates in the lower and upper tails. This means that in younger and older ages occur less frequently than a normal dsitribution would expect.",
+        
+        'path': "resources/data_exploration_plots_CT/QQ_Plot.png"}],
+        
+        
+        limitations="There are many ethical considerations that apply to this dataset because it contains very sensitive public health information involving deaths caused by overdoses. Another limitation is that there might be reporting biases amongst races and ethnicities. Plus, there are columns with several missing responses which may affect analysis and conclusions."
+        
+        )
     
     # --- SECTION: DATASET4 ---
