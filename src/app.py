@@ -279,29 +279,31 @@ with tab6:
             "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers. Added log transformation for death rate for use in potential future linear models."
         },
         visuals = [
-            {'title': "Fig. 1: U.S. Drug Mortality Rate",
-            'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp approximately 5 point jump between 2014 and 2016.",
-            'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"},
-            {'title': 'Fig. 2: Drug Mortality Rate by Race',
-            'desc':"The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
-            'path':"resources/data_exploration_plots/mortality_race_1999_2016.jpeg"},
-            {'title':'Fig. 3',
-            'path':"resources/data_exploration_plots_NCHS/mortality_race_1999_2016.jpeg"},
-            {'title':'Fig. 3: Drug Mortality Rate by Sex',
-            'desc': "Men have consistently suffered higher drug death rates than women. The death rate for men spiked from 2014-2016 along with the national rate, while the rate for women increased more gradually.",
-            'path':"resources/data_exploration_plots/mortality_sex_1999_2016.jpeg"},
-            {'title':'Fig. 4',
-            'path':"resources/data_exploration_plots_NCHS/mortality_sex_1999_2016.jpeg"},
-            {'title':'Fig. 4: Drug Mortality Rate by Age Group',
-            'desc': "Drug mortality rates are highest among 25-44 year olds, followed by 45-64 year olds.",
-            'path': "resources/data_exploration_plots/mortality_age_boxplot.jpeg"},
-            {'title':'Fig. 5',
-            'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases.",
-            'path': "resources/data_exploration_plots/state_outliers_2016.jpeg"}
-            'path': "resources/data_exploration_plots_NCHS/mortality_age_boxplot.jpeg"},
-            {'title':'Fig. 5: Top 10 State Outliers for Drug Mortality',
-            'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases. States ranked by z-score standardized age-adjusted death rate.",
-            'path': "resources/data_exploration_plots_NCHS/state_outliers_2016.jpeg"}
+            {
+                'title': "Fig. 1: U.S. Drug Mortality Rate",
+                'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp jump between 2014 and 2016.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 2: Drug Mortality Rate by Race',
+                'desc': "The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_race_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 3: Drug Mortality Rate by Sex',
+                'desc': "Men have consistently suffered higher drug death rates than women.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_sex_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 4: Drug Mortality Rate by Age Group',
+                'desc': "Drug mortality rates are highest among 25-44 year olds.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_age_boxplot.jpeg"
+            },
+            {
+                'title': 'Fig. 5: Top 10 State Outliers for Drug Mortality',
+                'desc': "These states had the top 10 most extreme death rates in 2016.",
+                'path': "resources/data_exploration_plots_NCHS/state_outliers_2016.jpeg"
+            }
         ],
         limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
     )
