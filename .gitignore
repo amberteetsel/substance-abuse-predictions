@@ -213,3 +213,5 @@ data/tedsa_puf_2023_cleaned.csv
 data/tedsa_puf_2023_first_use.csv
 data/tedsa_puf_2006_2023.csv
 data/tedsd_puf_2023.csv
+data/DEA_2.csv.gz
+data/dea_summary_mini.csv
