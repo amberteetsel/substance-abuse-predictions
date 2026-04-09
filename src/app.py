@@ -165,6 +165,8 @@ nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
 connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
 connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
 dea_clean = pd.read_csv('data/dea_full_interpolated.csv')
+ukcpr_raw = pd.read_csv('data/ukcpr_raw.csv')
+ukcpr_clean = pd.read_csv('data/UKCPR_cleaned.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
@@ -530,7 +532,27 @@ with tab6:
                 "Data Extraction": "For 2006-2016, data was extracted using the DEA ARCOS Query Tool. For 2000, 2001, and 2005, data was manually extracted from PDF reports and digitized.",
                 "Handling Missing Values": "Missing values for 2002-2003 were imputed using linear interpolation based on adjacent years.",
             },
-            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market). Additionally, data is only available through 2016, so it does not reflect more recent trends in opioid availability and use."
+            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market)."
             )
     except Exception as e:
         st.error(f"Error loading DEA dataset: {e}")
+
+
+    # --- SECTION: UKCPR National Welfare Data ---
+    try:
+        data_source_section(
+            title="UKCPR Dational Welfare Data, 1980-2024",
+            df_raw=ukcpr_raw,
+            df_clean=ukcpr_clean,
+            source_info="University of Kentucky Center for Poverty Research (UKCPR)",
+            collection_method="Excel download from source website",
+            description="State-level panel data series covering population, employment, unemployment, welfare, poverty, and politics.",
+            cleaning_steps={
+                "Feature Selection": "Keep only relevant columns such as year, state, population, unemployment rate, welfare spending, poverty rate, and political control.",
+                "Handling Missing Values": "N/A; dataset is complete with no missing values.",
+                "Data Reduction": "Filtered to include only 1999-2016 to align with NCHS mortality data for potential future modeling."
+            },
+            limitations="Older data may have lower accuracy."
+            )
+    except Exception as e:
+        st.error(f"Error loading UKCPR dataset: {e}")
