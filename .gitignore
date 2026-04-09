@@ -1,3 +1,10 @@
+# Large data files
+data/DEA_2.csv.gz
+data/dea_summary_mini.csv
+*/.ipynb_checkpoints
+.RData
+.Rhistory
+
 .DS_Store
 #.devcontainer
 
