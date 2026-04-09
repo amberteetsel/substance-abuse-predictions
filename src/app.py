@@ -530,6 +530,7 @@ with tab6:
             description="Reported controlled substances transactions by state. Proxy for availability of opioids (Hydrocodone, Oxycodone, and Fentanyl).",
             cleaning_steps={
                 "Data Extraction": "For 2006-2016, data was extracted using the DEA ARCOS Query Tool. For 2000, 2001, and 2005, data was manually extracted from PDF reports and digitized.",
+                "Data Loading": "Due to large size of ARCOS extract (422,647,324 rows), data was loaded in chunks and aggregated to state-year level to create a more manageable dataset for analysis.",
                 "Handling Missing Values": "Missing values for 2002-2003 were imputed using linear interpolation based on adjacent years.",
             },
             limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market)."

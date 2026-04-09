@@ -1,6 +1,8 @@
 # Large data files
 data/DEA_2.csv.gz
 data/dea_summary_mini.csv
+data/dea_summary_pre_aggregated.csv
+data/dea_final.csv
 */.ipynb_checkpoints
 .RData
 .Rhistory
