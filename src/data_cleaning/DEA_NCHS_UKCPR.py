@@ -47,8 +47,9 @@ nchs_dea = pd.merge(
 )
 
 # Convert hydro_gms, oxy_gms to be rate per 100k population
-nchs_dea['hydro_gms_per_100k'] = (nchs_dea['hydro_gms'] / nchs_dea['population']) * 100000 
-nchs_dea['oxy_gms_per_100k'] = (nchs_dea['oxy_gms'] / nchs_dea['population']) * 100000
+# Convert hydro_gms, oxy_gms to be rate per 100k population
+nchs_dea['hydro_gms'] = (nchs_dea['hydro_gms'] / nchs_dea['population']) * 100000 
+nchs_dea['oxy_gms'] = (nchs_dea['oxy_gms'] / nchs_dea['population']) * 100000
 
 ################# JOIN UKCPR #################
 
@@ -61,16 +62,11 @@ df_final = pd.merge(
     how = 'left'
 )
 
-cols_to_keep = ['year', 'state', 'sex', 'age_group', 'age_group_detail', 'race', 'hydro_gms_per_100k',
-                'oxy_gms_per_100k', 'unempl_rate','poverty_rate', 'gsp', 'min_wage',
+cols_to_keep = ['year', 'state', 'sex', 'age_group', 'age_group_detail', 'race', 'hydro_gms',
+                'oxy_gms', 'unempl_rate','poverty_rate', 'gsp', 'min_wage',
                 'snap_rate', 'medicaid_rate', 'aca_exp', 'gov_dem', 'death_rate']
 
 df_final = df_final[cols_to_keep]
-
-# Get rid of aggregated rows
-df_final = df_final.loc[df_final.sex != "Both Sexes"].reset_index(drop=True)
-df_final = df_final.loc[df_final.age_group != "All Ages"].reset_index(drop=True)
-df_final = df_final.loc[df_final.race != "All Races"].reset_index(drop=True)
 
 # Export final dataset
 df_final.to_csv('../../data/death_rate.csv', index=False)
