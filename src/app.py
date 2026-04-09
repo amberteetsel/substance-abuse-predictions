@@ -164,6 +164,7 @@ nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
 nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
 connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
 connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+dea_clean = pd.read_csv('data/dea_full_interpolated.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
@@ -176,8 +177,8 @@ with tab6:
         collection_method,
         description,
         cleaning_steps,
-        visuals,
         limitations,
+        visuals=None,
         outliers=None,
         sum_stats=None,
         corr=None,
@@ -515,4 +516,21 @@ with tab6:
         
         )
     
-    # --- SECTION: DATASET4 ---
+
+    # --- SECTION: DEA Retail Drug Sales ---
+    try:
+        data_source_section(
+            title="ARCOS Retail Drug Summary Reports",
+            df_raw="resources/dea_preview/arcos_raw_sample.png",
+            df_clean=dea_clean,
+            source_info="U.S. Drug Enforcement Administration (DEA) / ARCOS Retail Drug Summary Reports",
+            collection_method="ARCOS Query Tool (2006-2016); Manual extraction from PDF reports (2000-2005)",
+            description="Reported controlled substances transactions by state. Proxy for availability of opioids (Hydrocodone, Oxycodone, and Fentanyl).",
+            cleaning_steps={
+                "Data Extraction": "For 2006-2016, data was extracted using the DEA ARCOS Query Tool. For 2000, 2001, and 2005, data was manually extracted from PDF reports and digitized.",
+                "Handling Missing Values": "Missing values for 2002-2003 were imputed using linear interpolation based on adjacent years.",
+            },
+            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market). Additionally, data is only available through 2016, so it does not reflect more recent trends in opioid availability and use."
+            )
+    except Exception as e:
+        st.error(f"Error loading DEA dataset: {e}")
