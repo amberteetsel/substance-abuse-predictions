@@ -152,6 +152,9 @@ with tab5:
                      "SAMHSA Overdose Prevention and Response Toolkit",
                      "The Future of the United States Overdose Crisis: Challenges and Opportunities",
                      "Provisional Drug Overdose Death Counts for Specific Drugs"
+                     "University of Kentucky Center for Poverty Research",
+                     "ARCOS Retail Drug Summary Reports, 2000-2005",
+                     "ARCOS Query Tool, 2006-2016"
         ],
         "Link": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC9731175/",
                  "https://stacks.cdc.gov/view/cdc/135849",
@@ -159,6 +162,9 @@ with tab5:
                  "https://library.samhsa.gov/sites/default/files/overdose-prevention-response-kit-pep23-03-00-001.pdf",
                  "https://onlinelibrary.wiley.com/doi/10.1111/1468-0009.12602",
                  "https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm"
+                 "https://ukcpr.uky.edu/resources",
+                 "https://www.deadiversion.usdoj.gov/arcos/retail_drug_summary/archive/archives-report.html",
+                 "https://arcos.nd.edu/query"
         ]
     }
 
