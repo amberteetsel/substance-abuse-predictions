@@ -1,3 +1,9 @@
+# .ipynb notebook files that have been converted to .py
+src/data_cleaning/NCHS_cleaning.ipynb
+src/data_cleaning/DEA_cleaning.ipynb
+src/data_cleaning/UKCPR_cleaning.ipynb
+src/data_cleaning/DEA_NCHS_UKCPR.ipynb
+
 # Large data files
 data/DEA_2.csv.gz
 data/dea_summary_mini.csv
