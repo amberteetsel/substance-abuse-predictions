@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+from model_view import model_section
+import os
+
 
 # Page layout
 st.set_page_config(page_title="Substance Abuse/Overdose Analysis", layout="wide")
@@ -10,7 +13,12 @@ st.markdown("---")
 
 # Initialize tabs
 # tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
-tab1, tab2, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Team Bios", "References", "Data Exploration"])
+tab1, tab2, tab4, tab5, tab6, tab7 = st.tabs(["Introduction",
+                                              "Research Questions",
+                                              "Team Bios",
+                                              "References",
+                                              "Data Exploration",
+                                              "Models Implemented"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -557,3 +565,49 @@ with tab6:
             )
     except Exception as e:
         st.error(f"Error loading UKCPR dataset: {e}")
+
+# ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
+
+# Get the directory that app.py is in, then go up one level to the project root
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Construct the path safely
+map_path = os.path.join(BASE_DIR, "resources", "model_viz", "cluster_state_map.png")
+
+with tab7:
+    st.header("Models Implemented")
+    st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
+
+    # Example of how to use model_section function for a model implemented
+    model_section(
+        title = "Clustering of U.S. States Based on Drug Mortality Trends",
+        model_type = "K-Means Clustering",
+        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 1999-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
+        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states based on their drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
+        assumptions = {
+            "Assumption 1": "The drug mortality rates are representative of the true underlying trends.",
+            "Assumption 2": "The number of clusters (k) is known and appropriate for the data."
+        },
+        hyperparameters = {
+            "k": [3, "how I tuned this value"],
+            "max_iter": [300, "default value"],
+            "n_init": [10, "default value"]
+        },
+        model_viz={
+            "Cluster Map": {
+                "path": map_path,
+                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality."
+            }
+        },
+        performance_eval="Clustering performance is ... based on ...",
+        preprocessing_steps={
+            "Step 1": "Log transformation for drug quantities",
+            "Step 2" : "Standardization of features",
+            "Step 3": "Feature selection"
+        },
+        challenges={
+            "Challenge 1": "Determining the optimal number of clusters (k) was difficult due to ...",
+            "Challenge 2": "The data had some outliers that affected clustering results, which we addressed by ..."
+        }
+
+    )
