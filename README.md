@@ -28,7 +28,6 @@ To run Connecticut_Data_Caceres_Andrea.py and AmberDataCleaning.ipynb
 3. Cleaned csv for these datasets will be found in the data folder
 
 ## Data Modeling 
-## Data Cleaning
 To run tedsa_clean_modeling.py
 1. Download tedsa_puf_2023_cleaned.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing
 2. Create a folder called data and place tedsa_puf_2023_cleaned.csv in the folder
