@@ -1,12 +1,15 @@
 import pandas as pd
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
 
 # define important cols
 keep_cols = ['buyer_state', 'drug_name', 'transaction_date', 'calc_base_wt_in_gm']
 
 chunks = pd.read_csv(
-    "../../data/DEA_2.csv.gz", 
-    usecols=keep_cols, 
-    chunksize=1000000, 
+    os.path.join(BASE_DIR, "data", "DEA_2.csv.gz"),
+    usecols=keep_cols,
+    chunksize=1000000,
     compression='gzip',
     low_memory=False
 )
