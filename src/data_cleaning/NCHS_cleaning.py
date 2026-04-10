@@ -7,6 +7,9 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 import scipy.stats as stats
 from scipy.stats import skew
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
 
 # API Configuration
 DATASET_ID = "xbxb-epbu"
@@ -23,7 +26,7 @@ results = client.get(DATASET_ID, limit=5000)
 nchs_df = pd.DataFrame.from_records(results)
 
 # Save raw data to CSV
-nchs_df.to_csv('../../data/NCHS_Mortality_Raw.csv', index=False)
+nchs_df.to_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Raw.csv"), index=False)
 
 # Drop range column
 df = nchs_df.copy()
@@ -116,12 +119,13 @@ stats.probplot(df_cum.death_rate, dist='norm', plot=plt)
 plt.title('QQ Plot of Standardized Death Rates (Country-wide)')
 # plt.show()
 
-plt.savefig('../../resources/data_exploration_plots_NCHS/QQ_death_rate.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "QQ_death_rate.jpeg"))
+
 
 # Export Clean Data
-df.to_csv('../../data/NCHS_Mortality_Clean.csv', index=False)
-df_state.to_csv('../../data/NCHS_Mortality_State.csv', index=False)
-df_cum.to_csv('../../data/NCHS_Mortality_Cumulative.csv', index=False)
+df.to_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Clean.csv"), index=False)
+df_state.to_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_State.csv"), index=False)
+df_cum.to_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Cumulative.csv"), index=False)
 
 # VISUALIZATIONS
 # YoY Change in US Age-Adjusted Death Rate
@@ -154,7 +158,7 @@ plt.title("US Drug Death Mortality Rate, 1999-2016", fontsize=14, pad=10)
 plt.xlabel('Year')
 plt.ylabel('Age-Adjusted Death Rate per 100,000 Population')
 
-plt.savefig('../../resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "mortality_1999_2016.jpeg"))
 
 # YoY Change by Race
 tmp = df.loc[(df.sex=='Both Sexes')&(df.age_group=='All Ages')&(df.race!='All Races')].reset_index(drop=True)
@@ -175,7 +179,7 @@ plt.title("US Drug Death Mortality Rate by Race, 1999-2016", fontsize=14, pad=10
 plt.xlabel('Year')
 plt.ylabel('Age-Adjusted Death Rate per 100,000 Population')
 
-plt.savefig('../../resources/data_exploration_plots_NCHS/mortality_race_1999_2016.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "mortality_race_1999_2016.jpeg"))
 
 # YoY Change by Sex
 tmp = df.loc[(df.sex!='Both Sexes')&(df.age_group=='All Ages')&(df.race=='All Races')].reset_index(drop=True)
@@ -196,7 +200,7 @@ plt.legend(title='Sex')
 plt.title("US Drug Death Mortality Rate by Sex, 1999-2016", fontsize=14, pad=10)
 plt.xlabel('Year')
 plt.ylabel('Age-Adjusted Death Rate per 100,000 Population')
-plt.savefig('../../resources/data_exploration_plots_NCHS/mortality_sex_1999_2016.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "mortality_sex_1999_2016.jpeg"))
 
 # Boxplots - Death Rate by Age Group
 tmp = df.loc[(df.sex=='Both Sexes')&(df.age_group!='All Ages')&(df.race=='All Races')\
@@ -213,7 +217,7 @@ plt.grid(axis='y', linestyle='--', alpha=0.7, zorder=0)
 plt.title("US Drug Death Mortality Rate by Age", fontsize=14, pad=10)
 plt.xlabel('Age Group')
 plt.ylabel('Death Rate per 100,000 Population')
-plt.savefig('../../resources/data_exploration_plots_NCHS/mortality_age_boxplot.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "mortality_age_boxplot.jpeg"))
 
 # State Outliers, 2016
 tmp = df_state.loc[df_state.year==2016].reset_index(drop=True)
@@ -252,4 +256,4 @@ for i, p in enumerate(ax.patches[:10]):
 plt.title('Top 10 State Outliers for Drug Mortality (2016)')
 plt.xlabel('Z-Score')
 plt.ylabel('State')
-plt.savefig('../../resources/data_exploration_plots_NCHS/state_outliers_2016.jpeg')
+plt.savefig(os.path.join(BASE_DIR, "resources", "data_exploration_plots_NCHS", "state_outliers_2016.jpeg"))

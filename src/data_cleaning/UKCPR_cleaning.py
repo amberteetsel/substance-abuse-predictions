@@ -1,8 +1,11 @@
 import pandas as pd
+import os
 
-df = pd.read_excel("../../data/Nat_Welfare_Data_1980_2024.xlsx", sheet_name="Data")
+BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
 
-df.to_csv("../../data/ukcpr_raw.csv", index=False)
+df = pd.read_excel(os.path.join(BASE_DIR, "data", "Nat_Welfare_Data_1980_2024.xlsx"), sheet_name="Data")
+
+df.to_csv(os.path.join(BASE_DIR, "data", "ukcpr_raw.csv"), index=False)
 
 # filter for 1999-2016
 df = df[df["year"].between(1999, 2016)].reset_index(drop=True)
@@ -74,4 +77,4 @@ ordered_cols = [
 df = df[ordered_cols]
 
 # Save cleaned data
-df.to_csv("../../data/UKCPR_cleaned.csv", index=False)
+df.to_csv(os.path.join(BASE_DIR, "data", "UKCPR_cleaned.csv"), index=False)

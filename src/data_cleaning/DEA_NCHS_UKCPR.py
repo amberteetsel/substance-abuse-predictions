@@ -1,10 +1,13 @@
 import pandas as pd
 import numpy as np
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
 
 # Load datasets
-nchs = pd.read_csv('../../data/NCHS_Mortality_Clean.csv')
-dea = pd.read_csv('../../data/dea_full_interpolated.csv')
-ukcpr = pd.read_csv('../../data/UKCPR_cleaned.csv')
+nchs = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Clean.csv"))
+dea = pd.read_csv(os.path.join(BASE_DIR, "data", "dea_full_interpolated.csv"))
+ukcpr = pd.read_csv(os.path.join(BASE_DIR, "data", "UKCPR_cleaned.csv"))
 
 # Add state abbrev to NCHS
 state_map = {
