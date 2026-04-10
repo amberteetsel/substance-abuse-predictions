@@ -1,5 +1,8 @@
 import streamlit as st
 import pandas as pd
+from model_view import model_section
+import os
+
 
 # Page layout
 st.set_page_config(page_title="Substance Abuse/Overdose Analysis", layout="wide")
@@ -9,7 +12,13 @@ st.title("Substance Abuse & Overdose Death")
 st.markdown("---")
 
 # Initialize tabs
-tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
+# tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
+tab1, tab2, tab4, tab5, tab6, tab7 = st.tabs(["Introduction",
+                                              "Research Questions",
+                                              "Team Bios",
+                                              "References",
+                                              "Data Exploration",
+                                              "Models Implemented"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -72,31 +81,31 @@ with tab2:
         9. Can we forecast the next X months of overdose death for specific drugs?
         """)
 
-# TAB 3: DATA SOURCES
-with tab3:
-    st.header("Data Sources")
-    st.subheader("Potential Datasets for Analysis")
+# # TAB 3: DATA SOURCES
+# with tab3:
+#     st.header("Data Sources")
+#     st.subheader("Potential Datasets for Analysis")
 
-    st.info("💡 [Accidental Drug Related Deaths 2012-2014](https://catalog.data.gov/dataset/accidental-drug-related-deaths-2012-2018)")
-    st.write("A listing of each accidental death associated with drug overdose in Connecticut from 2012 to 2024.")
+#     st.info("💡 [Accidental Drug Related Deaths 2012-2014](https://catalog.data.gov/dataset/accidental-drug-related-deaths-2012-2018)")
+#     st.write("A listing of each accidental death associated with drug overdose in Connecticut from 2012 to 2024.")
 
-    st.info("💡 [SUDORS Dashboard: Fatal Drug Overdose Data](https://www.cdc.gov/overdose-prevention/data-research/facts-stats/sudors-dashboard-fatal-overdose-data-accessible.html)")
-    st.write("CDC data on unintentional and undetermined intent drug overdose deaths from death certificates, medical examiner or coroner reports, and postmortem toxicology results.")
+#     st.info("💡 [SUDORS Dashboard: Fatal Drug Overdose Data](https://www.cdc.gov/overdose-prevention/data-research/facts-stats/sudors-dashboard-fatal-overdose-data-accessible.html)")
+#     st.write("CDC data on unintentional and undetermined intent drug overdose deaths from death certificates, medical examiner or coroner reports, and postmortem toxicology results.")
 
-    st.info("💡 [Treatment Episode Data Set: Admissions/Discharges (TEDS-A/D)](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles/teds-d-2020)")
-    st.write("When undergoing substance abuse treatment, individual people can be admitted and discharged from treatment multiple times. The Treatment Episode Data Set (TEDS) system comprises demographic and drug history information about these individuals.")
+#     st.info("💡 [Treatment Episode Data Set: Admissions/Discharges (TEDS-A/D)](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles/teds-d-2020)")
+#     st.write("When undergoing substance abuse treatment, individual people can be admitted and discharged from treatment multiple times. The Treatment Episode Data Set (TEDS) system comprises demographic and drug history information about these individuals.")
 
-    st.info("💡 [Provisional Drug Overdose Death Counts for Specific Drugs](https://catalog.data.gov/dataset/provisional-drug-overdose-death-counts-for-specific-drugs)")
-    st.write("The provisional data are based on a current flow of mortality data and include reported 12 month-ending provisional counts of drug overdose deaths by jurisdiction of occurrence and specified drug.")
+#     st.info("💡 [Provisional Drug Overdose Death Counts for Specific Drugs](https://catalog.data.gov/dataset/provisional-drug-overdose-death-counts-for-specific-drugs)")
+#     st.write("The provisional data are based on a current flow of mortality data and include reported 12 month-ending provisional counts of drug overdose deaths by jurisdiction of occurrence and specified drug.")
 
-    st.info("💡 [CDC Social Vulnerability Index](https://www.atsdr.cdc.gov/place-health/php/svi/index.html)")
-    st.write("Place-based index, database, and mapping application designed to identify and quantify communities experiencing social vulnerability.")
+#     st.info("💡 [CDC Social Vulnerability Index](https://www.atsdr.cdc.gov/place-health/php/svi/index.html)")
+#     st.write("Place-based index, database, and mapping application designed to identify and quantify communities experiencing social vulnerability.")
 
-    st.info("💡 [NCHS - Drug Poisoning Mortality by State: United States](https://data.cdc.gov/National-Center-for-Health-Statistics/NCHS-Drug-Poisoning-Mortality-by-State-United-Stat/xbxb-epbu/data_preview)")
-    st.write("This dataset describes drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates for drug poisoning.")
+#     st.info("💡 [NCHS - Drug Poisoning Mortality by State: United States](https://data.cdc.gov/National-Center-for-Health-Statistics/NCHS-Drug-Poisoning-Mortality-by-State-United-Stat/xbxb-epbu/data_preview)")
+#     st.write("This dataset describes drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates for drug poisoning.")
 
-    st.info("💡 [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health/datafiles?utm_source=chatgpt.com)")
-    st.write("NSDUH measures substance use, mental illness, and treatment in the civilian noninstitutionalized population 12 or older.")
+#     st.info("💡 [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health/datafiles?utm_source=chatgpt.com)")
+#     st.write("NSDUH measures substance use, mental illness, and treatment in the civilian noninstitutionalized population 12 or older.")
 
 
 # TAB 4: TEAM BIOS
@@ -160,13 +169,32 @@ with tab5:
 
 ## Datasets to display
 nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
-nchs_clean = pd.read_csv('data/NCHS_Mortality_Cumulative.csv')
+nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
+connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
+connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+dea_clean = pd.read_csv('data/dea_full_interpolated.csv')
+ukcpr_raw = pd.read_csv('data/ukcpr_raw.csv')
+ukcpr_clean = pd.read_csv('data/UKCPR_cleaned.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
 
     # FUNCTION FOR DATA EXPLORATION LAYOUT
-    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
+    def data_source_section(
+        title,
+        df_raw, df_clean,
+        source_info,
+        collection_method,
+        description,
+        cleaning_steps,
+        limitations,
+        visuals=None,
+        outliers=None,
+        sum_stats=None,
+        corr=None,
+        advanced=None,
+        notes=None
+    ):
         """
         Inputs will be displayed cleanly on the website
         title - title of dataset
@@ -199,42 +227,57 @@ with tab6:
             
             with col_pre1:
                 st.write("🔍 **Raw Snapshot**")
-                st.dataframe(df_raw.head(5), use_container_width=True)
-                st.caption("Initial data types and values.")
-                with st.expander("View Raw Schema"):
-                    st.code(df_raw.dtypes)
+
+                # If using DataFrames
+                if isinstance(df_raw, pd.DataFrame):
+                    
+                    st.dataframe(df_raw.head(5), use_container_width=True)
+                    st.caption("Initial data types and values.")
+                    with st.expander("View Raw Schema"):
+                        st.code(df_raw.dtypes)
+
+                # If using links/strings
+                elif isinstance(df_raw, str):
+
+                    st.image(df_raw, use_container_width=True)
+
 
             with col_pre2:
                 st.write("✨ **Processed Snapshot**")
-                st.dataframe(df_clean.head(5), use_container_width=True)
-                st.caption("Post-cleaning, encoding, and scaling.")
-                with st.expander("View Processed Schema"):
-                    st.code(df_clean.dtypes)
+
+                if isinstance(df_clean, pd.DataFrame):
+                    st.dataframe(df_clean.head(5), use_container_width=True)
+                    st.caption("Post-cleaning, encoding, and scaling.")
+                    with st.expander("View Processed Schema"):
+                        st.code(df_clean.dtypes)
+                elif isinstance(df_clean, str):
+                    st.image(df_clean, use_container_width=True)
 
             st.markdown("---")
 
             # Summary Statistics
-            st.subheader("Statistical Profile")
-            st.write("Comparison of descriptive statistics before and after processing.")
-            
-            col_stat1, col_stat2 = st.columns(2)
-            with col_stat1:
-                st.write("**Raw Summary**")
-                raw_stats = df_raw.select_dtypes(include=['number']).describe().T
-                if not raw_stats.empty:
-                    st.table(raw_stats)
-                else:
-                    st.warning("No numeric data found in Raw dataset.")
-            
-            with col_stat2:
-                st.write("**Processed Summary**")
-                clean_stats = df_clean.select_dtypes(include=['number']).describe().T
-                if not clean_stats.empty:
-                    st.table(clean_stats)
-                else:
-                    st.warning("No numeric data found in Processed dataset.")
-
-            st.markdown("---")
+            if (isinstance(df_raw, pd.DataFrame)) and (isinstance(df_clean, pd.DataFrame)):
+                st.subheader("Statistical Profile")
+                st.write("Comparison of descriptive statistics before and after processing.")
+                
+                col_stat1, col_stat2 = st.columns(2)
+                with col_stat1:
+                    st.write("**Raw Summary**")
+                    raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                    if not raw_stats.empty:
+                        st.table(raw_stats)
+                    else:
+                        st.warning("No numeric data found in Raw dataset.")
+                
+                with col_stat2:
+                    st.write("**Processed Summary**")
+                    clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                    if not clean_stats.empty:
+                        st.table(clean_stats)
+                    else:
+                        st.warning("No numeric data found in Processed dataset.")
+    
+                st.markdown("---")
             
             # Cleaning & Processing Steps
             st.subheader("Cleaning & Processing Logic")
@@ -255,11 +298,41 @@ with tab6:
             else:
                 st.info("Visualizations for this dataset are currently in progress.")
 
+            # Additional Analysis Sections
+            if outliers:
+                st.subheader("Outlier Detection")
+                with st.container(border=True):
+                    st.image(outliers['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {outliers['Interpretation']}")
+                    st.write(f"**Action:** {outliers['Action']}")
+                
+            if sum_stats:
+                st.subheader("Summary Statistics")
+                with st.container(border=True):
+                    st.write(f"**Summary:** {sum_stats['Interpretation']}")
+                    st.write(f"**Interpretation:** {sum_stats['Interpretation']}")
+                    
+            if corr:
+                st.subheader("Correlation Analysis")
+                with st.container(border=True):
+                    st.image(corr['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {corr['Interpretation']}")
+    
+            if advanced:
+                st.subheader("Advanced Analysis")
+                with st.container(border=True):
+                    st.image(advanced['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {advanced['Interpretation']}")
+                    
+            if notes:
+                st.subheader("Additional Notes")
+                with st.container(border=True):
+                    st.write(notes)
 
             # Bias/Limitations
             st.subheader("Limitations")
             if limitations:
-                with st.container(border=True):
+                with st.container():
                     st.write(limitations)
 
     # --- SECTION: NCHS Drug Poisoning ---
@@ -269,39 +342,55 @@ with tab6:
         df_clean=nchs_clean,
         source_info="CDC / National Center for Health Statistics",
         collection_method="API (Socrata SODA)",
-        description="This dataset describes 1999-2016 drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates. It illuminates demographic and temporal trends in U.S. drug mortality rates.",
+        description="The dataset provides solid historical information (1999-2016) on drug deaths in the United States broken down by State, Age Group, Race (White, Hispanic, Black), and Sex (Male, Female). It enables us to see trends (geographic, demographic, temporal) in drug mortality during the early 21st century and can be useful in building an eventual predictive model.",
         cleaning_steps={
             "Handling Missing Data": "Age-adjusted rate is NA for rows that specify an age group (vs. All Ages). To remedy, we combined crude rate and adjusted rate columns with the understanding that data will need to be filtered by age group for subsequent analysis.",
+            "Outliers": "We identified many high outliers for death rate but decided to leave them in the data. Upon inspection, the numbers are consistent with the raw deaths/population numbers reported and tend to occur in states where we know the opioid and fentanyl crises had devastating effects (West Virginia, Ohio, etc.). Thus we feel the outliers are useful data points for understanding the true substance abuse landscape in the United States.",
             "Data Types": "The API returns all data as objects so we converted columns such as death rate, year, population, etc. to numeric. Relevant categorical columns include State, Race, Age Group, and Sex.",
-            "Dimensionality Reduction": "Keep only year, categorical feature columns, and death rate calculations. Made age group less granular to simplify visualizations.",
+            "Dimensionality Reduction": "Keep only year, categorical feature columns, and death rate calculations. Made age group less granular to simplify visualizations. Also simplified naming conventions for Race column.",
             "Handling Overlapping Totals": "Filter out 'United States' aggregate rows to isolate state-level data and prevent double-counting in statistical models.",
-            "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers (hotspots) across different decades. Added log transformation for death rate."
+            "Standardization": "Applied Z-score standardization to the age-adjusted rates to identify statistical outliers. Added log transformation for death rate for use in potential future linear models."
         },
         visuals = [
-            {'title': "Fig. 1",
-            'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp ~5 point jump between 2014 and 2016.",
-            'path': "resources/data_exploration_plots/mortality_1999_2016.jpeg"},
-            {'title': 'Fig. 2',
-            'desc':"The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
-            'path':"resources/data_exploration_plots/mortality_race_1999_2016.jpeg"},
-            {'title':'Fig. 3',
-            'desc': "Men have consistently suffered higher drug death rates than women. The death rate for men spiked from 2014-2016 along with the national rate, while the rate for women increased more gradually.",
-            'path':"resources/data_exploration_plots/mortality_sex_1999_2016.jpeg"},
-            {'title':'Fig. 4',
-            'desc': "Drug mortality rates are highest among 25-44 year olds, followed by 45-64 year olds.",
-            'path': "resources/data_exploration_plots/mortality_age_boxplot.jpeg"},
-            {'title':'Fig. 5',
-            'desc': "These states had the top 10 most extreme death rates in 2016 and had the greatest impact on overall rate increases.",
-            'path': "resources/data_exploration_plots/state_outliers_2016.jpeg"}
+            {
+                'title': "Fig. 1: U.S. Drug Mortality Rate",
+                'desc': "Demonstrates rise in U.S. drug mortality rates from 1999-2016, including a sharp jump between 2014 and 2016.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 2: Drug Mortality Rate by Race',
+                'desc': "The rise in drug mortality rates from 1999-2016 disproportionately impacted non-hispanic whites.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_race_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 3: Drug Mortality Rate by Sex',
+                'desc': "Men have consistently suffered higher drug death rates than women.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_sex_1999_2016.jpeg"
+            },
+            {
+                'title': 'Fig. 4: Drug Mortality Rate by Age Group',
+                'desc': "Drug mortality rates are highest among 25-44 year olds.",
+                'path': "resources/data_exploration_plots_NCHS/mortality_age_boxplot.jpeg"
+            },
+            {
+                'title': 'Fig. 5: Top 10 State Outliers for Drug Mortality',
+                'desc': "These states had the top 10 most extreme death rates in 2016.",
+                'path': "resources/data_exploration_plots_NCHS/state_outliers_2016.jpeg"
+            }
         ],
-        limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors."
+        limitations="This dataset covers drug mortality rates from 1999-2016, so data is not available for the most recent years. Also, drug deaths can be underreported due to stigma and confounding factors.",
+        advanced = {
+            "image": "resources/data_exploration_plots_NCHS/QQ_death_rate.jpeg",
+            'Interpretation':"Death rate is fairly normal, barring outliers at the extremes."
+
+        }
     )
 
     # --- SECTION: TEDS-A ---
     data_source_section(
         title="TEDS-A 2023 Treatment Episode Data Set",
-        df_raw="resources/tedsa_preview/raw_tedsa_preview.png",
-        df_clean="resources/tedsa_preview/cleaned_tedsa_preview.png",
+        df_raw="resources/teda_preview/raw_tedsa_preview.png",
+        df_clean="resources/teda_preview/cleaned_tedsa_preview.png",
         source_info="[SAMHSA TEDS-A Dataset](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles?data_collection=1011)",
         collection_method="Public-use dataset downloaded from SAMHSA website",
         description=(
@@ -322,21 +411,21 @@ with tab6:
             "Duplicates": "Ensured there were no duplicates.", 
             "Scaling & Log Transform": "Applied StandardScaler and log1p transform on numeric variables such as prior_tx and arrests_30days. Other transformation was not needed as the data is on a standardized small scale."
         },
-        outlier_detection={
-            "Boxplot": "resources/data_exploration_tedsa/boxplot_tedsa.png",
+        outliers={
+            "image": "resources/data_exploration_tedsa/boxplot_tedsa.png",
             "Interpretation": "These outliers were not due to issues with the data but rather truthful outliers as the nature of the data does not allow for mistakes, using strict inputs.",
             "Action": "Nothing will be done for these at this moment but when experimenting with models this may change."
         },
-        summary_statistics={
+        sum_stats={
             "Summary": "The mean, median, standard deviation, minimum, maximum, skewness, kurtosis, count, amount of missing values were computed for all relevant variables.",
             "Interpretation": "Age and educations are both roughly symmetric. Most of the variables are mildly skewed however there are some extremely skewed such as arrests_30days and self_help_30days."
         },
-        correlation_analysis={
-            "Correlation Matrix": "resources/data_exploration_tedsa/corr_tedsa.png",
+        corr={
+            "image": "resources/data_exploration_tedsa/corr_tedsa.png",
             "Interpretation": "There are some strong correlations between variables such as route of administration and primary substance."
         },
-        advanced_analysis={
-            "Q-Q Plot": "resources/data_exploration_tedsa/qq_tedsa.png",
+        advanced={
+            "image": "resources/data_exploration_tedsa/qq_tedsa_png.png",
             "Interpretation": "The data does not look normal on the Q-Q Plot however it is not continuous so this makes sense and is not a red flag."
         },
         visuals = [
@@ -350,9 +439,8 @@ with tab6:
             'desc': "Those with less education while being unemployed seem to have been arrested more within the past 30 days of admission.",
             'path':"resources/teds_visual/employment_educ_tedsa.png"},
         ],
-        additional_notes=(
-            "The dataset is quite large and complex, however the organization of the codebook helped tremendously with the process. "
-            "It is important to note that there may be some missed biases or issues that need to be addressed with later modeling."
+        notes=(
+            "The dataset is quite large and complex, however the organization of the codebook helped tremendously with the process. It is important to note that there may be some missed biases or issues that need to be addressed with later modeling."
         ),
         limitations=(
             "This dataset represents treatment admissions rather than unique individuals, "
@@ -362,6 +450,164 @@ with tab6:
             "There are always potential biases due to systemic inequalities and prejudices."
         )
     )
-    # --- SECTION: DATASET3 ---
+
     
-    # --- SECTION: DATASET4 ---
+    # --- SECTION: DATASET3 ---
+    data_source_section(
+        title="Connecticut Accidental Drug Related Deaths",
+        df_raw=connecticut_raw,
+        df_clean=connecticut_clean,
+        source_info="Connecticut Open Data Portal",
+        collection_method="API (Socrata SODA)",
+        description="This dataset contains accidental drug related deaths reported in Connecticut including demographic information, substances detected in toxicology reports, and circumstances surrounding overdose deaths. It allows analysis of poly-drug overdoses, demographic trends, and seasonal patterns.",
+        
+        cleaning_steps={
+        
+        "Duplicate Removal": "Duplicate records were identified and removed so each death is counted once.",
+        
+        "Handling Missing Values": "Age values were converted to numeric and missing ages were filled with the median age. Missing categorical values were standardized where possible.",
+        
+        "Outlier Handling": "Extreme age values outside the range of 10–100 were removed to eliminate likely data entry errors.",
+        
+        "Binary Encoding": "Drug indicator columns were converted to binary format where 1 indicates the drug was present in the toxicology report.",
+        
+        "Feature Engineering": "A Drug Count variable was created by summing drug indicator columns to measure the number of substances involved in each overdose case.",
+        
+        "Normalization": "Age was standardized using z-score normalization and Drug Count was log-transformed to reduce skewness."
+        
+        },
+        
+        visuals = [
+        
+        {'title': 'Fig. 7: Drug Correlation Heatmap',
+         
+        'desc': "The heatmap shows that there is a weak positive correlation between Xylazine and Fentanyl. There is a strong correlation between Heroin and Heroin Morphine Codeine, meaning that the combination of Heroin Morphine and Codeine combination is prevalent.",
+        
+        'path': "resources/data_exploration_plots_CT/heatmap.png"},
+        
+        {'title': 'Fig. 8: Drug Count Distribution',
+        
+        'desc':"This visual is to compare the transformation of Drug Count prior to the log transformation. From the shape, we can see that the distribution is right-skewed.",
+        
+        'path':"resources/data_exploration_plots_CT/Drug Count Distribution.png"},
+        
+        {'title': 'Fig. 9: Log Drug Count Distribution',
+        
+        'desc':"After the transformation, the distribution of data is more balanced and compressed, especially for cases with larger numbers of drugs involved. The majority of the cases center around the middle of the distribution which is approximately 2-4 substances.",
+        
+        'path':"resources/data_exploration_plots_CT/Log Transformed Data Count Distribution.png"},
+        
+        {'title':'Fig. 10: Total Deaths Involving Each Drug',
+        
+        'desc': "From this bar chart, we can see that the leading drug causing overdoses in Connecticut from 2012 to 2024 is Fentanyl, with Cocaine and Heroin being second and third leading drug.",
+        
+        'path':"resources/data_exploration_plots_CT/Total Deaths Involving Each Drug.png"},
+        
+        {'title':'Fig. 11: Seasonality of Overdose Deaths',
+        
+        'desc': "From this bar chart, we can see that the peak summer months, June and July, tend to have slightly higher overdose cases than the other months.",
+        
+        'path': "resources/data_exploration_plots_CT/Seasonality of Deaths.png"},
+        
+        {'title':'Fig. 12: Number of Drugs Present in Each Overdose Case',
+        
+        'desc': "The histogram shows that the most common number of drugs present in each overdose case is 3. A large amount of overdose cases involve 2 to 5 drugs present, indicating that many overdoses involve multiple substances. The shape of the histogram is skewed to the right, with a tail towards 7 to 8 drugs.",
+        
+        'path': "resources/data_exploration_plots_CT/Number of Drugs Present.png"},
+        
+        {'title':'Fig. 13: Q-Q Plot of Age Distribution',
+        
+        'desc': "From this Q-Q plot we can see that the red line depicts a normal distribution. The data points for Age seem to follow the line around the center of the data, but deviates in the lower and upper tails. This means that in younger and older ages occur less frequently than a normal dsitribution would expect.",
+        
+        'path': "resources/data_exploration_plots_CT/QQ Plot.png"}],
+        
+        
+        limitations="There are many ethical considerations that apply to this dataset because it contains very sensitive public health information involving deaths caused by overdoses. Another limitation is that there might be reporting biases amongst races and ethnicities. Plus, there are columns with several missing responses which may affect analysis and conclusions."
+        
+        )
+    
+
+    # --- SECTION: DEA Retail Drug Sales ---
+    try:
+        data_source_section(
+            title="ARCOS Retail Drug Summary Reports",
+            df_raw="resources/dea_preview/arcos_raw_sample.png",
+            df_clean=dea_clean,
+            source_info="U.S. Drug Enforcement Administration (DEA) / ARCOS Retail Drug Summary Reports",
+            collection_method="ARCOS Query Tool (2006-2016); Manual extraction from PDF reports (2000-2005)",
+            description="Reported controlled substances transactions by state. Proxy for availability of opioids (Hydrocodone, Oxycodone, and Fentanyl).",
+            cleaning_steps={
+                "Data Extraction": "For 2006-2016, data was extracted using the DEA ARCOS Query Tool. For 2000, 2001, and 2005, data was manually extracted from PDF reports and digitized.",
+                "Data Loading": "Due to large size of ARCOS extract (422,647,324 rows), data was loaded in chunks and aggregated to state-year level to create a more manageable dataset for analysis.",
+                "Handling Missing Values": "Missing values for 2002-2003 were imputed using linear interpolation based on adjacent years.",
+            },
+            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market)."
+            )
+    except Exception as e:
+        st.error(f"Error loading DEA dataset: {e}")
+
+
+    # --- SECTION: UKCPR National Welfare Data ---
+    try:
+        data_source_section(
+            title="UKCPR Dational Welfare Data, 1980-2024",
+            df_raw=ukcpr_raw,
+            df_clean=ukcpr_clean,
+            source_info="University of Kentucky Center for Poverty Research (UKCPR)",
+            collection_method="Excel download from source website",
+            description="State-level panel data series covering population, employment, unemployment, welfare, poverty, and politics.",
+            cleaning_steps={
+                "Feature Selection": "Keep only relevant columns such as year, state, population, unemployment rate, welfare spending, poverty rate, and political control.",
+                "Handling Missing Values": "N/A; dataset is complete with no missing values.",
+                "Data Reduction": "Filtered to include only 1999-2016 to align with NCHS mortality data for potential future modeling."
+            },
+            limitations="Older data may have lower accuracy."
+            )
+    except Exception as e:
+        st.error(f"Error loading UKCPR dataset: {e}")
+
+# ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
+
+# Get the directory that app.py is in, then go up one level to the project root
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Construct the path safely
+map_path = os.path.join(BASE_DIR, "resources", "model_viz", "cluster_state_map.png")
+
+with tab7:
+    st.header("Models Implemented")
+    st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
+
+    # Example of how to use model_section function for a model implemented
+    model_section(
+        title = "Clustering of U.S. States Based on Drug Mortality Trends",
+        model_type = "K-Means Clustering",
+        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 1999-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
+        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states based on their drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
+        assumptions = {
+            "Assumption 1": "The drug mortality rates are representative of the true underlying trends.",
+            "Assumption 2": "The number of clusters (k) is known and appropriate for the data."
+        },
+        hyperparameters = {
+            "k": [3, "how I tuned this value"],
+            "max_iter": [300, "default value"],
+            "n_init": [10, "default value"]
+        },
+        model_viz={
+            "Cluster Map": {
+                "path": map_path,
+                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality."
+            }
+        },
+        performance_eval="Clustering performance is ... based on ...",
+        preprocessing_steps={
+            "Step 1": "Log transformation for drug quantities",
+            "Step 2" : "Standardization of features",
+            "Step 3": "Feature selection"
+        },
+        challenges={
+            "Challenge 1": "Determining the optimal number of clusters (k) was difficult due to ...",
+            "Challenge 2": "The data had some outliers that affected clustering results, which we addressed by ..."
+        }
+
+    )
