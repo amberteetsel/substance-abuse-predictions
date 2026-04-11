@@ -200,3 +200,25 @@ plt.figure(figsize=(10, 8))
 sns.heatmap(df_final[cols_to_corr].corr(), annot=True, cmap='coolwarm', fmt=".2f")
 plt.title("Correlation Matrix (Scaled): Supply & Economics vs. Mortality")
 plt.savefig(os.path.join(BASE_DIR, 'resources', 'death_rate_plots', "scaled_corrplot.png"))
+
+
+# Drug Supply by Year
+df_melted = df_final.melt(id_vars='year', 
+                    value_vars=['log_oxy', 'log_hydro', 'log_fent'],
+                    var_name='Drug Type', 
+                    value_name='Grams')
+
+plt.figure(figsize=(12, 6))
+sns.set_style("whitegrid")
+
+# Create the lineplot
+sns.lineplot(data=df_melted, x='year', y='Grams', hue='Drug Type', marker='o')
+
+plt.title('National Supply Trends: Oxycodone, Hydrocodone, and Fentanyl', fontsize=15)
+plt.xlabel('Year', fontsize=12)
+plt.ylabel('Total Grams per 100k Population, scaled', fontsize=12)
+plt.legend(title='Drug Type')
+plt.xticks(df_final['year'].unique(), rotation=45) # Ensure every year is shown
+
+plt.tight_layout()
+plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "drug_supply_by_year.png"))
