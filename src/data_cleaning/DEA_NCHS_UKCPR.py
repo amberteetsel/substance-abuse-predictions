@@ -1,8 +1,12 @@
 import pandas as pd
 import numpy as np
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
+import math
+from sklearn.preprocessing import StandardScaler
 
-BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
 # Load datasets
 nchs = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Clean.csv"))
@@ -31,7 +35,7 @@ nchs = nchs[(nchs['state'] != 'United States')].reset_index(drop=True)
 nchs = nchs[nchs['state'].str.strip().str.upper() != 'DC'].reset_index(drop=True)
 
 # Verify it worked
-print(f"Remaining states: {nchs['state'].unique()}")
+# print(f"Remaining states: {nchs['state'].unique()}")
 # Map states
 nchs['state'] = nchs['state'].str.upper().str.strip()
 nchs['state'] = nchs['state'].map(state_map)
@@ -72,14 +76,127 @@ df_final = pd.merge(
     how = 'left'
 )
 
-cols_to_keep = ['year', 'state', 'sex', 'age_group', 'age_group_detail', 'race', 'hydro_gms',
-                'oxy_gms', 'fent_gms', 'unempl_rate','poverty_rate', 'gsp', 'min_wage',
-                'snap_rate', 'medicaid_rate', 'gov_dem', 'death_rate']
+# Distributions before scaling
+continuous_vars = ['oxy_gms', 'hydro_gms', 'fent_gms', 
+                   'gsp', 'unempl_rate', 'min_wage', 'snap_rate',
+                   'poverty_rate', 'medicaid_rate',
+                   'death_rate']
+
+def plot_unscaled_hist(df, columns, cols_per_row=3):
+    rows = math.ceil(len(columns) / cols_per_row)
+    plt.figure(figsize=(5 * cols_per_row, 4 * rows))
+    
+    for i, col in enumerate(columns):
+        plt.subplot(rows, cols_per_row, i + 1)
+        sns.histplot(df[col].dropna(), kde=False, color='teal', bins=50) 
+        plt.title(f'Unscaled Distribution: {col}')
+        plt.grid(axis='y', alpha=0.3)
+        plt.tight_layout()
+    
+    plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "unscaled_histograms.png"), dpi=300) # Save high-res version
+    # plt.show()
+
+plot_unscaled_hist(df_final, continuous_vars)
+
+# Feature Scaling
+
+# log transform the skewed features
+df_final['log_oxy'] = np.log1p(df_final['oxy_gms'])
+df_final['log_hydro'] = np.log1p(df_final['hydro_gms'])
+df_final['log_fent'] = np.log1p(df_final['fent_gms'])
+df_final['log_gsp'] = np.log1p(df_final['gsp'])
+df_final['log_death_rate'] = np.log1p(df_final['death_rate'])
+df_final['log_min_wage'] = np.log1p(df_final['min_wage'])
+df_final['log_unempl_rate'] = np.log1p(df_final['unempl_rate'])
+df_final['log_medicaid_rate'] = np.log1p(df_final['medicaid_rate'])
+
+# separate features
+continuous_vars = ['log_oxy', 'log_hydro', 'log_fent',
+                   'log_gsp', 'log_unempl_rate', 'log_min_wage', 'snap_rate',
+                   'poverty_rate','log_medicaid_rate',
+                   'log_death_rate']
+
+# put everything in common range
+scaler = StandardScaler()
+df_final[continuous_vars] = scaler.fit_transform(df_final[continuous_vars])
+
+def plot_scaled_hist(df, columns, cols_per_row=3):
+    rows = math.ceil(len(columns) / cols_per_row)
+    plt.figure(figsize=(5 * cols_per_row, 4 * rows))
+    
+    for i, col in enumerate(columns):
+        plt.subplot(rows, cols_per_row, i + 1)
+        sns.histplot(df[col].dropna(), kde=False, color='teal', bins=50) 
+        plt.title(f'Scaled Distribution: {col}')
+        plt.grid(axis='y', alpha=0.3)
+        plt.tight_layout()
+    
+    plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "scaled_histograms.png"), dpi=300) # Save high-res version
+    # plt.show()
+
+plot_scaled_hist(df_final, continuous_vars)
+
+
+# Plotting drugs against death rate, before and after scaling
+# UNSCALED
+
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+
+sns.regplot(data=df_final, x='oxy_gms', y='death_rate', ax=ax1, scatter_kws={'alpha':0.5})
+ax1.set_title('Oxycodone per 100k vs Death Rate')
+
+sns.regplot(data=df_final, x='hydro_gms', y='death_rate', ax=ax2, scatter_kws={'alpha':0.5}, color='orange')
+ax2.set_title('Hydrocodone per 100k vs Death Rate')
+
+sns.regplot(data=df_final, x='fent_gms', y='death_rate', ax=ax3, scatter_kws={'alpha':0.5}, color='green')
+ax3.set_title('Fentanyl per 100k vs Death Rate')
+
+plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "unscaled_drugs_vs_death.png"), dpi=300) # Save high-res version
+
+# SCALED
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+
+sns.regplot(data=df_final, x='log_oxy', y='log_death_rate', ax=ax1, scatter_kws={'alpha':0.5})
+ax1.set_title('Oxycodone per 100k vs Death Rate')
+
+sns.regplot(data=df_final, x='log_hydro', y='log_death_rate', ax=ax2, scatter_kws={'alpha':0.5}, color='orange')
+ax2.set_title('Hydrocodone per 100k vs Death Rate')
+
+sns.regplot(data=df_final, x='log_fent', y='log_death_rate', ax=ax3, scatter_kws={'alpha':0.5}, color='green')
+ax3.set_title('Fentanyl per 100k vs Death Rate')
+
+plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "scaled_drugs_vs_death.png"), dpi=300) # Save high-res version
+
+# FINAL DATAFRAME FOR MODELING
+
+cols_to_keep = ['year', 'state',
+                'hydro_gms', 'oxy_gms', 'fent_gms',
+                'log_oxy', 'log_hydro', 'log_fent',
+                'gsp', 'unempl_rate', 'min_wage', 'medicaid_rate', 
+                'log_gsp', 'log_unempl_rate', 'log_min_wage', 'log_medicaid_rate',
+                'snap_rate', 'poverty_rate',
+                'gov_dem', 'death_rate', 'log_death_rate']
 
 df_final = df_final[cols_to_keep]
 
 # Export final dataset
-df_final.to_csv('../../data/death_rate.csv', index=False)
+df_final.to_csv(os.path.join(BASE_DIR, 'data', 'death_rate.csv'), index=False)
 
+# Correlation Plots, Unscaled and Scaled
+# Unscaled
+cols_to_corr = ['death_rate', 'oxy_gms', 'hydro_gms', 'fent_gms', 'gsp', 'snap_rate',
+                'poverty_rate', 'unempl_rate', 'min_wage', 'medicaid_rate']
 
+plt.figure(figsize=(10, 8))
+sns.heatmap(df_final[cols_to_corr].corr(), annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Correlation Matrix (Unscaled): Supply & Economics vs. Mortality")
+plt.savefig(os.path.join(BASE_DIR, 'resources', 'death_rate_plots', "unscaled_corrplot.png"))
 
+# Scaled
+cols_to_corr = ['log_death_rate', 'log_oxy', 'log_hydro', 'log_fent', 'log_gsp', 'snap_rate',
+                'poverty_rate', 'log_unempl_rate', 'log_min_wage', 'log_medicaid_rate']
+
+plt.figure(figsize=(10, 8))
+sns.heatmap(df_final[cols_to_corr].corr(), annot=True, cmap='coolwarm', fmt=".2f")
+plt.title("Correlation Matrix (Scaled): Supply & Economics vs. Mortality")
+plt.savefig(os.path.join(BASE_DIR, 'resources', 'death_rate_plots', "scaled_corrplot.png"))
