@@ -221,4 +221,4 @@ plt.legend(title='Drug Type')
 plt.xticks(df_final['year'].unique(), rotation=45) # Ensure every year is shown
 
 plt.tight_layout()
-plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "drug_supply_by_year.png"))
+plt.savefig(os.path.join(BASE_DIR, "resources", "death_rate_plots", "drug_supply_by_year.png"), dpi=300)
