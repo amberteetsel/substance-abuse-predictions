@@ -162,6 +162,7 @@ with tab5:
                      "University of Kentucky Center for Poverty Research",
                      "ARCOS Retail Drug Summary Reports, 2000-2005",
                      "ARCOS Query Tool, 2006-2016"
+                     "National Library of Medicine"
         ],
         "Link": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC9731175/",
                  "https://stacks.cdc.gov/view/cdc/135849",
@@ -171,7 +172,8 @@ with tab5:
                  "https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm"
                  "https://ukcpr.uky.edu/resources",
                  "https://www.deadiversion.usdoj.gov/arcos/retail_drug_summary/archive/archives-report.html",
-                 "https://arcos.nd.edu/query"
+                 "https://arcos.nd.edu/query",
+                 "https://pmc.ncbi.nlm.nih.gov/articles/PMC6848196/"
         ]
     }
 
@@ -426,43 +428,155 @@ with tab6:
 
 # ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
 
-# Cluster State Map path
-map_path = os.path.join(BASE_DIR, "resources", "model_viz", "cluster_state_map.png")
+# CLUSTER MODEL REFERENCES
+map_path = os.path.join(BASE_DIR, "resources", "death_rate_plots", "dominant_risk_profile_map_allyears.png")
+map_shift = os.path.join(BASE_DIR, "resources", "death_rate_plots", "state_risk_map_eras.png")
+schema_pre = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate_unscaled.csv"))
+schema_post = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate.csv"))
+distr_pre = os.path.join(BASE_DIR, "resources", "death_rate_plots", "unscaled_histograms.png")
+distr_post = os.path.join(BASE_DIR, "resources", "death_rate_plots", "scaled_histograms.png")
+clust_descriptions = """
+    To determine the optimal number of clusters, we evaluated the model using three metrics. The Elbow Method suggested a clear transition at k=3 or k=4, and the Davies=Bouldin Index confirmed k=3 as most compact clustering. \n
+    However, we ultimately selected k=4. Despite slightly increasing the DB Index, using 4 clusters enabled us to see the difference between high Oxycodone states and high Fentanyl states. \n
+    We deemed the trade-off between minor loss in cluster quality and gain of qualitative nuance necessary to accurately study the shifting nature of the opioid crisis.
+"""
+performance_str = """
+    We evaluate cluster performance using Silhouette Score and the Davies-Bouldin (DB) Index. \n
+    The overall model's Silhouette Score (0.4675) is relatively low, but it was the best score possible with a reasonable amount of clusters.
+    It's DB Index (0.9318) is poor, indicating clusters are not well separated as seen in the 3D visual below. \n
+    In 2000-2005, both metrics improve. The Silhouette Score (0.5129) indicates better separation of clusters, as does the significantly reduced DB Index (0.5343). \n
+    2006-2010 is the worst performaing era. Silhouette Score (0.3745) is low and DB Index (0.9647) is high, indicating poor separation of clusters. The visual below demonstrates how spread out some clusters are and the low degree of separation between many data points. \n
+    2011-2016 improves slightly on the previous era with a higher Silhouette Score (0.4261) and lower DB Index (0.8814). The plot below visualizes the spread of clusters, where we can see that the Low and Moderate Risk clusters are pretty well-defined and separated.
+    However, the High and Acute risk clusters are very spread out.
+"""
+challenge_dict = {
+    "Ch1":{
+        'name': "Data Accessability",
+        'issue': 'Drug availability data from 2000-2005 was trapped in pdf reports from the DEA.',
+        'sol': "Manually extracted and digitized data for 2000 and 2005, then use linear interpolation to fill in 2001-2004"
+    },
+    "Ch2":{
+        "name": "Data Volume",
+        "issue": "The DEA ARCOS data from 2006-2016 contained over 6 million rows, so loading and cleaning the data took over 30 minutes and often crashed the kernel.",
+        "sol": "Processing the cleaning the data in chunks of 1 million rows each"
+    },
+    "Ch3": {
+        "name": "Data Availability",
+        "issue": "Initially the goal was to incorporate demographic data (age, sex, race) into the model. However, the NCHS data only provides this information at the national level.",
+        "sol": "Drop age, sex, and race data from analysis"
+    },
+    "Ch4": {
+        "name": "Multicollinearity",
+        "issue": "Oxycodone and Hydrocodone supply were highly correlated (r = 0.73), as were SNAP rate and Poverty Rate (r = 0.71)",
+        "sol": "Dropped Hydrocodone supply and Poverty rate from feature considerations since Oxycodone supply and SNAP rate were more highly correlated with death rate than their counterparts."
+    }
+}
+death_rate_df = pd.read_csv(os.path.join(BASE_DIR,"data","death_rate_kmeans.csv"))
+# define time periods
+periods = [
+    (2000, 2016, "Full Time Span (2000-2016)"),
+    (2000, 2005, "Early Era (2000-2005)"),
+    (2006, 2010, "Prescription Era (2006-2010)"),
+    (2011, 2016, "Synthetic/Fentanyl Era (2011-2016)")
+]
+
+# Define specific color scale
+color_mapping = {
+    'Low Risk': '#2ecc71',
+    'Moderate Risk': '#f1c40f',
+    'High Risk (Prescription-Driven)': '#e67e22',
+    'Acute High Risk (Fentanyl-Driven)': '#e74c3c'
+}
+
+from plot_utils import generate_era_3d_plots
+era_3d_plots = generate_era_3d_plots(death_rate_df,periods, color_mapping)
+
 
 with tab7:
     st.header("Models Implemented")
     st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
 
-    # Example of how to use model_section function for a model implemented
+    # CLUSTERING MODEL
     model_section(
         title = "Clustering of U.S. States Based on Drug Mortality Trends",
         model_type = "K-Means Clustering",
-        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 1999-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
+        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 2000-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
         justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states based on their drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
         assumptions = {
             "Assumption 1": "The drug mortality rates are representative of the true underlying trends.",
-            "Assumption 2": "The number of clusters (k) is known and appropriate for the data."
         },
         hyperparameters = {
-            "k": [3, "how I tuned this value"],
-            "max_iter": [300, "default value"],
-            "n_init": [10, "default value"]
+            "k": [3, "See images below"],
+            "max_iter": [300, "Left at default value; changes had no meaningful impact on Silhouette score"],
+            "n_init": [20, "Adjusted from default 10 to improve Silhouette score"]
+        },
+        hyperparameter_viz={
+            "Features & K Selection": {
+                "path": os.path.join(BASE_DIR, "resources", "death_rate_plots", "cluster_feature_sets.png"),
+                "description": "Optimal model features were initially selected based on Silhouette score",
+                "cont_width": False
+            },
+            "K Validation": {
+                "path": os.path.join(BASE_DIR, "resources", "death_rate_plots", "kmeans_evaluation_metrics.png"),
+                "description": "Elbow Method and Silhouette Score \n ",
+                "cont_width": True
+            },
+            "Davies-Bouldin Index & Cluster Identification": {
+                "path": os.path.join(BASE_DIR,"resources","death_rate_plots","cluster_db_index.png"),
+                "description": "While DB scores indicate k=3 as optimal cluster number, k=4 provides better insight to specific drivers of death rate.",
+                "cont_width":False
+            },
+            "Cluster Descriptions": {
+                "path":os.path.join(BASE_DIR,"resources", "death_rate_plots", "cluster_descriptions.png"),
+                "description": clust_descriptions,
+                "cont_width": True
+            }
+
         },
         model_viz={
-            "Cluster Map": {
+            "U.S. States by Predominant Cluster": {
                 "path": map_path,
-                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality."
+                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality.",
+                "cont_width": True
+            },
+            "State Cluster Shift": {
+                "path": map_shift,
+                "description": "Predominant cluster for each state during each era. Illustrates developing severity of risk of death from drug overdose over time.",
+                "cont_width":True
             }
         },
-        performance_eval="Clustering performance is ... based on ...",
+        performance_eval=performance_str,
+        performance_viz={
+            "Comprehensive Analysis":{
+                "fig": era_3d_plots[periods[0][2]]["fig"],
+                "stats": era_3d_plots[periods[0][2]]["stats"],
+                "cont_width":True
+            },
+            "Early Era Analysis": {
+                "fig": era_3d_plots[periods[1][2]]["fig"],
+                "stats": era_3d_plots[periods[1][2]]["stats"],
+                "cont_width": True
+            },
+            "Mid Era Analysis": {
+                "fig": era_3d_plots[periods[2][2]]["fig"],
+                "stats": era_3d_plots[periods[2][2]]["stats"],
+                "cont_width": True
+            },
+            "Late Era Analysis": {
+                "fig": era_3d_plots[periods[3][2]]["fig"],
+                "stats": era_3d_plots[periods[3][2]]["stats"],
+                "cont_width": True
+            }
+        },
         preprocessing_steps={
-            "Step 1": "Log transformation for drug quantities",
-            "Step 2" : "Standardization of features",
+            "Step 1": "Log transformation for drug quantities and other skewed continuous variables.",
+            "Step 2" : "Z-Score Standardization of features",
             "Step 3": "Feature selection"
         },
-        challenges={
-            "Challenge 1": "Determining the optimal number of clusters (k) was difficult due to ...",
-            "Challenge 2": "The data had some outliers that affected clustering results, which we addressed by ..."
-        }
+        before_viz = schema_pre,
+        after_viz = schema_post,
+        before_distr = distr_pre,
+        after_distr = distr_post,
+        challenges=challenge_dict
 
     )

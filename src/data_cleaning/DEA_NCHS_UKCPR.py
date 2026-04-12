@@ -76,6 +76,9 @@ df_final = pd.merge(
     how = 'left'
 )
 
+# Save Unscaled DataFrame for Before/After snapshots, schemas
+df_final.to_csv(os.path.join(BASE_DIR, "data", "death_rate_unscaled.csv"), index=False)
+
 # Distributions before scaling
 continuous_vars = ['oxy_gms', 'hydro_gms', 'fent_gms', 
                    'gsp', 'unempl_rate', 'min_wage', 'snap_rate',
@@ -179,7 +182,7 @@ cols_to_keep = ['year', 'state',
 
 df_final = df_final[cols_to_keep]
 
-# Export final dataset
+# Export final dataset, scaled (use for "after" snapshots, schemas)
 df_final.to_csv(os.path.join(BASE_DIR, 'data', 'death_rate.csv'), index=False)
 
 # Correlation Plots, Unscaled and Scaled
