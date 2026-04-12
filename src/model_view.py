@@ -96,7 +96,7 @@ def model_section(
         st.markdown("---")
         st.markdown("### 📊 Model Details & Evaluation")
         tab_specs, tab_perf, tab_challenges = st.tabs([
-            "Technical Specs", "Performance Evaluation", "Implementation Challenges"
+            "Technical Specs", "Assumptions & Performance", "Implementation Challenges"
         ])
 
         with tab_specs:
@@ -109,30 +109,40 @@ def model_section(
             # --- NEW: Hyperparameter Visualizations Section ---
             if hyperparameter_viz:
                 process_viz_dict(hyperparameter_viz)
-
-
-            st.markdown("#### Model Assumptions")
-            for k, v in assumptions.items():
-                st.write(f"- **{k}:** {v}")
             
             if model_viz:
                 st.markdown("#### Model Visualizations")
                 process_viz_dict(model_viz)
 
         with tab_perf:
+
+            st.markdown("#### Performance Evaluation")
             st.write(performance_eval)
             if performance_viz:
                 process_viz_dict(performance_viz)
 
+            
+            st.markdown("#### KMeans Model Assumptions")
+            for key, details in assumptions.items():
+                name = details.get("assumption", "N/A")
+                assess = details.get("assessment", "N/A")
+                st.markdown(f"**Assumption:** {name}")
+                st.markdown(f"**Assessment:** {assess}")
+                if details.get("viz"):
+                    render_visual(details.get("viz"))
+                st.markdown("---")
+            
+
+
         with tab_challenges:
             if challenges:
                 for key, details in challenges.items():
-                                    # Extract values from the sub-dictionary
-                                    name = details.get('name', 'N/A')
-                                    issue = details.get('issue', 'N/A')
-                                    sol = details.get('sol', 'N/A')
-                                    
-                                    # Display the formatted markdown
-                                    st.markdown(f"🔧 **{name}:** {issue}")
-                                    st.markdown(f"💡 **Solution:** {sol}")
-                                    st.markdown("---")
+                    # Extract values from the sub-dictionary
+                    name = details.get('name', 'N/A')
+                    issue = details.get('issue', 'N/A')
+                    sol = details.get('sol', 'N/A')
+                    
+                    # Display the formatted markdown
+                    st.markdown(f"🔧 **{name}:** {issue}")
+                    st.markdown(f"💡 **Solution:** {sol}")
+                    st.markdown("---")

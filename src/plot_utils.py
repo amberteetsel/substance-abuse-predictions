@@ -1,5 +1,7 @@
 # plot_utils.py
 import plotly.express as px
+import pandas as pd
+import numpy as np
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 
 def generate_era_3d_plots(df, periods, color_mapping):
@@ -10,10 +12,32 @@ def generate_era_3d_plots(df, periods, color_mapping):
     for start, end, title in periods:
         df_era = df[(df['year'] >= start) & (df['year'] <= end)].copy()
         
-        # Calculate Metrics
+        # basic metrics
         s_score = silhouette_score(df_era[features], df_era['cluster_lab'])
         db_index = davies_bouldin_score(df_era[features], df_era['cluster_lab'])
         
+        stats_dict = {
+            "Global Silhouette": round(s_score, 3),
+            "Global DB Index": round(db_index, 3)
+        }
+
+        # variance
+        cluster_groups = df_era.groupby('cluster_lab')[features]
+        counts = cluster_groups.size()
+        variances = cluster_groups.var().mean(axis=1) # Average variance across the 3 features
+
+        for label in risk_order:
+            if label in counts.index:
+                n = counts[label]
+                # Variance requires N > 1
+                if n > 1:
+                    stats_dict[f"{label} Variance"] = round(variances[label], 3)
+                else:
+                    stats_dict[f"{label} Variance"] = "N/A (N=1)"
+            else:
+                stats_dict[f"{label} Variance"] = "None"
+
+        # 3D plot
         fig = px.scatter_3d(
             df_era, x='log_oxy', y='log_fent', z='log_min_wage',
             color='cluster_lab', title=f"3D Clusters: {title}",
@@ -28,12 +52,9 @@ def generate_era_3d_plots(df, periods, color_mapping):
             legend=dict(traceorder="normal", itemsizing="constant")
         )
         
-        # Store both the figure and the metrics
         era_plots[title] = {
             "fig": fig,
-            "stats": {
-                "Silhouette Score": round(s_score, 4),
-                "Davies-Bouldin Index": round(db_index, 4)
-            }
+            "stats": stats_dict
         }
+        
     return era_plots
