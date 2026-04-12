@@ -3,6 +3,8 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 from sklearn.metrics import silhouette_score, davies_bouldin_score
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 def generate_era_3d_plots(df, periods, color_mapping):
     era_plots = {}
@@ -58,3 +60,92 @@ def generate_era_3d_plots(df, periods, color_mapping):
         }
         
     return era_plots
+
+# Interactive Map
+def generate_dominant_risk_map(df, color_map):
+    # Calculate mode
+    state_identities = df.groupby('state')['cluster_lab'].agg(lambda x: x.mode()[0]).reset_index()
+
+    fig = px.choropleth(
+        state_identities,
+        locations='state',
+        locationmode="USA-states",
+        color='cluster_lab',
+        scope="usa",
+        title="Predominant Risk Profile (2000-2016)",
+        color_discrete_map=color_map,
+        category_orders={"cluster_lab": ['Low Risk', 'Moderate Risk', 
+                                        'High Risk (Prescription-Driven)', 
+                                        'Acute High Risk (Fentanyl-Driven)']},
+        # Rename the label for the legend/hover
+        labels={'cluster_lab': 'Risk Profile'}
+    )
+    
+    fig.update_layout(
+        margin={"r":0,"t":50,"l":0,"b":0},
+        geo=dict(bgcolor='rgba(0,0,0,0)')
+    )
+    fig.update_traces(marker_line_color="white")
+    fig.update_traces(
+        hovertemplate="<b>%{location}</b><br>Profile: %{customdata[0]}<extra></extra>",
+        customdata=state_identities[['cluster_lab']]
+    )
+    
+    return fig
+
+def generate_eras_map(df, periods, color_dict):
+    active_periods = periods[1:4]
+    custom_colorscale = [
+        [0.0, color_dict['Low Risk']],
+        [0.25, color_dict['Low Risk']],
+        [0.25, color_dict['Moderate Risk']],
+        [0.5, color_dict['Moderate Risk']],
+        [0.5, color_dict['High Risk (Prescription-Driven)']],
+        [0.75, color_dict['High Risk (Prescription-Driven)']],
+        [0.75, color_dict['Acute High Risk (Fentanyl-Driven)']],
+        [1.0, color_dict['Acute High Risk (Fentanyl-Driven)']]
+    ]
+    label_order = {'Low Risk':0, 'Moderate Risk':1,
+                   'High Risk (Prescription-Driven)':2, 'Acute High Risk (Fentanyl-Driven)':3}
+    fig = make_subplots(
+        rows=1, cols=3, 
+        subplot_titles=[p[2] for p in active_periods],
+        specs=[[{'type': 'choropleth'}]*3]
+    )
+
+    for i, (start, end, title) in enumerate(active_periods):
+        df_slice = df[(df['year'] >= start) & (df['year'] <= end)]
+        era_modes = df_slice.groupby('state')['cluster_lab'].agg(lambda x: x.mode()[0]).reset_index()
+        era_modes['z_value'] = era_modes['cluster_lab'].map(label_order)
+        
+        # Add the map trace
+        fig.add_trace(
+            go.Choropleth(
+                locations=era_modes['state'],
+                z=era_modes['cluster_lab'].map(label_order), 
+                locationmode='USA-states',
+                colorscale=custom_colorscale,
+                zmin=0, 
+                zmax=3,
+                showscale=False,
+                marker_line_color='white',
+                marker_line_width=0.5,
+                customdata=np.expand_dims(era_modes['cluster_lab'].values, axis=-1),
+                hovertemplate="<b>%{location}</b><br>Profile: %{customdata[0]}<extra></extra>"
+            ),
+            row=1, col=i+1
+        )
+
+    # USA only
+    fig.update_geos(scope="usa", projection_type='albers usa')
+
+    # layout specs
+    fig.update_layout(
+        title_text="Geographic Evolution of Risk Profiles",
+        title_x=0.39,
+        width=1800,
+        height=600,
+        margin={"r":10,"t":100,"l":10,"b":10}
+    )
+
+    return fig

@@ -458,7 +458,7 @@ challenge_dict = {
     "Ch2":{
         "name": "Data Volume",
         "issue": "The DEA ARCOS data from 2006-2016 contained over 6 million rows, so loading and cleaning the data took over 30 minutes and often crashed the kernel.",
-        "sol": "Processing the cleaning the data in chunks of 1 million rows each"
+        "sol": "Processing and cleaning the data in chunks of 1 million rows each"
     },
     "Ch3": {
         "name": "Data Availability",
@@ -503,10 +503,12 @@ color_mapping = {
     'Acute High Risk (Fentanyl-Driven)': '#e74c3c'
 }
 
-from plot_utils import generate_era_3d_plots
+from plot_utils import generate_era_3d_plots, generate_dominant_risk_map, generate_eras_map
 era_3d_plots = generate_era_3d_plots(death_rate_df,periods, color_mapping)
+map_mode = generate_dominant_risk_map(death_rate_df, color_mapping)
+eras_map = generate_eras_map(death_rate_df, periods, color_mapping)
 
-
+# -------- START OF ACTUAL MODELING SECTION ON WEBSITE -------- #
 with tab7:
     st.header("Models Implemented")
     st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
@@ -520,6 +522,7 @@ with tab7:
         assumptions = assumption_dict,
         hyperparameters = {
             "k": [3, "See images below"],
+            "random_state": [42, "Set for reproduceability"],
             "max_iter": [300, "Left at default value; changes had no meaningful impact on Silhouette score"],
             "n_init": [20, "Adjusted from default 10 to improve Silhouette score"]
         },
@@ -542,22 +545,24 @@ with tab7:
             "Cluster Descriptions": {
                 "path":os.path.join(BASE_DIR,"resources", "death_rate_plots", "cluster_descriptions.png"),
                 "description": clust_descriptions,
-                "cont_width": True
+                "cont_width": False
             }
 
         },
+        model_code="kmeans_final = KMeans(n_clusters=4, random_state=42, max_iter=300, n_init=20)",
         model_viz={
             "U.S. States by Predominant Cluster": {
-                "path": map_path,
+                "path": map_mode,
                 "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality.",
                 "cont_width": True
             },
             "State Cluster Shift": {
-                "path": map_shift,
+                "path": eras_map,
                 "description": "Predominant cluster for each state during each era. Illustrates developing severity of risk of death from drug overdose over time.",
                 "cont_width":True
             }
         },
+        performance_summary="Our data violates model assumptions, leading to relatively poor performance.",
         performance_eval=performance_str,
         performance_viz={
             "Comprehensive Analysis":{

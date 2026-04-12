@@ -10,7 +10,9 @@ def model_section(
     assumptions: dict,
     hyperparameters: dict, 
     hyperparameter_viz: dict=None,
-    model_viz: dict=None,   
+    model_code = None,
+    model_viz: dict=None,
+    performance_summary: str=None,   
     performance_eval: str=None,
     performance_viz: dict=None,
     preprocessing_steps: dict=None,
@@ -56,6 +58,7 @@ def model_section(
                         st.markdown("##### Era Metrics")
                         for metric, val in content["stats"].items():
                             st.metric(label=metric, value=val)
+                    st.markdown("----")
                 else:
                     # Standard rendering for items without stats
                     if isinstance(content, dict):
@@ -100,21 +103,64 @@ def model_section(
         ])
 
         with tab_specs:
+            if model_code:
+                st.markdown("#### Final Model")
+                st.code(model_code, language='python')
+                st.markdown("---")
+
             st.markdown("#### Hyperparameters & Tuning")
-            hp_data = []
-            for param, info in hyperparameters.items():
-                hp_data.append({"Parameter": param, "Value": info[0], "Tuning Process": info[1]})
-            st.table(hp_data)
+
+            # turn input dict into DataFrame
+            hp_df = pd.DataFrame([
+                {"Parameter": param, "Value": info[0], "Tuning Process": info[1]}
+                for param, info in hyperparameters.items()
+            ])
+
+            # configure columns
+            st.dataframe(
+                hp_df,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Parameter": st.column_config.TextColumn(
+                        "Parameter",
+                        help="The specific model hyperparameter",
+                        width="medium",
+                    ),
+                    "Value": st.column_config.TextColumn(
+                        "Value",
+                        width="small",
+                    ),
+                    "Tuning Process": st.column_config.TextColumn(
+                        "Tuning Process",
+                        width="large", # Forces more space to prevent line breaks
+                    )
+                }
+            )
+
+            # Styling for centering (CSS Hack)
+            st.markdown("""
+                <style>
+                    [data-testid="stDataFrame"] td {
+                        text-align: center !important;
+                    }
+                    /* Keep Tuning Process left-aligned for readability if desired, 
+                    otherwise the rule above centers everything */
+                    [data-testid="stDataFrame"] td:nth-child(3) {
+                        text-align: left !important;
+                    }
+                </style>
+            """, unsafe_allow_html=True)
 
             # --- NEW: Hyperparameter Visualizations Section ---
             if hyperparameter_viz:
                 process_viz_dict(hyperparameter_viz)
             
-            if model_viz:
-                st.markdown("#### Model Visualizations")
-                process_viz_dict(model_viz)
 
         with tab_perf:
+            if performance_summary:
+                st.markdown("### Overall Assessment")
+                st.write(performance_summary)
 
             st.markdown("#### Performance Evaluation")
             st.write(performance_eval)
@@ -132,8 +178,6 @@ def model_section(
                     render_visual(details.get("viz"))
                 st.markdown("---")
             
-
-
         with tab_challenges:
             if challenges:
                 for key, details in challenges.items():
@@ -146,3 +190,9 @@ def model_section(
                     st.markdown(f"🔧 **{name}:** {issue}")
                     st.markdown(f"💡 **Solution:** {sol}")
                     st.markdown("---")
+
+        # Model Visuals
+        if model_viz:
+            st.markdown("---")
+            st.markdown("#### 📈 Model Visualizations")
+            process_viz_dict(model_viz)
