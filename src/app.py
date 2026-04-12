@@ -682,8 +682,8 @@ with tab7:
             "Predictive Power": "Assumes features have the predictive power necessary to make meaningful splits."
         },
         hyperparameters={
-            "n_estimators": [100, "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
-            "max_depth": ["Tuned", "Ensured the model identified underlying patterns without getting lost in the noise."],
+            "n_estimators": ["100", "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
+            "max_depth": ["'Tuned'", "Ensured the model identified underlying patterns without getting lost in the noise."],
             "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
         },
         model_viz={
