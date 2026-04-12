@@ -611,3 +611,105 @@ with tab7:
         }
 
     )
+# --- Model 1 Image Paths (Mental Health) ---
+    dt_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_importance_tedsa.png")
+    dt_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_model.png")
+    roc_dt_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_dt.png")
+    lr_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "lr_model.png")
+    roc_lr_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_lr.png")
+    mh_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_before.png")
+    mh_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_after_scale.png")
+
+    # --- Model 2 Image Paths (Age of First Use) ---
+    rf_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_feat_importance.png")
+    rf_eval_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_eval.png")
+    rf_matrix_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_matrix.png")
+    age_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_before.png")
+    age_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_after_scale.png")
+
+
+    # --- Isra's Model 1: Co-occurring Mental Health ---
+    model_section(
+        title="Predicting Co-occurring Mental Health Diagnoses",
+        model_type="Decision Tree & Logistic Regression",
+        description="Predicts the likelihood of a patient requiring dual-diagnosis treatment based on demographics and substance use risk factors.",
+        justification="Decision trees handle highly categorical data without assuming linearity and provide clear feature importance. Logistic Regression serves as an industry-standard, highly interpretable baseline for overall probability.",
+        assumptions={
+            "Decision Tree": "Assumes features have predictive power to create meaningful data splits; non-parametric.",
+            "Logistic Regression": "Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."
+        },
+        hyperparameters={
+            "class_weight": ["'balanced'", "Ensures equal weighting of classes so the models aren't biased toward common outcomes during the 70/30 train-test split."]
+        },
+        model_viz={
+            "Decision Tree Feature Importance": {
+                "path": dt_feat_path, 
+                "description": "Visualizing the strongest underlying risk factors driving the decision tree splits."
+            }
+        },
+        preprocessing_steps={
+            "Handling Missing Data": "Used dropna() on targets and primary predictors to ensure training on complete observations.",
+            "One-Hot Encoding": "Expanded text categories into binary columns using pd.get_dummies.",
+            "Scaling": "Transformed features into z-scores using StandardScaler so larger numerical ranges didn't disproportionately influence the logistic regression."
+        },
+        before_viz=mh_before_path, 
+        after_viz=mh_after_path,   
+        performance_eval=(
+            "Both models achieved 60% accuracy, outperforming a random guess on the balanced test set. "
+            "Logistic Regression generated a smooth ROC curve with an AUC of 0.64 (Decision tree: 0.63), indicating reliable, relatively linear relationships. "
+            "Recall was nearly perfectly balanced (0.60 for class 0, 0.61 for class 1). "
+            "Key Decision Tree insights showed 'No Prior Treatment' held 46% of the decision weight, followed by Race: Other (16%), Male (15%), and Methamphetamine/Speed use (6%)."
+        ),
+        performance_viz={
+            "Decision Tree Evaluation": dt_model_path,
+            "Decision Tree ROC Curve": roc_dt_path,
+            "Logistic Regression Evaluation": lr_model_path,
+            "Logistic Regression ROC Curve": roc_lr_path 
+        },
+        challenges={
+            "Feature Scaling for Baseline Model": "Logistic regression can be disproportionately influenced by variables with larger ranges. This was solved by applying StandardScaler across the features."
+        }
+    )
+
+    # --- Isra's Model 2: Age of First Use ---
+    model_section(
+        title="Predicting Age of First Use",
+        model_type="Random Forest Classifier",
+        description="Predicts the discrete age bracket of a patient's first substance use based on primary substance choice and demographic background.",
+        justification="Because age was recorded in discrete brackets rather than continuously, regression was not ideal. A Random Forest was chosen to mitigate overfitting and provide stability when dealing with complex data and many categorical features.",
+        assumptions={
+            "Non-parametric": "The model does not assume anything about the distribution of the data.",
+            "Predictive Power": "Assumes features have the predictive power necessary to make meaningful splits."
+        },
+        hyperparameters={
+            "n_estimators": [100, "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
+            "max_depth": ["Tuned", "Ensured the model identified underlying patterns without getting lost in the noise."],
+            "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
+        },
+        model_viz={
+            "Random Forest Feature Importance": {
+                "path": rf_feat_path,
+                "description": "The strongest predictors for age of first use were specific substances."
+            }
+        },
+        preprocessing_steps={
+            "Handling Missing Data": "Used dropna() on the 'first_use' target and predictors.",
+            "One-Hot Encoding": "Applied pd.get_dummies to process text categories independently.",
+            "Scaling": "Applied StandardScaler to normalize features."
+        },
+        before_viz=age_before_path, 
+        after_viz=age_after_path,   
+        performance_eval=(
+            "Evaluated via multi-class classification report and a chronological confusion matrix. "
+            "The model achieved 20.2% accuracy across 7 categories (beating the random guess baseline of 14.2%). "
+            "Its primary strength was identifying extreme age brackets, achieving a recall of 0.60 for the '< 11' group and 0.54 for the '30+' group. "
+            "The top predictors were specific substances, namely Other Opiates (26.3%) and Synthetics/Heroin (20.9%)."
+        ),
+        performance_viz={
+            "Evaluation Metrics": rf_eval_path,
+            "Chronological Confusion Matrix": rf_matrix_path 
+        },
+        challenges={
+            "Continuous vs. Discrete Target": "Initially, Linear Regression was considered. However, the target variable was discrete brackets, not continuous numbers. We solved this by reframing the problem as a classification task using a Random Forest."
+        }
+    )
