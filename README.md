@@ -27,10 +27,16 @@ To run TEDS_Acleaning.py
 3. Run the file (be patient, it is a large data set)
 4. Cleaned csv for this set will be found in the google drive
 
-To run Connecticut_Data_Caceres_Andrea.py and AmberDataCleaning.ipynb
+To run Connecticut_Data_Caceres_Andrea.py
 1. Download the cleaning file
 2. Run the file
 3. Cleaned csv for these datasets will be found in the data folder
+
+To run DEA_cleaning.py, NCHS_cleaning.py, UKCPR_cleaning.py, DEA_NCHS_UKCPR.py:
+1. Clone the repository
+2. `python src/data_cleaning/<file_name>`
+3. Cleaned .csv files to be found in data/
+4. Relevant plots to be found in resources/data_exploration_plots_NCHS and resources/death_rate_plots
 
 ## Data Modeling 
 To run tedsa_clean_modeling.py
