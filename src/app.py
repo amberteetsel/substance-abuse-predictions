@@ -3,6 +3,7 @@ import pandas as pd
 from model_view import model_section
 from data_view import data_source_section
 import os
+import plotly.express as px
 
 # Set root directory for file paths
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -650,9 +651,11 @@ color_mapping = {
 }
 
 from plot_utils import generate_era_3d_plots, generate_dominant_risk_map, generate_eras_map
+from plot_utils import generate_interactive_heatmap
 era_3d_plots = generate_era_3d_plots(death_rate_df,periods, color_mapping)
 map_mode = generate_dominant_risk_map(death_rate_df, color_mapping)
 eras_map = generate_eras_map(death_rate_df, periods, color_mapping)
+heatmap_red_wall = generate_interactive_heatmap(death_rate_df)
 
 with tab7:
     st.header("Models Implemented")
@@ -707,9 +710,9 @@ with tab7:
                 "cont_width":True
             },
             "Drug Death Risk Heatmap": {
-                "path": os.path.join(BASE_DIR,"resources","death_rate_plots","risk_progression_heatmap_sorted.png"),
+                "path": heatmap_red_wall,
                 "description": "Sorted by risk level in 2016, this heatmap demonstrates the shift in drug death risk over time. Note the 'red wall' appearing in 2006 and taking over from then until 2016.",
-                "cont_width": False
+                "cont_width": True
             }
         },
         performance_summary="Our data violates model assumptions, leading to relatively poor performance.",
