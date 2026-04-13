@@ -584,7 +584,7 @@ distr_pre = os.path.join(BASE_DIR, "resources", "death_rate_plots", "unscaled_hi
 distr_post = os.path.join(BASE_DIR, "resources", "death_rate_plots", "scaled_histograms.png")
 clust_descriptions = """
     To determine the optimal number of clusters, we evaluated the model using three metrics. The Elbow Method suggested a clear transition at k=3 or k=4, and the Davies=Bouldin Index confirmed k=3 as most compact clustering. \n
-    However, we ultimately selected k=4. Despite slightly increasing the DB Index, using 4 clusters enabled us to see the difference between high Oxycodone states and high Fentanyl states. \n
+    However, we ultimately selected k=4. Despite slightly increasing the DB Index, it has a higher Silhouette Score and using 4 clusters enabled us to see the difference between high Oxycodone states and high Fentanyl states. \n
     We deemed the trade-off between minor loss in cluster quality and gain of qualitative nuance necessary to accurately study the shifting nature of the opioid crisis.
 """
 performance_str = """
