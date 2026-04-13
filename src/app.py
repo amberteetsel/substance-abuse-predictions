@@ -868,7 +868,7 @@ with tab7:
         performance_eval=(
             "Evaluated via multi-class classification report and a chronological confusion matrix. "
             "The model achieved 20.2% accuracy across 7 categories (beating the random guess baseline of 14.2%). "
-            "Its primary strength was identifying extreme age brackets, achieving a recall of 0.60 for the '< 11' group and 0.54 for the '30+' group. "
+            "Its primary strength was identifying extreme age brackets, achieving a recall of 0.60 for the $\le$ 11' group and 0.54 for the '30+' group. "
             "The top predictors were specific substances, namely Other Opiates (26.3%) and Synthetics/Heroin (20.9%)."
         ),
         performance_viz={
