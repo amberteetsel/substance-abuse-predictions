@@ -713,3 +713,95 @@ with tab7:
             "Continuous vs. Discrete Target": "Initially, Linear Regression was considered. However, the target variable was discrete brackets, not continuous numbers. We solved this by reframing the problem as a classification task using a Random Forest."
         }
     )
+
+# --- Model 1 Image Paths (Apriori / Association Rules) ---
+apriori_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_before_transformation.png")
+apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_after_transformation.png")
+apriori_rules_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_rules.png") # Update this one if you have a specific filename for the rules table
+
+# --- Model 2 Image Paths (Regression & Seasonality) ---
+resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
+resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
+reg_summary_path = os.path.join(BASE_DIR, "resources", "model_viz", "regression_summary.png") # Update this one if you have a specific filename for the summary
+
+
+# --- Andrea's Model 1: Deadliest Drug Combinations ---
+model_section(
+    title="Identifying Deadliest Drug Combinations",
+    model_type="Apriori Algorithm & Association Rules",
+    description="Identifies the most frequent combinations of substances present in overdose cases to uncover the deadliest drug pairings.",
+    justification="The Apriori algorithm is highly efficient at mining boolean 'market basket' data to find frequent itemsets. It generates clear, interpretable association rules based on support and confidence metrics.",
+    assumptions={
+        "Transaction Independence": "Assumes each overdose case is an independent event.",
+        "Support Threshold": "Assumes drug combinations occurring in less than 10% of cases are not the primary patterns of interest for this specific broad analysis."
+    },
+    hyperparameters={
+        "min_support": ["0.1", "Requires a drug or combination to appear in at least 10% of total cases to be considered 'frequent'."],
+        "min_threshold": ["0.7", "Sets a 70% confidence baseline, meaning if the antecedent drug is present, there is at least a 70% chance the consequent drug is also present."]
+    },
+    model_viz={
+        "Frequent Itemsets": {
+            "path": apriori_rules_path,
+            "description": "Visualizing the baseline frequencies of individual substances and their combinations."
+        }
+    },
+    preprocessing_steps={
+        "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
+        "Boolean Conversion": "Converted the selected drug columns to boolean types using .astype(bool) to create a valid market basket for the algorithm."
+    },
+    before_viz=apriori_before_path,
+    after_viz=apriori_after_path,  
+    performance_eval=(
+        "The algorithm successfully identified primary substance threats. 67% of overdose cases involved Fentanyl, "
+        "and approximately 40% involved Cocaine. "
+        "The most critical finding was that approximately 30% of all overdoses involved a combination of both Fentanyl and Cocaine."
+    ),
+    performance_viz={
+        "Top Association Rules": apriori_rules_path
+    },
+    challenges={
+        "Threshold Tuning": "Balancing the min_support and confidence thresholds to find meaningful, actionable rules without generating excessive noise or filtering out dangerous but slightly less common combinations."
+    }
+)
+
+# --- Andrea's Model 2: Drug Overdose Seasonality & Trends ---
+model_section(
+    title="Predicting Drug Overdose Deaths: Seasonality & Trends",
+    model_type="Ordinary Least Squares (OLS) Regression",
+    description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
+    justification="OLS Regression provides highly interpretable coefficients for time and month variables, allowing us to explicitly quantify the effect of time and test the significance of specific months.",
+    assumptions={
+        "Linearity": "Initially violated, but corrected by introducing a polynomial (squared) Year feature.",
+        "Homoscedasticity": "Variance originally increased with predicted values; corrected by applying a log transformation to the target variable."
+    },
+    hyperparameters={
+        "Formula": ["'Log_Deaths ~ C(Month) + Year + I(Year**2)'", "Defines the features, forcing months to be treated as categorical and introducing a quadratic time trend."]
+    },
+    model_viz={
+        "Regression Summary": {
+            "path": reg_summary_path,
+            "description": "Summary output detailing R-squared, coefficients, and p-values for seasonal indicators."
+        }
+    },
+    preprocessing_steps={
+        "Aggregation": "Grouped data by 'Year' and 'Month' using .groupby().size() to calculate total monthly death counts.",
+        "Log Transformation": "Applied np.log() to the 'Deaths' column to stabilize variance (heteroscedasticity).",
+        "Polynomial Features": "Squared the Year feature within the OLS formula to capture non-linear, decelerating trends."
+    },
+    before_viz=resid_before_path,
+    after_viz=resid_after_path,  
+    performance_eval=(
+        "The initial linear model achieved an R-squared of 0.64 but violated core regression assumptions. "
+        "After log-transforming the target and adding a squared time feature, the final model achieved an R-squared of 0.883, "
+        "explaining 88.3% of the variance. The model showed log deaths increase over time but decelerate (negative Year^2 coefficient). "
+        "Crucially, none of the month variables were statistically significant, indicating a lack of true seasonality, though June showed marginal significance (p=0.062)."
+    ),
+    performance_viz={
+        "Initial Residual Plot": resid_before_path,
+        "Transformed Residual Plot": resid_after_path
+    },
+    challenges={
+        "Violated Assumptions": "The initial residual plot showed a distinct parabolic pattern (non-linearity) and increasing variance (heteroscedasticity). "
+        "This was successfully solved by log-transforming the dependent variable and squaring the Year feature, which resulted in a much more random residual distribution."
+    }
+)
