@@ -458,8 +458,8 @@ with tab6:
     
     # --- SECTION: DATASET3 ---
     ## Datasets to display
-connecticut_raw = os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
-connecticut_clean = os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
+connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
 # connecticut_raw = pd.read_csv("c:/Users/jenny/Downloads/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
 # connecticut_clean = pd.read_csv("c:/Users/jenny/Downloads/DataMining/HW/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
 
