@@ -460,108 +460,107 @@ with tab6:
     ## Datasets to display
 connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
 connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
-# connecticut_raw = pd.read_csv("c:/Users/jenny/Downloads/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
-# connecticut_clean = pd.read_csv("c:/Users/jenny/Downloads/DataMining/HW/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+
+from data_view import data_source_section
 
 with tab6:
-    
 
-    # FUNCTION FOR DATA EXPLORATION LAYOUT
-    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
-        """
-        Inputs will be displayed cleanly on the website
-        title - title of dataset
-        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
-        source_info - where dataset came from
-        collection_method - how you accessed the data (e.g. download, API, etc.)
-        description - briefly describe dataset contents and why it's relevant to the project
-        cleaning_steps - dictionary, {<step name> : <step description>}
-        visuals - list of dictionaries, [{'title': <name of visual>,
-                                        'desc': <description, insights, comments, etc.>,
-                                        'path': <path to image>}]
-        limitations - text describing any potential biases or limitations of data
-        """
-        with st.expander(f"📊 Dataset: {title}", expanded=False):
-            st.subheader(title)
+    # # FUNCTION FOR DATA EXPLORATION LAYOUT
+    # def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
+    #     """
+    #     Inputs will be displayed cleanly on the website
+    #     title - title of dataset
+    #     Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
+    #     source_info - where dataset came from
+    #     collection_method - how you accessed the data (e.g. download, API, etc.)
+    #     description - briefly describe dataset contents and why it's relevant to the project
+    #     cleaning_steps - dictionary, {<step name> : <step description>}
+    #     visuals - list of dictionaries, [{'title': <name of visual>,
+    #                                     'desc': <description, insights, comments, etc.>,
+    #                                     'path': <path to image>}]
+    #     limitations - text describing any potential biases or limitations of data
+    #     """
+    #     with st.expander(f"📊 Dataset: {title}", expanded=False):
+    #         st.subheader(title)
             
-            # Overview
-            col_meta1, col_meta2 = st.columns(2)
-            with col_meta1:
-                st.write(f"**Source:** {source_info}")
-                st.write(f"**Collection Method:** {collection_method}")
-            with col_meta2:
-                st.markdown(f"**Description:** {description}")
+    #         # Overview
+    #         col_meta1, col_meta2 = st.columns(2)
+    #         with col_meta1:
+    #             st.write(f"**Source:** {source_info}")
+    #             st.write(f"**Collection Method:** {collection_method}")
+    #         with col_meta2:
+    #             st.markdown(f"**Description:** {description}")
             
-            st.markdown("---")
+    #         st.markdown("---")
 
-            # Raw vs. Clean comparison
-            st.subheader("Data Transformation Preview")
-            col_pre1, col_pre2 = st.columns(2)
+    #         # Raw vs. Clean comparison
+    #         st.subheader("Data Transformation Preview")
+    #         col_pre1, col_pre2 = st.columns(2)
             
-            with col_pre1:
-                st.write("🔍 **Raw Snapshot**")
-                st.dataframe(df_raw.head(5), use_container_width=True)
-                st.caption("Initial data types and values.")
-                with st.expander("View Raw Schema"):
-                    st.code(df_raw.dtypes)
+    #         with col_pre1:
+    #             st.write("🔍 **Raw Snapshot**")
+    #             st.dataframe(df_raw.head(5), use_container_width=True)
+    #             st.caption("Initial data types and values.")
+    #             with st.expander("View Raw Schema"):
+    #                 st.code(df_raw.dtypes)
 
-            with col_pre2:
-                st.write("✨ **Processed Snapshot**")
-                st.dataframe(df_clean.head(5), use_container_width=True)
-                st.caption("Post-cleaning, encoding, and scaling.")
-                with st.expander("View Processed Schema"):
-                    st.code(df_clean.dtypes)
+    #         with col_pre2:
+    #             st.write("✨ **Processed Snapshot**")
+    #             st.dataframe(df_clean.head(5), use_container_width=True)
+    #             st.caption("Post-cleaning, encoding, and scaling.")
+    #             with st.expander("View Processed Schema"):
+    #                 st.code(df_clean.dtypes)
 
-            st.markdown("---")
+    #         st.markdown("---")
 
-            # Summary Statistics
-            st.subheader("Statistical Profile")
-            st.write("Comparison of descriptive statistics before and after processing.")
+    #         # Summary Statistics
+    #         st.subheader("Statistical Profile")
+    #         st.write("Comparison of descriptive statistics before and after processing.")
             
-            col_stat1, col_stat2 = st.columns(2)
-            with col_stat1:
-                st.write("**Raw Summary**")
-                raw_stats = df_raw.select_dtypes(include=['number']).describe().T
-                if not raw_stats.empty:
-                    st.table(raw_stats)
-                else:
-                    st.warning("No numeric data found in Raw dataset.")
+    #         col_stat1, col_stat2 = st.columns(2)
+    #         with col_stat1:
+    #             st.write("**Raw Summary**")
+    #             raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+    #             if not raw_stats.empty:
+    #                 st.table(raw_stats)
+    #             else:
+    #                 st.warning("No numeric data found in Raw dataset.")
             
-            with col_stat2:
-                st.write("**Processed Summary**")
-                clean_stats = df_clean.select_dtypes(include=['number']).describe().T
-                if not clean_stats.empty:
-                    st.table(clean_stats)
-                else:
-                    st.warning("No numeric data found in Processed dataset.")
+    #         with col_stat2:
+    #             st.write("**Processed Summary**")
+    #             clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+    #             if not clean_stats.empty:
+    #                 st.table(clean_stats)
+    #             else:
+    #                 st.warning("No numeric data found in Processed dataset.")
 
-            st.markdown("---")
+    #         st.markdown("---")
             
-            # Cleaning & Processing Steps
-            st.subheader("Cleaning & Processing Logic")
-            for step_title, step_desc in cleaning_steps.items():
-                st.markdown(f"**{step_title}**")
-                st.info(step_desc)
+    #         # Cleaning & Processing Steps
+    #         st.subheader("Cleaning & Processing Logic")
+    #         for step_title, step_desc in cleaning_steps.items():
+    #             st.markdown(f"**{step_title}**")
+    #             st.info(step_desc)
 
-            st.markdown("---")
+    #         st.markdown("---")
 
-            # Visuals
-            st.subheader("Visual Analysis")
-            if visuals:
-                for viz in visuals:
-                    with st.container(border=True):
-                        st.write(f"#### {viz['title']}")
-                        st.write(viz['desc'])
-                        st.image(viz['path'], use_container_width=True)
-            else:
-                st.info("Visualizations for this dataset are currently in progress.")
+    #         # Visuals
+    #         st.subheader("Visual Analysis")
+    #         if visuals:
+    #             for viz in visuals:
+    #                 with st.container(border=True):
+    #                     st.write(f"#### {viz['title']}")
+    #                     st.write(viz['desc'])
+    #                     st.image(viz['path'], use_container_width=True)
+    #         else:
+    #             st.info("Visualizations for this dataset are currently in progress.")
 
 
-            # Bias/Limitations
-            st.subheader("Limitations")
-            if limitations:
-                with st.container(border=True):
-                    st.write(limitations)
+    #         # Bias/Limitations
+    #         st.subheader("Limitations")
+    #         if limitations:
+    #             with st.container(border=True):
+    #                 st.write(limitations)
 
     # --- SECTION: Connecticut Accidental Drug Related Deaths ---
     data_source_section(
@@ -643,7 +642,8 @@ with tab6:
                 "Data Loading": "Due to large size of ARCOS extract (422,647,324 rows), data was loaded in chunks and aggregated to state-year level to create a more manageable dataset for analysis.",
                 "Handling Missing Values": "Missing values for 2002-2003 were imputed using linear interpolation based on adjacent years.",
             },
-            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market)."
+            limitations="Dataset only covers transactions reported to the DEA, so it may not capture all sources of opioids (e.g. illicit market).",
+            visuals=None
             )
     except Exception as e:
         st.error(f"Error loading DEA dataset: {e}")
@@ -663,7 +663,8 @@ with tab6:
                 "Handling Missing Values": "N/A; dataset is complete with no missing values.",
                 "Data Reduction": "Filtered to include only 1999-2016 to align with NCHS mortality data for potential future modeling."
             },
-            limitations="Older data may have lower accuracy."
+            limitations="Older data may have lower accuracy.",
+            visuals=None
             )
     except Exception as e:
         st.error(f"Error loading UKCPR dataset: {e}")
@@ -858,7 +859,8 @@ with tab7:
 
     )
     # ------------------ END OF CLUSTERING MODEL ------------------ #
-# --- Model 1 Image Paths (Mental Health) ---
+
+    # --- Model 1 Image Paths (Mental Health) ---
     dt_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_importance_tedsa.png")
     dt_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_model.png")
     roc_dt_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_dt.png")
@@ -876,8 +878,6 @@ with tab7:
 
 
     # --- Isra's Model 1: Co-occurring Mental Health ---
-# --- Isra's Model 1: Co-occurring Mental Health ---
-# --- Isra's Model 1: Co-occurring Mental Health ---
     model_section(
         title="Predicting Co-occurring Mental Health Diagnoses",
         model_type="Decision Tree & Logistic Regression",
@@ -935,7 +935,6 @@ with tab7:
         }
     )
     # --- Isra's Model 2: Age of First Use ---
-# --- Isra's Model 2: Age of First Use ---
     model_section(
         title="Predicting Age of First Use",
         model_type="Random Forest Classifier",
@@ -989,118 +988,114 @@ with tab7:
             }
         }
     )
-# --- Model 1 Image Paths (Apriori / Association Rules) ---
-apriori_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_before_transformation.png")
-apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_after_transformation.png")
+    # --- Model 1 Image Paths (Apriori / Association Rules) ---
+    apriori_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_before_transformation.png")
+    apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_after_transformation.png")
 
-# --- Model 2 Image Paths (Regression & Seasonality) ---
-resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
-resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
-regress_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_before.png")
-regress_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_after.png")
-apriori_table_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_algorithm_table.png")
-
-
+    # --- Model 2 Image Paths (Regression & Seasonality) ---
+    resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
+    resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
+    regress_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_before.png")
+    regress_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_after.png")
+    apriori_table_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_algorithm_table.png")
 
 
-
-# --- Andrea's Model 1: Deadliest Drug Combinations ---
-model_section(
-    title="Identifying Deadliest Drug Combinations",
-    model_type="Apriori Algorithm & Association Rules",
-    description=" This will help provide insight into the circumstances surrounding these deaths and determine which drugs are frequently used together. The apriori algorithm is the best model for this because in this case our 'market basket' will be the death’s related toxicology report to help uncover the deadliest drug pairings.",
-    justification="The apriori algorithm is efficient for mining boolean data to find frequent itemsets through interpretable association rules based on support and confidence metrics.",
-    
-    assumptions={
-        "A1": {
-            "assumption": "Transaction Independence",
-            "assessment": "Assumes each overdose case is an independent event."
+    # --- Andrea's Model 1: Deadliest Drug Combinations ---
+    model_section(
+        title="Identifying Deadliest Drug Combinations",
+        model_type="Apriori Algorithm & Association Rules",
+        description=" This will help provide insight into the circumstances surrounding these deaths and determine which drugs are frequently used together. The apriori algorithm is the best model for this because in this case our 'market basket' will be the death’s related toxicology report to help uncover the deadliest drug pairings.",
+        justification="The apriori algorithm is efficient for mining boolean data to find frequent itemsets through interpretable association rules based on support and confidence metrics.",
+        
+        assumptions={
+            "A1": {
+                "assumption": "Transaction Independence",
+                "assessment": "Assumes each overdose case is an independent event."
+            },
+            "A2": {
+                "assumption": "Minimum Frequency",
+                "assessment": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."
+            }
         },
-        "A2": {
-            "assumption": "Minimum Frequency",
-            "assessment": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."
-        }
-    },
-    
-    hyperparameters={
-        "min_support": ["0.1", "Requires combination to appear in at least 10% of cases."],
-        "min_threshold": ["0.7", "70% confidence baseline for drug pairings."]
-    },
-    model_viz={
-    "Frequent Itemsets": {
-        "path": apriori_table_path,
-        "description": "Visualizing the baseline frequencies..."
-    }
-},
-    preprocessing_steps={
-        "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
-        "Boolean Conversion": " I converted the selected drug columns to boolean types using .astype(bool) to create a correct market basket for the algorithm."
-    },
-    before_viz=apriori_before_path,
-    after_viz=apriori_after_path,  
-    performance_eval=(
-        "The algorithm successfully identified primary substance threats. 67% of overdose cases involved Fentanyl, "
-        "and approximately 40% involved Cocaine."
-    ),
-    challenges={
-        "C1": {
-            "name": "Threshold Tuning & Removing Drug",
-            "issue": "An issue that occured was finding the right balance between support and confidence. Another issue was removing the 'Heroin Morphine Codeine' drug from the analysis because it was a combination of Heroin, Morphine, and Codeine, which made it difficult to interpret the results since we already have 'Heroin'.",
-            "sol": "Iterative testing to find meaningful rules and comparing results from apriori with 'Heroin Morphine Codeine' versus without."
-        }
-    }
-)
-
-# --- Andrea's Model 2: Drug Overdose Seasonality & Trends ---
-model_section(
-    title="Predicting Drug Overdose Deaths: Seasonality & Trends",
-    model_type="Ordinary Least Squares (OLS) Regression",
-    description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
-    justification="OLS Regression provides highly interpretable coefficients for time and month variables.",
-
-    assumptions={
-        "A1": {
-            "assumption": "Linearity",
-            "assessment": "Corrected by introducing a polynomial squared Year feature."
+        
+        hyperparameters={
+            "min_support": ["0.1", "Requires combination to appear in at least 10% of cases."],
+            "min_threshold": ["0.7", "70% confidence baseline for drug pairings."]
         },
-        "A2": {
-            "assumption": "Homoscedasticity",
-            "assessment": "Corrected by applying a log transformation to the response variable, 'Deaths'."
+        model_viz={
+        "Frequent Itemsets": {
+            "path": apriori_table_path,
+            "description": "Visualizing the baseline frequencies..."
         }
     },
-    
-    hyperparameters={
-        "Formula": ["Log_Deaths ~ C(Month) + Year + I(Year**2)", "Forces categorical months and quadratic time trend."]
-    },
-    model_viz={
-        "Regression Summary": {
-            "path": regress_before_path,
-            "description": "Summary output detailing R-squared, coefficients, and p-values before transformation."
+        preprocessing_steps={
+            "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
+            "Boolean Conversion": " I converted the selected drug columns to boolean types using .astype(bool) to create a correct market basket for the algorithm."
         },
-        "Regression Summary (Transformed)": {
-            "path": regress_after_path,
-            "description": "Summary output detailing R-squared, coefficients, and p-values after transformation."
+        before_viz=apriori_before_path,
+        after_viz=apriori_after_path,  
+        performance_eval=(
+            "The algorithm successfully identified primary substance threats. 67% of overdose cases involved Fentanyl, "
+            "and approximately 40% involved Cocaine."
+        ),
+        challenges={
+            "C1": {
+                "name": "Threshold Tuning & Removing Drug",
+                "issue": "An issue that occured was finding the right balance between support and confidence. Another issue was removing the 'Heroin Morphine Codeine' drug from the analysis because it was a combination of Heroin, Morphine, and Codeine, which made it difficult to interpret the results since we already have 'Heroin'.",
+                "sol": "Iterative testing to find meaningful rules and comparing results from apriori with 'Heroin Morphine Codeine' versus without."
+            }
         }
+    )
 
-    },
-    preprocessing_steps={
-        "Aggregation": "Grouped data by 'Year' and 'Month'.",
-        "Log Transformation": "Applied np.log() to the 'Deaths' column.",
-        "Polynomial Features": "Squared the Year feature within the OLS formula."
-    },
-    before_viz=resid_before_path,
-    after_viz=resid_after_path,  
-    performance_eval="The final model achieved an R-squared of 0.883, explaining 88.3% of the variance.",
-    performance_viz={
-        "Initial Residual Plot": {"path": resid_before_path},
-        "Transformed Residual Plot": {"path": resid_after_path}
-    },
-    challenges={
-        "C1": {
-            "name": "Violated Assumptions",
-            "issue": "The initial residual plot showed a distinct parabolic pattern.",
-            "sol": "Solved by squaring the Year feature & log transforming the response variable."
+    # --- Andrea's Model 2: Drug Overdose Seasonality & Trends ---
+    model_section(
+        title="Predicting Drug Overdose Deaths: Seasonality & Trends",
+        model_type="Ordinary Least Squares (OLS) Regression",
+        description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
+        justification="OLS Regression provides highly interpretable coefficients for time and month variables.",
+
+        assumptions={
+            "A1": {
+                "assumption": "Linearity",
+                "assessment": "Corrected by introducing a polynomial squared Year feature."
+            },
+            "A2": {
+                "assumption": "Homoscedasticity",
+                "assessment": "Corrected by applying a log transformation to the response variable, 'Deaths'."
+            }
+        },
+        
+        hyperparameters={
+            "Formula": ["Log_Deaths ~ C(Month) + Year + I(Year**2)", "Forces categorical months and quadratic time trend."]
+        },
+        model_viz={
+            "Regression Summary": {
+                "path": regress_before_path,
+                "description": "Summary output detailing R-squared, coefficients, and p-values before transformation."
+            },
+            "Regression Summary (Transformed)": {
+                "path": regress_after_path,
+                "description": "Summary output detailing R-squared, coefficients, and p-values after transformation."
+            }
+
+        },
+        preprocessing_steps={
+            "Aggregation": "Grouped data by 'Year' and 'Month'.",
+            "Log Transformation": "Applied np.log() to the 'Deaths' column.",
+            "Polynomial Features": "Squared the Year feature within the OLS formula."
+        },
+        before_viz=resid_before_path,
+        after_viz=resid_after_path,  
+        performance_eval="The final model achieved an R-squared of 0.883, explaining 88.3% of the variance.",
+        performance_viz={
+            "Initial Residual Plot": {"path": resid_before_path},
+            "Transformed Residual Plot": {"path": resid_after_path}
+        },
+        challenges={
+            "C1": {
+                "name": "Violated Assumptions",
+                "issue": "The initial residual plot showed a distinct parabolic pattern.",
+                "sol": "Solved by squaring the Year feature & log transforming the response variable."
+            }
         }
-    }
-)
-    # ------------------ END OF CLUSTERING MODEL ------------------ #
+    )
