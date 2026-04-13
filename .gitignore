@@ -13,6 +13,11 @@ data/dea_summary_pre_aggregated.csv
 data/dea_final.csv
 *.gz
 
+# config files
+.devcontainer
+.streamlit
+.vscode
+
 # excel temporary files
 ~$*
 
