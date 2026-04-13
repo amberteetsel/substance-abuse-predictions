@@ -63,5 +63,5 @@ To run death_rate_model.py (K-Means Clustering):
 
 1. Project Framing & Website Launch (9 Feb 2026)
 2. Data Preparation/Collection & Cleaning (6 Mar 2026)
-3. Model Implementation (3 Apr 2026)
-4. Conclusion, Results, & Project Report (17 Apr 2026)
+3. Model Implementation (13 Apr 2026)
+4. Conclusion, Results, & Project Report (20 Apr 2026)
