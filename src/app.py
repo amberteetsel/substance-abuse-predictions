@@ -110,6 +110,7 @@ with tab2:
 #     st.info("💡 [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health/datafiles?utm_source=chatgpt.com)")
 #     st.write("NSDUH measures substance use, mental illness, and treatment in the civilian noninstitutionalized population 12 or older.")
 
+
 caceres_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "AndreaCaceres_Headshot.jpg")
 marcu_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "IsraMarcu_Headshot.JPG")
 teetsel_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "Teetsel_Headshot.jpeg")
@@ -131,6 +132,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/andrea-caceres-609609256/)")
 
     with c2:
+
         st.image(marcu_headshot_path, width=150)
         st.write("**Isra Marcu**")
         st.write("Role: Data & Analyzation Lead ")
@@ -139,6 +141,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
     with c3:
+
         st.image(teetsel_headshot_path, width=150)
         st.write("**Amber Teetsel**")
         st.write("Role: Web Developer & Data Scientist")
@@ -181,7 +184,6 @@ with tab5:
 # TAB 6: DATA EXPLORATION
 
 ## Datasets to display
-
 nchs_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Raw.csv"))
 nchs_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_State.csv"))
 connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
@@ -192,6 +194,162 @@ ukcpr_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "UKCPR_cleaned.csv"))
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
+
+    # FUNCTION FOR DATA EXPLORATION LAYOUT
+    def data_source_section(
+        title,
+        df_raw, df_clean,
+        source_info,
+        collection_method,
+        description,
+        cleaning_steps,
+        limitations,
+        visuals=None,
+        outliers=None,
+        sum_stats=None,
+        corr=None,
+        advanced=None,
+        notes=None
+    ):
+        """
+        Inputs will be displayed cleanly on the website
+        title - title of dataset
+        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
+        source_info - where dataset came from
+        collection_method - how you accessed the data (e.g. download, API, etc.)
+        description - briefly describe dataset contents and why it's relevant to the project
+        cleaning_steps - dictionary, {<step name> : <step description>}
+        visuals - list of dictionaries, [{'title': <name of visual>,
+                                        'desc': <description, insights, comments, etc.>,
+                                        'path': <path to image>}]
+        limitations - text describing any potential biases or limitations of data
+        """
+        with st.expander(f"📊 Dataset: {title}", expanded=False):
+            st.subheader(title)
+            
+            # Overview
+            col_meta1, col_meta2 = st.columns(2)
+            with col_meta1:
+                st.write(f"**Source:** {source_info}")
+                st.write(f"**Collection Method:** {collection_method}")
+            with col_meta2:
+                st.markdown(f"**Description:** {description}")
+            
+            st.markdown("---")
+
+            # Raw vs. Clean comparison
+            st.subheader("Data Transformation Preview")
+            col_pre1, col_pre2 = st.columns(2)
+            
+            with col_pre1:
+                st.write("🔍 **Raw Snapshot**")
+
+                # If using DataFrames
+                if isinstance(df_raw, pd.DataFrame):
+                    
+                    st.dataframe(df_raw.head(5), use_container_width=True)
+                    st.caption("Initial data types and values.")
+                    with st.expander("View Raw Schema"):
+                        st.code(df_raw.dtypes)
+
+                # If using links/strings
+                elif isinstance(df_raw, str):
+
+                    st.image(df_raw, use_container_width=True)
+
+
+            with col_pre2:
+                st.write("✨ **Processed Snapshot**")
+
+                if isinstance(df_clean, pd.DataFrame):
+                    st.dataframe(df_clean.head(5), use_container_width=True)
+                    st.caption("Post-cleaning, encoding, and scaling.")
+                    with st.expander("View Processed Schema"):
+                        st.code(df_clean.dtypes)
+                elif isinstance(df_clean, str):
+                    st.image(df_clean, use_container_width=True)
+
+            st.markdown("---")
+
+            # Summary Statistics
+            if (isinstance(df_raw, pd.DataFrame)) and (isinstance(df_clean, pd.DataFrame)):
+                st.subheader("Statistical Profile")
+                st.write("Comparison of descriptive statistics before and after processing.")
+                
+                col_stat1, col_stat2 = st.columns(2)
+                with col_stat1:
+                    st.write("**Raw Summary**")
+                    raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                    if not raw_stats.empty:
+                        st.table(raw_stats)
+                    else:
+                        st.warning("No numeric data found in Raw dataset.")
+                
+                with col_stat2:
+                    st.write("**Processed Summary**")
+                    clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                    if not clean_stats.empty:
+                        st.table(clean_stats)
+                    else:
+                        st.warning("No numeric data found in Processed dataset.")
+    
+                st.markdown("---")
+            
+            # Cleaning & Processing Steps
+            st.subheader("Cleaning & Processing Logic")
+            for step_title, step_desc in cleaning_steps.items():
+                st.markdown(f"**{step_title}**")
+                st.info(step_desc)
+
+            st.markdown("---")
+
+            # Visuals
+            st.subheader("Visual Analysis")
+            if visuals:
+                for viz in visuals:
+                    with st.container(border=True):
+                        st.write(f"#### {viz['title']}")
+                        st.write(viz['desc'])
+                        st.image(viz['path'], use_container_width=True)
+            else:
+                st.info("Visualizations for this dataset are currently in progress.")
+
+            # Additional Analysis Sections
+            if outliers:
+                st.subheader("Outlier Detection")
+                with st.container(border=True):
+                    st.image(outliers['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {outliers['Interpretation']}")
+                    st.write(f"**Action:** {outliers['Action']}")
+                
+            if sum_stats:
+                st.subheader("Summary Statistics")
+                with st.container(border=True):
+                    st.write(f"**Summary:** {sum_stats['Interpretation']}")
+                    st.write(f"**Interpretation:** {sum_stats['Interpretation']}")
+                    
+            if corr:
+                st.subheader("Correlation Analysis")
+                with st.container(border=True):
+                    st.image(corr['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {corr['Interpretation']}")
+    
+            if advanced:
+                st.subheader("Advanced Analysis")
+                with st.container(border=True):
+                    st.image(advanced['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {advanced['Interpretation']}")
+                    
+            if notes:
+                st.subheader("Additional Notes")
+                with st.container(border=True):
+                    st.write(notes)
+
+            # Bias/Limitations
+            st.subheader("Limitations")
+            if limitations:
+                with st.container():
+                    st.write(limitations)
 
     # --- SECTION: NCHS Drug Poisoning ---
     data_source_section(
@@ -426,7 +584,11 @@ with tab6:
 
 # ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
 
-# Cluster State Map path
+
+# Get the directory that app.py is in, then go up one level to the project root
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+# Construct the path safely
 map_path = os.path.join(BASE_DIR, "resources", "model_viz", "cluster_state_map.png")
 
 with tab7:
@@ -464,5 +626,106 @@ with tab7:
             "Challenge 1": "Determining the optimal number of clusters (k) was difficult due to ...",
             "Challenge 2": "The data had some outliers that affected clustering results, which we addressed by ..."
         }
+    )
+    # --- Model 1 Image Paths (Mental Health) ---
+    dt_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_importance_tedsa.png")
+    dt_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_model.png")
+    roc_dt_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_dt.png")
+    lr_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "lr_model.png")
+    roc_lr_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_lr.png")
+    mh_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_before.png")
+    mh_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_after_scale.png")
 
+    # --- Model 2 Image Paths (Age of First Use) ---
+    rf_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_feat_importance.png")
+    rf_eval_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_eval.png")
+    rf_matrix_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_matrix.png")
+    age_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_before.png")
+    age_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_after_scale.png")
+
+
+    # --- Isra's Model 1: Co-occurring Mental Health ---
+    model_section(
+        title="Predicting Co-occurring Mental Health Diagnoses",
+        model_type="Decision Tree & Logistic Regression",
+        description="Predicts the likelihood of a patient requiring dual-diagnosis treatment based on demographics and substance use risk factors.",
+        justification="Decision trees handle highly categorical data without assuming linearity and provide clear feature importance. Logistic Regression serves as an industry-standard, highly interpretable baseline for overall probability.",
+        assumptions={
+            "Decision Tree": "Assumes features have predictive power to create meaningful data splits; non-parametric.",
+            "Logistic Regression": "Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."
+        },
+        hyperparameters={
+            "class_weight": ["'balanced'", "Ensures equal weighting of classes so the models aren't biased toward common outcomes during the 70/30 train-test split."]
+        },
+        model_viz={
+            "Decision Tree Feature Importance": {
+                "path": dt_feat_path, 
+                "description": "Visualizing the strongest underlying risk factors driving the decision tree splits."
+            }
+        },
+        preprocessing_steps={
+            "Handling Missing Data": "Used dropna() on targets and primary predictors to ensure training on complete observations.",
+            "One-Hot Encoding": "Expanded text categories into binary columns using pd.get_dummies.",
+            "Scaling": "Transformed features into z-scores using StandardScaler so larger numerical ranges didn't disproportionately influence the logistic regression."
+        },
+        before_viz=mh_before_path, 
+        after_viz=mh_after_path,   
+        performance_eval=(
+            "Both models achieved 60% accuracy, outperforming a random guess on the balanced test set. "
+            "Logistic Regression generated a smooth ROC curve with an AUC of 0.64 (Decision tree: 0.63), indicating reliable, relatively linear relationships. "
+            "Recall was nearly perfectly balanced (0.60 for class 0, 0.61 for class 1). "
+            "Key Decision Tree insights showed 'No Prior Treatment' held 46% of the decision weight, followed by Race: Other (16%), Male (15%), and Methamphetamine/Speed use (6%)."
+        ),
+        performance_viz={
+            "Decision Tree Evaluation": dt_model_path,
+            "Decision Tree ROC Curve": roc_dt_path,
+            "Logistic Regression Evaluation": lr_model_path,
+            "Logistic Regression ROC Curve": roc_lr_path 
+        },
+        challenges={
+            "Feature Scaling for Baseline Model": "Logistic regression can be disproportionately influenced by variables with larger ranges. This was solved by applying StandardScaler across the features."
+        }
+    )
+
+    # --- Isra's Model 2: Age of First Use ---
+    model_section(
+        title="Predicting Age of First Use",
+        model_type="Random Forest Classifier",
+        description="Predicts the discrete age bracket of a patient's first substance use based on primary substance choice and demographic background.",
+        justification="Because age was recorded in discrete brackets rather than continuously, regression was not ideal. A Random Forest was chosen to mitigate overfitting and provide stability when dealing with complex data and many categorical features.",
+        assumptions={
+            "Non-parametric": "The model does not assume anything about the distribution of the data.",
+            "Predictive Power": "Assumes features have the predictive power necessary to make meaningful splits."
+        },
+        hyperparameters={
+            "n_estimators": ["100", "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
+            "max_depth": ["'Tuned'", "Ensured the model identified underlying patterns without getting lost in the noise."],
+            "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
+        },
+        model_viz={
+            "Random Forest Feature Importance": {
+                "path": rf_feat_path,
+                "description": "The strongest predictors for age of first use were specific substances."
+            }
+        },
+        preprocessing_steps={
+            "Handling Missing Data": "Used dropna() on the 'first_use' target and predictors.",
+            "One-Hot Encoding": "Applied pd.get_dummies to process text categories independently.",
+            "Scaling": "Applied StandardScaler to normalize features."
+        },
+        before_viz=age_before_path, 
+        after_viz=age_after_path,   
+        performance_eval=(
+            "Evaluated via multi-class classification report and a chronological confusion matrix. "
+            "The model achieved 20.2% accuracy across 7 categories (beating the random guess baseline of 14.2%). "
+            "Its primary strength was identifying extreme age brackets, achieving a recall of 0.60 for the '< 11' group and 0.54 for the '30+' group. "
+            "The top predictors were specific substances, namely Other Opiates (26.3%) and Synthetics/Heroin (20.9%)."
+        ),
+        performance_viz={
+            "Evaluation Metrics": rf_eval_path,
+            "Chronological Confusion Matrix": rf_matrix_path 
+        },
+        challenges={
+            "Continuous vs. Discrete Target": "Initially, Linear Regression was considered. However, the target variable was discrete brackets, not continuous numbers. We solved this by reframing the problem as a classification task using a Random Forest."
+        }
     )

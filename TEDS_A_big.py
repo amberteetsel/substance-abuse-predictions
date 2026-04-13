@@ -1,0 +1,9 @@
+import pandas as pd 
+import numpy as np 
+
+TEDS_A = pd.read_csv("/Users/isramarcu/Downloads/datamining/substance-abuse-predictions/data/tedsa_puf_2006_2023.csv")
+#missing values are equal to -9, so replace
+TEDS_A = TEDS_A.replace(-9,np.nan)
+print(TEDS_A.columns.tolist())
+#stratify sample because 32million will cause memory issues, year and stfips (based on codebook)
+
