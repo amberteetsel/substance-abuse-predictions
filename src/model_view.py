@@ -168,7 +168,7 @@ def model_section(
                 process_viz_dict(performance_viz)
 
             
-            st.markdown("#### KMeans Model Assumptions")
+            st.markdown("#### Model Assumptions")
             for key, details in assumptions.items():
                 name = details.get("assumption", "N/A")
                 assess = details.get("assessment", "N/A")

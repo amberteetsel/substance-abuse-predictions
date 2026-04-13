@@ -890,16 +890,21 @@ apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connectic
 # --- Model 2 Image Paths (Regression & Seasonality) ---
 resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
 resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
+regress_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_before.png")
+regress_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_regression_summary_after.png")
+apriori_table_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_algorithm_table.png")
 
 
-# --- Andrea's Model 1: Deadliest Drug Combinations ---
+
+
+
 # --- Andrea's Model 1: Deadliest Drug Combinations ---
 model_section(
     title="Identifying Deadliest Drug Combinations",
     model_type="Apriori Algorithm & Association Rules",
-    description="Identifies the most frequent combinations of substances present in overdose cases to uncover the deadliest drug pairings.",
-    justification="The Apriori algorithm is highly efficient at mining boolean 'market basket' data to find frequent itemsets. It generates clear, interpretable association rules based on support and confidence metrics.",
-    # FIXED: Nested Dictionary for Line 173
+    description=" This will help provide insight into the circumstances surrounding these deaths and determine which drugs are frequently used together. The apriori algorithm is the best model for this because in this case our 'market basket' will be the death’s related toxicology report to help uncover the deadliest drug pairings.",
+    justification="The apriori algorithm is efficient for mining boolean data to find frequent itemsets through interpretable association rules based on support and confidence metrics.",
+    
     assumptions={
         "A1": {
             "assumption": "Transaction Independence",
@@ -910,19 +915,20 @@ model_section(
             "assessment": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."
         }
     },
-    # FIXED: Dictionary with 2-item list for Line 116
+    
     hyperparameters={
         "min_support": ["0.1", "Requires combination to appear in at least 10% of cases."],
         "min_threshold": ["0.7", "70% confidence baseline for drug pairings."]
     },
     model_viz={
     "Frequent Itemsets": {
+        "path": apriori_table_path,
         "description": "Visualizing the baseline frequencies..."
     }
 },
     preprocessing_steps={
         "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
-        "Boolean Conversion": "Converted the selected drug columns to boolean types using .astype(bool) to create a valid market basket for the algorithm."
+        "Boolean Conversion": " I converted the selected drug columns to boolean types using .astype(bool) to create a correct market basket for the algorithm."
     },
     before_viz=apriori_before_path,
     after_viz=apriori_after_path,  
@@ -932,9 +938,9 @@ model_section(
     ),
     challenges={
         "C1": {
-            "name": "Threshold Tuning",
-            "issue": "Balancing support and confidence.",
-            "sol": "Iterative testing to find meaningful rules."
+            "name": "Threshold Tuning & Removing Drug",
+            "issue": "An issue that occured was finding the right balance between support and confidence. Another issue was removing the 'Heroin Morphine Codeine' drug from the analysis because it was a combination of Heroin, Morphine, and Codeine, which made it difficult to interpret the results since we already have 'Heroin'.",
+            "sol": "Iterative testing to find meaningful rules and comparing results from apriori with 'Heroin Morphine Codeine' versus without."
         }
     }
 )
@@ -945,7 +951,7 @@ model_section(
     model_type="Ordinary Least Squares (OLS) Regression",
     description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
     justification="OLS Regression provides highly interpretable coefficients for time and month variables.",
-    # FIXED: Nested Dictionary for Line 173
+
     assumptions={
         "A1": {
             "assumption": "Linearity",
@@ -953,17 +959,23 @@ model_section(
         },
         "A2": {
             "assumption": "Homoscedasticity",
-            "assessment": "Corrected by applying a log transformation to the target."
+            "assessment": "Corrected by applying a log transformation to the response variable, 'Deaths'."
         }
     },
-    # FIXED: Dictionary with 2-item list for Line 116
+    
     hyperparameters={
         "Formula": ["Log_Deaths ~ C(Month) + Year + I(Year**2)", "Forces categorical months and quadratic time trend."]
     },
     model_viz={
         "Regression Summary": {
-            "description": "Summary output detailing R-squared, coefficients, and p-values."
+            "path": regress_before_path,
+            "description": "Summary output detailing R-squared, coefficients, and p-values before transformation."
+        },
+        "Regression Summary (Transformed)": {
+            "path": regress_after_path,
+            "description": "Summary output detailing R-squared, coefficients, and p-values after transformation."
         }
+
     },
     preprocessing_steps={
         "Aggregation": "Grouped data by 'Year' and 'Month'.",
@@ -981,7 +993,7 @@ model_section(
         "C1": {
             "name": "Violated Assumptions",
             "issue": "The initial residual plot showed a distinct parabolic pattern.",
-            "sol": "Solved by squaring the Year feature."
+            "sol": "Solved by squaring the Year feature & log transforming the response variable."
         }
     }
 )
