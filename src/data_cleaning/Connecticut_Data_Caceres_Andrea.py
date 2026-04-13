@@ -207,8 +207,10 @@ sns.histplot(df["Drug Count Log"], bins=8, kde=True)
 plt.title("Log Transformed Drug Count Distribution")
 plt.xlabel("Log(Drug Count + 1)")
 plt.ylabel("Frequency")
+
 plt.savefig("../../resources/data_exploration_plots_CT/Log_Transformed_Data_Count_Distribution.png")
 plt.show()
+
 
 
 #Summary Statistics
@@ -220,10 +222,9 @@ sns.set_theme(style="whitegrid")
 plt.figure(figsize=(7,6))
 stats.probplot(df["Age"], dist="norm", plot=plt)
 plt.title("Q-Q Plot of Age Distribution")
+
 plt.savefig("../../resources/data_exploration_plots_CT/QQ_Plot.png")
 plt.show()
-
-
 
 #Total Deaths Involving Each Drug
 drugs = [
