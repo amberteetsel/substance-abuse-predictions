@@ -149,3 +149,76 @@ def generate_eras_map(df, periods, color_dict):
     )
 
     return fig
+
+
+def generate_interactive_heatmap(df):
+
+    label_order = {
+        'Low Risk': 0, 
+        'Moderate Risk': 1, 
+        'High Risk (Prescription-Driven)': 2, 
+        'Acute High Risk (Fentanyl-Driven)': 3
+    }
+
+    # sorting logic
+    sort_cols = sorted(df['year'].unique(), reverse=True)
+    pivot_df = df.pivot(index="state", columns="year", values="risk_num")
+    pivot_df_sorted = pivot_df.sort_values(by=sort_cols, ascending=False)
+
+    colors = ['#27ae60', '#f1c40f', '#e67e22', '#e74c3c']
+
+    fig = px.imshow(
+        pivot_df_sorted,
+        labels=dict(x="Year", y="State", color="Risk Level"),
+        color_continuous_scale=colors,
+        zmin=0, zmax=3,
+        aspect="auto"
+    )
+
+    fig.update_traces(
+        xgap=0.5,
+        ygap=0.5,
+        selector=dict(type='heatmap')
+    )
+
+    # legend
+    for label, val in label_order.items():
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None],
+            mode="markers",
+            marker = dict(size=10, color=colors[val], symbol='square'),
+            showlegend=True,
+            name=label
+        ))
+
+    # custom data for hover
+    death_rates = df.pivot(index="state", columns="year", values="death_rate").reindex(pivot_df_sorted.index).values
+    
+    fig.update_traces(
+        customdata=death_rates,
+        hovertemplate=(
+            "<b>State:</b> %{y}<br>" +
+            "<b>Year:</b> %{x}<br>" +
+            "<b>Death Rate:</b> %{customdata:.2f}<extra></extra>"
+        ),
+        selector=dict(type='heatmap')
+    )
+    # fig.update_traces(marker_line_color="white")
+    fig.update_layout(
+        title="Opioid Risk Evolution (2000-2016)",
+        height=1200,
+        # title_font_size=22,
+        coloraxis_showscale=False,
+        legend=dict(
+            title="Risk Categories",
+            orientation="v",
+            yanchor="bottom",
+            y=.91,
+            xanchor="right",
+            x=1.3
+        ),
+        yaxis=dict(tickmode='linear'), # Ensures every state name is printed
+        margin=dict(l=150)
+    )
+    
+    return fig

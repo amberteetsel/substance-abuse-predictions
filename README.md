@@ -15,6 +15,11 @@ The topic of our research project is identifying/predicting which communities ar
 
 **Amber Teetsel:** Web Developer & Data Scientist
 
+## Development Environment
+1. Run `conda env create -f environment.yml` in terminal.
+2. `conda activate substance_abuse ` to activate the environment.
+3. `python -m streamlit run src/app.py` to run the streamlit app.
+
 ## Data Cleaning
 To run TEDS_Acleaning.py
 1. Download tedsa_puf_2023.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing

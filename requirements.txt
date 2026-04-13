@@ -1,7 +1,7 @@
-streamlit
+streamlit>=1.35.0
 pandas
 numpy
-plotly
+plotly>=6.0.0
 matplotlib
 seaborn
 scikit-learn
