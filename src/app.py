@@ -457,6 +457,111 @@ with tab6:
 
     
     # --- SECTION: DATASET3 ---
+    ## Datasets to display
+connecticut_raw = pd.read_csv("c:/Users/jenny/Downloads/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
+connecticut_clean = pd.read_csv("c:/Users/jenny/Downloads/DataMining/HW/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+
+with tab6:
+    
+
+    # FUNCTION FOR DATA EXPLORATION LAYOUT
+    def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
+        """
+        Inputs will be displayed cleanly on the website
+        title - title of dataset
+        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
+        source_info - where dataset came from
+        collection_method - how you accessed the data (e.g. download, API, etc.)
+        description - briefly describe dataset contents and why it's relevant to the project
+        cleaning_steps - dictionary, {<step name> : <step description>}
+        visuals - list of dictionaries, [{'title': <name of visual>,
+                                        'desc': <description, insights, comments, etc.>,
+                                        'path': <path to image>}]
+        limitations - text describing any potential biases or limitations of data
+        """
+        with st.expander(f"📊 Dataset: {title}", expanded=False):
+            st.subheader(title)
+            
+            # Overview
+            col_meta1, col_meta2 = st.columns(2)
+            with col_meta1:
+                st.write(f"**Source:** {source_info}")
+                st.write(f"**Collection Method:** {collection_method}")
+            with col_meta2:
+                st.markdown(f"**Description:** {description}")
+            
+            st.markdown("---")
+
+            # Raw vs. Clean comparison
+            st.subheader("Data Transformation Preview")
+            col_pre1, col_pre2 = st.columns(2)
+            
+            with col_pre1:
+                st.write("🔍 **Raw Snapshot**")
+                st.dataframe(df_raw.head(5), use_container_width=True)
+                st.caption("Initial data types and values.")
+                with st.expander("View Raw Schema"):
+                    st.code(df_raw.dtypes)
+
+            with col_pre2:
+                st.write("✨ **Processed Snapshot**")
+                st.dataframe(df_clean.head(5), use_container_width=True)
+                st.caption("Post-cleaning, encoding, and scaling.")
+                with st.expander("View Processed Schema"):
+                    st.code(df_clean.dtypes)
+
+            st.markdown("---")
+
+            # Summary Statistics
+            st.subheader("Statistical Profile")
+            st.write("Comparison of descriptive statistics before and after processing.")
+            
+            col_stat1, col_stat2 = st.columns(2)
+            with col_stat1:
+                st.write("**Raw Summary**")
+                raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                if not raw_stats.empty:
+                    st.table(raw_stats)
+                else:
+                    st.warning("No numeric data found in Raw dataset.")
+            
+            with col_stat2:
+                st.write("**Processed Summary**")
+                clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                if not clean_stats.empty:
+                    st.table(clean_stats)
+                else:
+                    st.warning("No numeric data found in Processed dataset.")
+
+            st.markdown("---")
+            
+            # Cleaning & Processing Steps
+            st.subheader("Cleaning & Processing Logic")
+            for step_title, step_desc in cleaning_steps.items():
+                st.markdown(f"**{step_title}**")
+                st.info(step_desc)
+
+            st.markdown("---")
+
+            # Visuals
+            st.subheader("Visual Analysis")
+            if visuals:
+                for viz in visuals:
+                    with st.container(border=True):
+                        st.write(f"#### {viz['title']}")
+                        st.write(viz['desc'])
+                        st.image(viz['path'], use_container_width=True)
+            else:
+                st.info("Visualizations for this dataset are currently in progress.")
+
+
+            # Bias/Limitations
+            st.subheader("Limitations")
+            if limitations:
+                with st.container(border=True):
+                    st.write(limitations)
+
+    # --- SECTION: Connecticut Accidental Drug Related Deaths ---
     data_source_section(
         title="Connecticut Accidental Drug Related Deaths",
         df_raw=connecticut_raw,
@@ -464,23 +569,14 @@ with tab6:
         source_info="Connecticut Open Data Portal",
         collection_method="API (Socrata SODA)",
         description="This dataset contains accidental drug related deaths reported in Connecticut including demographic information, substances detected in toxicology reports, and circumstances surrounding overdose deaths. It allows analysis of poly-drug overdoses, demographic trends, and seasonal patterns.",
-        
         cleaning_steps={
-        
-        "Duplicate Removal": "Duplicate records were identified and removed so each death is counted once.",
-        
-        "Handling Missing Values": "Age values were converted to numeric and missing ages were filled with the median age. Missing categorical values were standardized where possible.",
-        
-        "Outlier Handling": "Extreme age values outside the range of 10–100 were removed to eliminate likely data entry errors.",
-        
-        "Binary Encoding": "Drug indicator columns were converted to binary format where 1 indicates the drug was present in the toxicology report.",
-        
-        "Feature Engineering": "A Drug Count variable was created by summing drug indicator columns to measure the number of substances involved in each overdose case.",
-        
-        "Normalization": "Age was standardized using z-score normalization and Drug Count was log-transformed to reduce skewness."
-        
+            "Duplicate Removal": "Duplicate records were identified and removed so each death is counted once.",
+            "Handling Missing Values": "Age values were converted to numeric and missing ages were filled with the median age. Missing categorical values were standardized where possible.",
+            "Outlier Handling": "Extreme age values outside the range of 10–100 were removed to eliminate likely data entry errors.",
+            "Binary Encoding": "Drug indicator columns were converted to binary format where 1 indicates the drug was present in the toxicology report.",
+            "Feature Engineering": "A Drug Count variable was created by summing drug indicator columns to measure the number of substances involved in each overdose case.",
+            "Normalization": "Age was standardized using z-score normalization and Drug Count was log-transformed to reduce skewness."
         },
-        
         visuals = [
         
         {'title': 'Fig. 7: Drug Correlation Heatmap',
