@@ -513,15 +513,15 @@ with tab7:
     st.header("Models Implemented")
     st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
 
-    # CLUSTERING MODEL
+    # ------------------ CLUSTERING MODEL ------------------ #
     model_section(
         title = "Clustering of U.S. States Based on Drug Mortality Trends",
         model_type = "K-Means Clustering",
-        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 2000-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
-        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states based on their drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
+        description = "We applied K-Means clustering to group U.S. states based on their drug supply and minimum wages from 2000-2016. The goal was to identify clusters of states with similar characteristics and evaluate trends in their respective death rates.",
+        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states and assessing each cluster's drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
         assumptions = assumption_dict,
         hyperparameters = {
-            "k": [3, "See images below"],
+            "k": [4, "See images below"],
             "random_state": [42, "Set for reproduceability"],
             "max_iter": [300, "Left at default value; changes had no meaningful impact on Silhouette score"],
             "n_init": [20, "Adjusted from default 10 to improve Silhouette score"]
@@ -529,7 +529,7 @@ with tab7:
         hyperparameter_viz={
             "Features & K Selection": {
                 "path": os.path.join(BASE_DIR, "resources", "death_rate_plots", "cluster_feature_sets.png"),
-                "description": "Optimal model features were initially selected based on Silhouette score",
+                "description": "Optimal model features were initially selected based on Silhouette score. We wanted to include both Oxycodone and Fentanyl supply to determine if one or the other was a larger driver of death rate.",
                 "cont_width": False
             },
             "K Validation": {
@@ -560,6 +560,11 @@ with tab7:
                 "path": eras_map,
                 "description": "Predominant cluster for each state during each era. Illustrates developing severity of risk of death from drug overdose over time.",
                 "cont_width":True
+            },
+            "Drug Death Risk Heatmap": {
+                "path": os.path.join(BASE_DIR,"resources","death_rate_plots","risk_progression_heatmap_sorted.png"),
+                "description": "Sorted by risk level in 2016, this heatmap demonstrates the shift in drug death risk over time. Note the 'red wall' appearing in 2006 and taking over from then until 2016.",
+                "cont_width": False
             }
         },
         performance_summary="Our data violates model assumptions, leading to relatively poor performance.",
@@ -598,3 +603,4 @@ with tab7:
         challenges=challenge_dict
 
     )
+    # ------------------ END OF CLUSTERING MODEL ------------------ #
