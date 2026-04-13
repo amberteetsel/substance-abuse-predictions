@@ -1,11 +1,8 @@
 import streamlit as st
 import pandas as pd
 from model_view import model_section
-from data_view import data_source_section
 import os
 
-# Set root directory for file paths
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 # Page layout
 st.set_page_config(page_title="Substance Abuse/Overdose Analysis", layout="wide")
@@ -110,10 +107,6 @@ with tab2:
 #     st.info("💡 [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health/datafiles?utm_source=chatgpt.com)")
 #     st.write("NSDUH measures substance use, mental illness, and treatment in the civilian noninstitutionalized population 12 or older.")
 
-caceres_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "AndreaCaceres_Headshot.jpg")
-marcu_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "IsraMarcu_Headshot.JPG")
-teetsel_headshot_path = os.path.join(BASE_DIR, "resources", "bio", "Teetsel_Headshot.jpeg")
-
 
 # TAB 4: TEAM BIOS
 with tab4:
@@ -123,7 +116,7 @@ with tab4:
     c1, c2, c3 = st.columns(3)
     
     with c1:
-        st.image(caceres_headshot_path, width=150)
+        st.image("resources/bio/AndreaCaceres_Headshot.jpg", width=150)
         st.write("**Andrea Caceres**")
         st.write("Role: Modeling & Visualization Lead")
         st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pension analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
@@ -131,7 +124,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/andrea-caceres-609609256/)")
 
     with c2:
-        st.image(marcu_headshot_path, width=150)
+        st.image("resources/bio/IsraMarcu_Headshot.JPG", width=150)
         st.write("**Isra Marcu**")
         st.write("Role: Data & Analyzation Lead ")
         st.write("Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Masters in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
@@ -139,7 +132,7 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
     with c3:
-        st.image(teetsel_headshot_path, width=150)
+        st.image("resources/bio/Teetsel_Headshot.jpeg", width=150)
         st.write("**Amber Teetsel**")
         st.write("Role: Web Developer & Data Scientist")
         st.write("Bio: Amber Teetsel is currently pursuiing a Master's in Data Science at the University of Colorado Boulder. She has Bachelor's degrees from Vanderbilt University in Mathematics, Finance, and Women's Studies. Amber began her career in financial services consulting, but her past 4 years of experience have been as data analyst for a multinational corporation.")
@@ -159,10 +152,6 @@ with tab5:
                      "SAMHSA Overdose Prevention and Response Toolkit",
                      "The Future of the United States Overdose Crisis: Challenges and Opportunities",
                      "Provisional Drug Overdose Death Counts for Specific Drugs"
-                     "University of Kentucky Center for Poverty Research",
-                     "ARCOS Retail Drug Summary Reports, 2000-2005",
-                     "ARCOS Query Tool, 2006-2016"
-                     "National Library of Medicine"
         ],
         "Link": ["https://pmc.ncbi.nlm.nih.gov/articles/PMC9731175/",
                  "https://stacks.cdc.gov/view/cdc/135849",
@@ -170,10 +159,6 @@ with tab5:
                  "https://library.samhsa.gov/sites/default/files/overdose-prevention-response-kit-pep23-03-00-001.pdf",
                  "https://onlinelibrary.wiley.com/doi/10.1111/1468-0009.12602",
                  "https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm"
-                 "https://ukcpr.uky.edu/resources",
-                 "https://www.deadiversion.usdoj.gov/arcos/retail_drug_summary/archive/archives-report.html",
-                 "https://arcos.nd.edu/query",
-                 "https://pmc.ncbi.nlm.nih.gov/articles/PMC6848196/"
         ]
     }
 
@@ -183,17 +168,172 @@ with tab5:
 # TAB 6: DATA EXPLORATION
 
 ## Datasets to display
-
-nchs_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_Raw.csv"))
-nchs_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "NCHS_Mortality_State.csv"))
-connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
-connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
-dea_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "dea_full_interpolated.csv"))
-ukcpr_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "ukcpr_raw.csv"))
-ukcpr_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "UKCPR_cleaned.csv"))
+nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
+nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
+connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
+connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+dea_clean = pd.read_csv('data/dea_full_interpolated.csv')
+ukcpr_raw = pd.read_csv('data/ukcpr_raw.csv')
+ukcpr_clean = pd.read_csv('data/UKCPR_cleaned.csv')
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
+
+    # FUNCTION FOR DATA EXPLORATION LAYOUT
+    def data_source_section(
+        title,
+        df_raw, df_clean,
+        source_info,
+        collection_method,
+        description,
+        cleaning_steps,
+        limitations,
+        visuals=None,
+        outliers=None,
+        sum_stats=None,
+        corr=None,
+        advanced=None,
+        notes=None
+    ):
+        """
+        Inputs will be displayed cleanly on the website
+        title - title of dataset
+        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
+        source_info - where dataset came from
+        collection_method - how you accessed the data (e.g. download, API, etc.)
+        description - briefly describe dataset contents and why it's relevant to the project
+        cleaning_steps - dictionary, {<step name> : <step description>}
+        visuals - list of dictionaries, [{'title': <name of visual>,
+                                        'desc': <description, insights, comments, etc.>,
+                                        'path': <path to image>}]
+        limitations - text describing any potential biases or limitations of data
+        """
+        with st.expander(f"📊 Dataset: {title}", expanded=False):
+            st.subheader(title)
+            
+            # Overview
+            col_meta1, col_meta2 = st.columns(2)
+            with col_meta1:
+                st.write(f"**Source:** {source_info}")
+                st.write(f"**Collection Method:** {collection_method}")
+            with col_meta2:
+                st.markdown(f"**Description:** {description}")
+            
+            st.markdown("---")
+
+            # Raw vs. Clean comparison
+            st.subheader("Data Transformation Preview")
+            col_pre1, col_pre2 = st.columns(2)
+            
+            with col_pre1:
+                st.write("🔍 **Raw Snapshot**")
+
+                # If using DataFrames
+                if isinstance(df_raw, pd.DataFrame):
+                    
+                    st.dataframe(df_raw.head(5), use_container_width=True)
+                    st.caption("Initial data types and values.")
+                    with st.expander("View Raw Schema"):
+                        st.code(df_raw.dtypes)
+
+                # If using links/strings
+                elif isinstance(df_raw, str):
+
+                    st.image(df_raw, use_container_width=True)
+
+
+            with col_pre2:
+                st.write("✨ **Processed Snapshot**")
+
+                if isinstance(df_clean, pd.DataFrame):
+                    st.dataframe(df_clean.head(5), use_container_width=True)
+                    st.caption("Post-cleaning, encoding, and scaling.")
+                    with st.expander("View Processed Schema"):
+                        st.code(df_clean.dtypes)
+                elif isinstance(df_clean, str):
+                    st.image(df_clean, use_container_width=True)
+
+            st.markdown("---")
+
+            # Summary Statistics
+            if (isinstance(df_raw, pd.DataFrame)) and (isinstance(df_clean, pd.DataFrame)):
+                st.subheader("Statistical Profile")
+                st.write("Comparison of descriptive statistics before and after processing.")
+                
+                col_stat1, col_stat2 = st.columns(2)
+                with col_stat1:
+                    st.write("**Raw Summary**")
+                    raw_stats = df_raw.select_dtypes(include=['number']).describe().T
+                    if not raw_stats.empty:
+                        st.table(raw_stats)
+                    else:
+                        st.warning("No numeric data found in Raw dataset.")
+                
+                with col_stat2:
+                    st.write("**Processed Summary**")
+                    clean_stats = df_clean.select_dtypes(include=['number']).describe().T
+                    if not clean_stats.empty:
+                        st.table(clean_stats)
+                    else:
+                        st.warning("No numeric data found in Processed dataset.")
+    
+                st.markdown("---")
+            
+            # Cleaning & Processing Steps
+            st.subheader("Cleaning & Processing Logic")
+            for step_title, step_desc in cleaning_steps.items():
+                st.markdown(f"**{step_title}**")
+                st.info(step_desc)
+
+            st.markdown("---")
+
+            # Visuals
+            st.subheader("Visual Analysis")
+            if visuals:
+                for viz in visuals:
+                    with st.container(border=True):
+                        st.write(f"#### {viz['title']}")
+                        st.write(viz['desc'])
+                        st.image(viz['path'], use_container_width=True)
+            else:
+                st.info("Visualizations for this dataset are currently in progress.")
+
+            # Additional Analysis Sections
+            if outliers:
+                st.subheader("Outlier Detection")
+                with st.container(border=True):
+                    st.image(outliers['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {outliers['Interpretation']}")
+                    st.write(f"**Action:** {outliers['Action']}")
+                
+            if sum_stats:
+                st.subheader("Summary Statistics")
+                with st.container(border=True):
+                    st.write(f"**Summary:** {sum_stats['Interpretation']}")
+                    st.write(f"**Interpretation:** {sum_stats['Interpretation']}")
+                    
+            if corr:
+                st.subheader("Correlation Analysis")
+                with st.container(border=True):
+                    st.image(corr['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {corr['Interpretation']}")
+    
+            if advanced:
+                st.subheader("Advanced Analysis")
+                with st.container(border=True):
+                    st.image(advanced['image'], use_container_width=True)
+                    st.write(f"**Interpretation:** {advanced['Interpretation']}")
+                    
+            if notes:
+                st.subheader("Additional Notes")
+                with st.container(border=True):
+                    st.write(notes)
+
+            # Bias/Limitations
+            st.subheader("Limitations")
+            if limitations:
+                with st.container():
+                    st.write(limitations)
 
     # --- SECTION: NCHS Drug Poisoning ---
     data_source_section(
@@ -428,179 +568,241 @@ with tab6:
 
 # ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
 
-# CLUSTER MODEL REFERENCES
-map_path = os.path.join(BASE_DIR, "resources", "death_rate_plots", "dominant_risk_profile_map_allyears.png")
-map_shift = os.path.join(BASE_DIR, "resources", "death_rate_plots", "state_risk_map_eras.png")
-schema_pre = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate_unscaled.csv"))
-schema_post = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate.csv"))
-distr_pre = os.path.join(BASE_DIR, "resources", "death_rate_plots", "unscaled_histograms.png")
-distr_post = os.path.join(BASE_DIR, "resources", "death_rate_plots", "scaled_histograms.png")
-clust_descriptions = """
-    To determine the optimal number of clusters, we evaluated the model using three metrics. The Elbow Method suggested a clear transition at k=3 or k=4, and the Davies=Bouldin Index confirmed k=3 as most compact clustering. \n
-    However, we ultimately selected k=4. Despite slightly increasing the DB Index, using 4 clusters enabled us to see the difference between high Oxycodone states and high Fentanyl states. \n
-    We deemed the trade-off between minor loss in cluster quality and gain of qualitative nuance necessary to accurately study the shifting nature of the opioid crisis.
-"""
-performance_str = """
-    We evaluate cluster performance using Silhouette Score and the Davies-Bouldin (DB) Index. \n
-    The overall model's Silhouette Score (0.4675) is relatively low, but it was the best score possible with a reasonable amount of clusters.
-    It's DB Index (0.9318) is poor, indicating clusters are not well separated as seen in the 3D visual below. \n
-    In 2000-2005, both metrics improve. The Silhouette Score (0.5129) indicates better separation of clusters, as does the significantly reduced DB Index (0.5343). \n
-    2006-2010 is the worst performaing era. Silhouette Score (0.3745) is low and DB Index (0.9647) is high, indicating poor separation of clusters. The visual below demonstrates how spread out some clusters are and the low degree of separation between many data points. \n
-    2011-2016 improves slightly on the previous era with a higher Silhouette Score (0.4261) and lower DB Index (0.8814). The plot below visualizes the spread of clusters, where we can see that the Low and Moderate Risk clusters are pretty well-defined and separated.
-    However, the High and Acute risk clusters are very spread out.
-"""
-challenge_dict = {
-    "Ch1":{
-        'name': "Data Accessability",
-        'issue': 'Drug availability data from 2000-2005 was trapped in pdf reports from the DEA.',
-        'sol': "Manually extracted and digitized data for 2000 and 2005, then use linear interpolation to fill in 2001-2004"
-    },
-    "Ch2":{
-        "name": "Data Volume",
-        "issue": "The DEA ARCOS data from 2006-2016 contained over 6 million rows, so loading and cleaning the data took over 30 minutes and often crashed the kernel.",
-        "sol": "Processing and cleaning the data in chunks of 1 million rows each"
-    },
-    "Ch3": {
-        "name": "Data Availability",
-        "issue": "Initially the goal was to incorporate demographic data (age, sex, race) into the model. However, the NCHS data only provides this information at the national level.",
-        "sol": "Drop age, sex, and race data from analysis"
-    },
-    "Ch4": {
-        "name": "Multicollinearity",
-        "issue": "Oxycodone and Hydrocodone supply were highly correlated (r = 0.73), as were SNAP rate and Poverty Rate (r = 0.71)",
-        "sol": "Dropped Hydrocodone supply and Poverty rate from feature considerations since Oxycodone supply and SNAP rate were more highly correlated with death rate than their counterparts."
-    }
-}
-assumption_dict = {
-    "A1": {
-        "assumption": "Clusters are spherical and isotropic",
-        "assessment": "In general, clusters generated by our model are not spherical or isotropic. The exception is the Moderate Risk group which is approximately spherical in most models (see Performance Evaluation visuals above).\n The Silhouette Score for each models generally ranges between 0.4 to 0.5, indicating the assumption has not been violated too severely."
-    },
-    "A2": {
-        "assumption": "Equal Variance of Clusters",
-        "assessment": "Variance between clusters differs significantly. The Low Risk and Moderate Risk clusters generally have very low variance, between approx. 0.01 and 0.3. The Acute Risk cluster variance is higher, generally hovering around 0.5 - 0.6. The High Risk cluster's variance is extremely high (approx. 0.95)."
-    },
-    "A3": {
-        "assumption": "Cluster Size Similarity",
-        "assessment": "Cluster sizes are not evenly balanced, particularly in the Early Era",
-        "viz": os.path.join(BASE_DIR,"resources","death_rate_plots","cluster_by_era_comp.png")
-    }
-}
-death_rate_df = pd.read_csv(os.path.join(BASE_DIR,"data","death_rate_kmeans.csv"))
-# define time periods
-periods = [
-    (2000, 2016, "Full Time Span (2000-2016)"),
-    (2000, 2005, "Early Era (2000-2005)"),
-    (2006, 2010, "Prescription Era (2006-2010)"),
-    (2011, 2016, "Synthetic/Fentanyl Era (2011-2016)")
-]
+# Get the directory that app.py is in, then go up one level to the project root
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-# Define specific color scale
-color_mapping = {
-    'Low Risk': '#2ecc71',
-    'Moderate Risk': '#f1c40f',
-    'High Risk (Prescription-Driven)': '#e67e22',
-    'Acute High Risk (Fentanyl-Driven)': '#e74c3c'
-}
+# Construct the path safely
+map_path = os.path.join(BASE_DIR, "resources", "model_viz", "cluster_state_map.png")
 
-from plot_utils import generate_era_3d_plots, generate_dominant_risk_map, generate_eras_map
-era_3d_plots = generate_era_3d_plots(death_rate_df,periods, color_mapping)
-map_mode = generate_dominant_risk_map(death_rate_df, color_mapping)
-eras_map = generate_eras_map(death_rate_df, periods, color_mapping)
-
-# -------- START OF ACTUAL MODELING SECTION ON WEBSITE -------- #
 with tab7:
     st.header("Models Implemented")
     st.info("Modeling is currently in progress and will be added to the website soon. Stay tuned!")
 
-    # ------------------ CLUSTERING MODEL ------------------ #
+    # Example of how to use model_section function for a model implemented
     model_section(
         title = "Clustering of U.S. States Based on Drug Mortality Trends",
         model_type = "K-Means Clustering",
-        description = "We applied K-Means clustering to group U.S. states based on their drug supply and minimum wages from 2000-2016. The goal was to identify clusters of states with similar characteristics and evaluate trends in their respective death rates.",
-        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states and assessing each cluster's drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
-        assumptions = assumption_dict,
+        description = "We applied K-Means clustering to group U.S. states based on their drug mortality rates from 1999-2016. The goal was to identify clusters of states with similar drug mortality trends and characteristics.",
+        justification = "K-Means is a simple and effective clustering algorithm that can help us uncover underlying patterns in the data. By clustering states based on their drug mortality rates, we can identify groups of states that may share common risk factors or policy environments.",
+        assumptions = {
+            "Assumption 1": "The drug mortality rates are representative of the true underlying trends.",
+            "Assumption 2": "The number of clusters (k) is known and appropriate for the data."
+        },
         hyperparameters = {
-            "k": [4, "See images below"],
-            "random_state": [42, "Set for reproduceability"],
-            "max_iter": [300, "Left at default value; changes had no meaningful impact on Silhouette score"],
-            "n_init": [20, "Adjusted from default 10 to improve Silhouette score"]
+            "k": [3, "how I tuned this value"],
+            "max_iter": [300, "default value"],
+            "n_init": [10, "default value"]
         },
-        hyperparameter_viz={
-            "Features & K Selection": {
-                "path": os.path.join(BASE_DIR, "resources", "death_rate_plots", "cluster_feature_sets.png"),
-                "description": "Optimal model features were initially selected based on Silhouette score. We wanted to include both Oxycodone and Fentanyl supply to determine if one or the other was a larger driver of death rate.",
-                "cont_width": False
-            },
-            "K Validation": {
-                "path": os.path.join(BASE_DIR, "resources", "death_rate_plots", "kmeans_evaluation_metrics.png"),
-                "description": "Elbow Method and Silhouette Score \n ",
-                "cont_width": True
-            },
-            "Davies-Bouldin Index & Cluster Identification": {
-                "path": os.path.join(BASE_DIR,"resources","death_rate_plots","cluster_db_index.png"),
-                "description": "While DB scores indicate k=3 as optimal cluster number, k=4 provides better insight to specific drivers of death rate.",
-                "cont_width":False
-            },
-            "Cluster Descriptions": {
-                "path":os.path.join(BASE_DIR,"resources", "death_rate_plots", "cluster_descriptions.png"),
-                "description": clust_descriptions,
-                "cont_width": False
-            }
-
-        },
-        model_code="kmeans_final = KMeans(n_clusters=4, random_state=42, max_iter=300, n_init=20)",
         model_viz={
-            "U.S. States by Predominant Cluster": {
-                "path": map_mode,
-                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality.",
-                "cont_width": True
-            },
-            "State Cluster Shift": {
-                "path": eras_map,
-                "description": "Predominant cluster for each state during each era. Illustrates developing severity of risk of death from drug overdose over time.",
-                "cont_width":True
-            },
-            "Drug Death Risk Heatmap": {
-                "path": os.path.join(BASE_DIR,"resources","death_rate_plots","risk_progression_heatmap_sorted.png"),
-                "description": "Sorted by risk level in 2016, this heatmap demonstrates the shift in drug death risk over time. Note the 'red wall' appearing in 2006 and taking over from then until 2016.",
-                "cont_width": False
+            "Cluster Map": {
+                "path": map_path,
+                "description": "This map visualizes the clusters of states based on their drug mortality trends. Each color represents a different cluster, allowing us to see geographic patterns in drug mortality."
             }
         },
-        performance_summary="Our data violates model assumptions, leading to relatively poor performance.",
-        performance_eval=performance_str,
-        performance_viz={
-            "Comprehensive Analysis":{
-                "fig": era_3d_plots[periods[0][2]]["fig"],
-                "stats": era_3d_plots[periods[0][2]]["stats"],
-                "cont_width":True
-            },
-            "Early Era Analysis": {
-                "fig": era_3d_plots[periods[1][2]]["fig"],
-                "stats": era_3d_plots[periods[1][2]]["stats"],
-                "cont_width": True
-            },
-            "Mid Era Analysis": {
-                "fig": era_3d_plots[periods[2][2]]["fig"],
-                "stats": era_3d_plots[periods[2][2]]["stats"],
-                "cont_width": True
-            },
-            "Late Era Analysis": {
-                "fig": era_3d_plots[periods[3][2]]["fig"],
-                "stats": era_3d_plots[periods[3][2]]["stats"],
-                "cont_width": True
+        performance_eval="Clustering performance is ... based on ...",
+        preprocessing_steps={
+            "Step 1": "Log transformation for drug quantities",
+            "Step 2" : "Standardization of features",
+            "Step 3": "Feature selection"
+        },
+        challenges={
+            "Challenge 1": "Determining the optimal number of clusters (k) was difficult due to ...",
+            "Challenge 2": "The data had some outliers that affected clustering results, which we addressed by ..."
+        }
+
+    )
+# --- Model 1 Image Paths (Mental Health) ---
+    dt_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_importance_tedsa.png")
+    dt_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_model.png")
+    roc_dt_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_dt.png")
+    lr_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "lr_model.png")
+    roc_lr_path = os.path.join(BASE_DIR, "resources", "model_viz", "roc_lr.png")
+    mh_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_before.png")
+    mh_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "mh_after_scale.png")
+
+    # --- Model 2 Image Paths (Age of First Use) ---
+    rf_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_feat_importance.png")
+    rf_eval_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_eval.png")
+    rf_matrix_path = os.path.join(BASE_DIR, "resources", "model_viz", "rf_matrix.png")
+    age_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_before.png")
+    age_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "age_after_scale.png")
+
+
+    # --- Isra's Model 1: Co-occurring Mental Health ---
+    model_section(
+        title="Predicting Co-occurring Mental Health Diagnoses",
+        model_type="Decision Tree & Logistic Regression",
+        description="Predicts the likelihood of a patient requiring dual-diagnosis treatment based on demographics and substance use risk factors.",
+        justification="Decision trees handle highly categorical data without assuming linearity and provide clear feature importance. Logistic Regression serves as an industry-standard, highly interpretable baseline for overall probability.",
+        assumptions={
+            "Decision Tree": "Assumes features have predictive power to create meaningful data splits; non-parametric.",
+            "Logistic Regression": "Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."
+        },
+        hyperparameters={
+            "class_weight": ["'balanced'", "Ensures equal weighting of classes so the models aren't biased toward common outcomes during the 70/30 train-test split."]
+        },
+        model_viz={
+            "Decision Tree Feature Importance": {
+                "path": dt_feat_path, 
+                "description": "Visualizing the strongest underlying risk factors driving the decision tree splits."
             }
         },
         preprocessing_steps={
-            "Step 1": "Log transformation for drug quantities and other skewed continuous variables.",
-            "Step 2" : "Z-Score Standardization of features",
-            "Step 3": "Feature selection"
+            "Handling Missing Data": "Used dropna() on targets and primary predictors to ensure training on complete observations.",
+            "One-Hot Encoding": "Expanded text categories into binary columns using pd.get_dummies.",
+            "Scaling": "Transformed features into z-scores using StandardScaler so larger numerical ranges didn't disproportionately influence the logistic regression."
         },
-        before_viz = schema_pre,
-        after_viz = schema_post,
-        before_distr = distr_pre,
-        after_distr = distr_post,
-        challenges=challenge_dict
-
+        before_viz=mh_before_path, 
+        after_viz=mh_after_path,   
+        performance_eval=(
+            "Both models achieved 60% accuracy, outperforming a random guess on the balanced test set. "
+            "Logistic Regression generated a smooth ROC curve with an AUC of 0.64 (Decision tree: 0.63), indicating reliable, relatively linear relationships. "
+            "Recall was nearly perfectly balanced (0.60 for class 0, 0.61 for class 1). "
+            "Key Decision Tree insights showed 'No Prior Treatment' held 46% of the decision weight, followed by Race: Other (16%), Male (15%), and Methamphetamine/Speed use (6%)."
+        ),
+        performance_viz={
+            "Decision Tree Evaluation": dt_model_path,
+            "Decision Tree ROC Curve": roc_dt_path,
+            "Logistic Regression Evaluation": lr_model_path,
+            "Logistic Regression ROC Curve": roc_lr_path 
+        },
+        challenges={
+            "Feature Scaling for Baseline Model": "Logistic regression can be disproportionately influenced by variables with larger ranges. This was solved by applying StandardScaler across the features."
+        }
     )
+
+    # --- Isra's Model 2: Age of First Use ---
+    model_section(
+        title="Predicting Age of First Use",
+        model_type="Random Forest Classifier",
+        description="Predicts the discrete age bracket of a patient's first substance use based on primary substance choice and demographic background.",
+        justification="Because age was recorded in discrete brackets rather than continuously, regression was not ideal. A Random Forest was chosen to mitigate overfitting and provide stability when dealing with complex data and many categorical features.",
+        assumptions={
+            "Non-parametric": "The model does not assume anything about the distribution of the data.",
+            "Predictive Power": "Assumes features have the predictive power necessary to make meaningful splits."
+        },
+        hyperparameters={
+            "n_estimators": ["100", "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
+            "max_depth": ["'Tuned'", "Ensured the model identified underlying patterns without getting lost in the noise."],
+            "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
+        },
+        model_viz={
+            "Random Forest Feature Importance": {
+                "path": rf_feat_path,
+                "description": "The strongest predictors for age of first use were specific substances."
+            }
+        },
+        preprocessing_steps={
+            "Handling Missing Data": "Used dropna() on the 'first_use' target and predictors.",
+            "One-Hot Encoding": "Applied pd.get_dummies to process text categories independently.",
+            "Scaling": "Applied StandardScaler to normalize features."
+        },
+        before_viz=age_before_path, 
+        after_viz=age_after_path,   
+        performance_eval=(
+            "Evaluated via multi-class classification report and a chronological confusion matrix. "
+            "The model achieved 20.2% accuracy across 7 categories (beating the random guess baseline of 14.2%). "
+            "Its primary strength was identifying extreme age brackets, achieving a recall of 0.60 for the '< 11' group and 0.54 for the '30+' group. "
+            "The top predictors were specific substances, namely Other Opiates (26.3%) and Synthetics/Heroin (20.9%)."
+        ),
+        performance_viz={
+            "Evaluation Metrics": rf_eval_path,
+            "Chronological Confusion Matrix": rf_matrix_path 
+        },
+        challenges={
+            "Continuous vs. Discrete Target": "Initially, Linear Regression was considered. However, the target variable was discrete brackets, not continuous numbers. We solved this by reframing the problem as a classification task using a Random Forest."
+        }
+    )
+
+# --- Model 1 Image Paths (Apriori / Association Rules) ---
+apriori_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_before_transformation.png")
+apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_after_transformation.png")
+apriori_rules_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_rules.png") # Update this one if you have a specific filename for the rules table
+
+# --- Model 2 Image Paths (Regression & Seasonality) ---
+resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
+resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
+reg_summary_path = os.path.join(BASE_DIR, "resources", "model_viz", "regression_summary.png") # Update this one if you have a specific filename for the summary
+
+
+# --- Andrea's Model 1: Deadliest Drug Combinations ---
+model_section(
+    title="Identifying Deadliest Drug Combinations",
+    model_type="Apriori Algorithm & Association Rules",
+    description="Identifies the most frequent combinations of substances present in overdose cases to uncover the deadliest drug pairings.",
+    justification="The Apriori algorithm is highly efficient at mining boolean 'market basket' data to find frequent itemsets. It generates clear, interpretable association rules based on support and confidence metrics.",
+    assumptions={
+        "Transaction Independence": "Assumes each overdose case is an independent event.",
+        "Support Threshold": "Assumes drug combinations occurring in less than 10% of cases are not the primary patterns of interest for this specific broad analysis."
+    },
+    hyperparameters={
+        "min_support": ["0.1", "Requires a drug or combination to appear in at least 10% of total cases to be considered 'frequent'."],
+        "min_threshold": ["0.7", "Sets a 70% confidence baseline, meaning if the antecedent drug is present, there is at least a 70% chance the consequent drug is also present."]
+    },
+    model_viz={
+        "Frequent Itemsets": {
+            "path": apriori_rules_path,
+            "description": "Visualizing the baseline frequencies of individual substances and their combinations."
+        }
+    },
+    preprocessing_steps={
+        "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
+        "Boolean Conversion": "Converted the selected drug columns to boolean types using .astype(bool) to create a valid market basket for the algorithm."
+    },
+    before_viz=apriori_before_path,
+    after_viz=apriori_after_path,  
+    performance_eval=(
+        "The algorithm successfully identified primary substance threats. 67% of overdose cases involved Fentanyl, "
+        "and approximately 40% involved Cocaine. "
+        "The most critical finding was that approximately 30% of all overdoses involved a combination of both Fentanyl and Cocaine."
+    ),
+    performance_viz={
+        "Top Association Rules": apriori_rules_path
+    },
+    challenges={
+        "Threshold Tuning": "Balancing the min_support and confidence thresholds to find meaningful, actionable rules without generating excessive noise or filtering out dangerous but slightly less common combinations."
+    }
+)
+
+# --- Andrea's Model 2: Drug Overdose Seasonality & Trends ---
+model_section(
+    title="Predicting Drug Overdose Deaths: Seasonality & Trends",
+    model_type="Ordinary Least Squares (OLS) Regression",
+    description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
+    justification="OLS Regression provides highly interpretable coefficients for time and month variables, allowing us to explicitly quantify the effect of time and test the significance of specific months.",
+    assumptions={
+        "Linearity": "Initially violated, but corrected by introducing a polynomial (squared) Year feature.",
+        "Homoscedasticity": "Variance originally increased with predicted values; corrected by applying a log transformation to the target variable."
+    },
+    hyperparameters={
+        "Formula": ["'Log_Deaths ~ C(Month) + Year + I(Year**2)'", "Defines the features, forcing months to be treated as categorical and introducing a quadratic time trend."]
+    },
+    model_viz={
+        "Regression Summary": {
+            "path": reg_summary_path,
+            "description": "Summary output detailing R-squared, coefficients, and p-values for seasonal indicators."
+        }
+    },
+    preprocessing_steps={
+        "Aggregation": "Grouped data by 'Year' and 'Month' using .groupby().size() to calculate total monthly death counts.",
+        "Log Transformation": "Applied np.log() to the 'Deaths' column to stabilize variance (heteroscedasticity).",
+        "Polynomial Features": "Squared the Year feature within the OLS formula to capture non-linear, decelerating trends."
+    },
+    before_viz=resid_before_path,
+    after_viz=resid_after_path,  
+    performance_eval=(
+        "The initial linear model achieved an R-squared of 0.64 but violated core regression assumptions. "
+        "After log-transforming the target and adding a squared time feature, the final model achieved an R-squared of 0.883, "
+        "explaining 88.3% of the variance. The model showed log deaths increase over time but decelerate (negative Year^2 coefficient). "
+        "Crucially, none of the month variables were statistically significant, indicating a lack of true seasonality, though June showed marginal significance (p=0.062)."
+    ),
+    performance_viz={
+        "Initial Residual Plot": resid_before_path,
+        "Transformed Residual Plot": resid_after_path
+    },
+    challenges={
+        "Violated Assumptions": "The initial residual plot showed a distinct parabolic pattern (non-linearity) and increasing variance (heteroscedasticity). "
+        "This was successfully solved by log-transforming the dependent variable and squaring the Year feature, which resulted in a much more random residual distribution."
+    }
+)
     # ------------------ END OF CLUSTERING MODEL ------------------ #
