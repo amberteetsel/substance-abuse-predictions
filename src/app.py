@@ -633,6 +633,14 @@ assumption_dict = {
         "viz": os.path.join(BASE_DIR,"resources","death_rate_plots","cluster_by_era_comp.png")
     }
 }
+
+model_code = """
+    cluster_features = ['log_oxy', 'log_fent', 'log_min_wage']
+    X = df[cluster_features]
+    kmeans_final = KMeans(n_clusters=4, random_state=42, max_iter=300, n_init=20)
+    df['cluster_num'] = kmeans_final.fit_predict(X)
+"""
+
 death_rate_df = pd.read_csv(os.path.join(BASE_DIR,"data","death_rate_kmeans.csv"))
 # define time periods
 periods = [
@@ -697,7 +705,7 @@ with tab7:
             }
 
         },
-        model_code="kmeans_final = KMeans(n_clusters=4, random_state=42, max_iter=300, n_init=20)",
+        model_code=model_code,
         model_viz={
             "U.S. States by Predominant Cluster": {
                 "path": map_mode,
