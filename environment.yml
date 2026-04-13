@@ -1,0 +1,21 @@
+name: substance_abuse
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pandas
+  - numpy
+  - scikit-learn
+  - statsmodels
+  - scipy
+  - matplotlib
+  - seaborn
+  - openpyxl
+  - pip
+  - pip:
+      - streamlit==1.55.0
+      - plotly==6.6.0
+      - mlxtend
+      - sodapy
+      - kaleido

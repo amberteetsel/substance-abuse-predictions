@@ -15,6 +15,43 @@ The topic of our research project is identifying/predicting which communities ar
 
 **Amber Teetsel:** Web Developer & Data Scientist
 
+## Development Environment
+1. Run `conda env create -f environment.yml` in terminal.
+2. `conda activate substance_abuse ` to activate the environment.
+3. `python -m streamlit run src/app.py` to run the streamlit app.
+
+## Data Cleaning
+To run TEDS_Acleaning.py
+1. Download tedsa_puf_2023.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing
+2. Create a folder called data and place tedsa_puf_2023.csv in the folder
+3. Run the file (be patient, it is a large data set)
+4. Cleaned csv for this set will be found in the google drive
+
+To run Connecticut_Data_Caceres_Andrea.py
+1. Download the cleaning file
+2. Run the file
+3. Cleaned csv for these datasets will be found in the data folder
+
+To run DEA_cleaning.py, NCHS_cleaning.py, UKCPR_cleaning.py, DEA_NCHS_UKCPR.py:
+1. Clone the repository
+2. `python src/data_cleaning/<file_name>`
+3. Cleaned .csv files to be found in data/
+4. Relevant plots to be found in resources/data_exploration_plots_NCHS and resources/death_rate_plots
+
+## Data Modeling 
+To run tedsa_clean_modeling.py
+1. Download tedsa_puf_2023_cleaned.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing
+2. Create a folder called data and place tedsa_puf_2023_cleaned.csv in the folder
+3. Run the file (be patient, it is a large data set)
+4. Cleaned csv for this set will be found in the google drive
+
+To run tedsa_first_use_modeling.py
+1. Download tedsa_puf_2023_first_use.csv from the google drive: https://drive.google.com/drive/folders/1tE90rBjR8Rhdg5j_9aLIlxras2XQ7W-J?usp=sharing
+2. Create a folder called data and place tedsa_puf_2023_first_use.csv in the folder
+3. Run the file (be patient, it is a large data set)
+4. Cleaned csv for this set will be found in the google drive
+   
+
 ## Milestones
 
 1. Project Framing & Website Launch (9 Feb 2026)
