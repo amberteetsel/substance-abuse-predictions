@@ -1,4 +1,27 @@
+# .ipynb notebook files that have been converted to .py
+src/data_cleaning/NCHS_cleaning.ipynb
+src/data_cleaning/DEA_cleaning.ipynb
+src/data_cleaning/UKCPR_cleaning.ipynb
+src/data_cleaning/DEA_NCHS_UKCPR.ipynb
+src/data_cleaning/DEA_NCHS_UKPCR.ipynb
+
+# Large data files
+data/DEA_2.csv.gz
+data/dea_summary_mini.csv
+data/dea_summary_pre_aggregated.csv
+data/dea_final.csv
+*.gz
+
+# excel temporary files
+~$*
+
+*/.ipynb_checkpoints
+.RData
+.Rhistory
+
 .DS_Store
+#.devcontainer
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -212,6 +235,10 @@ data/tedsa_puf_2023_cleaned.csv
 data/tedsa_puf_2023_first_use.csv
 data/tedsa_puf_2006_2023.csv
 data/tedsd_puf_2023.csv
+
+data/DEA_2.csv.gz
+data/dea_summary_mini.csv
 data/tedsa_puf_2023.csv
 data/NSDUH_2024_Tab.csv
 data/NSDUH_2024_Tab.txt
+

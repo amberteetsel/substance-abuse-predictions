@@ -10,10 +10,9 @@ import seaborn as sns
 
 
 
-df = pd.read_csv("../../data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+df = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
 df.head()
 
-#remove 'Heroin Morphine Codeine' column from list of drugs as it is redundant with the 'Heroin' column for Apriori analysis.
 drugs = [
 'Heroin','Cocaine','Fentanyl','Fentanyl Analogue','Oxycodone',
 'Oxymorphone','Ethanol','Hydrocodone','Benzodiazepine',
