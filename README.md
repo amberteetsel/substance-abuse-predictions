@@ -19,6 +19,7 @@ The topic of our research project is identifying/predicting which communities ar
 1. Run `conda env create -f environment.yml` in terminal.
 2. `conda activate substance_abuse ` to activate the environment.
 3. `python -m streamlit run src/app.py` to run the streamlit app.
+4. `python <file_path>` to run any other .py files
 
 ## Data Cleaning
 To run TEDS_Acleaning.py
@@ -35,8 +36,8 @@ To run Connecticut_Data_Caceres_Andrea.py
 To run DEA_cleaning.py, NCHS_cleaning.py, UKCPR_cleaning.py, DEA_NCHS_UKCPR.py:
 1. Clone the repository
 2. `python src/data_cleaning/<file_name>`
-3. Cleaned .csv files to be found in data/
-4. Relevant plots to be found in resources/data_exploration_plots_NCHS and resources/death_rate_plots
+3. Cleaned .csv files to be found in [Data Folder](data)
+4. Relevant plots to be found at [Data Exploration Plots](resources/data_exploration_plots_NCHS) and [Death Rate Plots](resources/death_rate_plots)
 
 ## Data Modeling 
 To run tedsa_clean_modeling.py
@@ -50,6 +51,12 @@ To run tedsa_first_use_modeling.py
 2. Create a folder called data and place tedsa_puf_2023_first_use.csv in the folder
 3. Run the file (be patient, it is a large data set)
 4. Cleaned csv for this set will be found in the google drive
+
+To run death_rate_model.py (K-Means Clustering):
+1. Clone the repository
+2. `python src/models/death_rate_model.py`
+3. Data with clustering results: [Death Rate Clusters](data/death_rate_kmeans.csv)
+4. Associated visuals: [Death Rate Cluster Plots](resources/death_rate_plots)
    
 
 ## Milestones
