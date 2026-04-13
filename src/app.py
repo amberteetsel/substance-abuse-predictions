@@ -769,18 +769,19 @@ with tab7:
 
 
     # --- Isra's Model 1: Co-occurring Mental Health ---
+# --- Isra's Model 1: Co-occurring Mental Health ---
     model_section(
         title="Predicting Co-occurring Mental Health Diagnoses",
         model_type="Decision Tree & Logistic Regression",
         description="Predicts the likelihood of a patient requiring dual-diagnosis treatment based on demographics and substance use risk factors.",
         justification="Decision trees handle highly categorical data without assuming linearity and provide clear feature importance. Logistic Regression serves as an industry-standard, highly interpretable baseline for overall probability.",
-        assumptions={
-            "Decision Tree": "Assumes features have predictive power to create meaningful data splits; non-parametric.",
-            "Logistic Regression": "Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."
-        },
-        hyperparameters={
-            "class_weight": ["'balanced'", "Ensures equal weighting of classes so the models aren't biased toward common outcomes during the 70/30 train-test split."]
-        },
+        assumptions=[
+            {"assumption": "Decision Tree: Assumes features have predictive power to create meaningful data splits; non-parametric."},
+            {"assumption": "Logistic Regression: Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."}
+        ],
+        hyperparameters=[
+            {"name": "class_weight", "value": "balanced", "description": "Ensures equal weighting of classes during the 70/30 train-test split."}
+        ],
         model_viz={
             "Decision Tree Feature Importance": {
                 "path": dt_feat_path, 
@@ -817,15 +818,15 @@ with tab7:
         model_type="Random Forest Classifier",
         description="Predicts the discrete age bracket of a patient's first substance use based on primary substance choice and demographic background.",
         justification="Because age was recorded in discrete brackets rather than continuously, regression was not ideal. A Random Forest was chosen to mitigate overfitting and provide stability when dealing with complex data and many categorical features.",
-        assumptions={
-            "Non-parametric": "The model does not assume anything about the distribution of the data.",
-            "Predictive Power": "Assumes features have the predictive power necessary to make meaningful splits."
-        },
-        hyperparameters={
-            "n_estimators": ["100", "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
-            "max_depth": ["'Tuned'", "Ensured the model identified underlying patterns without getting lost in the noise."],
-            "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
-        },
+       assumptions = [
+            {"assumption": "The model does not assume anything about the distribution of the data (Non-parametric)."},
+            {"assumption": "Assumes features have the predictive power necessary to make meaningful splits."}
+        ],
+        hyperparameters = [
+            {"name": "n_estimators", "value": "100", "description": "100 independent trees to ensure accurate split points."},
+            {"name": "max_depth", "value": "Tuned", "description": "Ensured model identified patterns without noise."},
+            {"name": "class_weight", "value": "balanced", "description": "Prevented model from defaulting to common age groups."}
+        ],
         model_viz={
             "Random Forest Feature Importance": {
                 "path": rf_feat_path,
@@ -871,14 +872,14 @@ model_section(
     model_type="Apriori Algorithm & Association Rules",
     description="Identifies the most frequent combinations of substances present in overdose cases to uncover the deadliest drug pairings.",
     justification="The Apriori algorithm is highly efficient at mining boolean 'market basket' data to find frequent itemsets. It generates clear, interpretable association rules based on support and confidence metrics.",
-    assumptions={
-        "Transaction Independence": "Assumes each overdose case is an independent event.",
-        "Support Threshold": "Assumes drug combinations occurring in less than 10% of cases are not the primary patterns of interest for this specific broad analysis."
-    },
-    hyperparameters={
-        "min_support": ["0.1", "Requires a drug or combination to appear in at least 10% of total cases to be considered 'frequent'."],
-        "min_threshold": ["0.7", "Sets a 70% confidence baseline, meaning if the antecedent drug is present, there is at least a 70% chance the consequent drug is also present."]
-    },
+    assumptions = [
+        {"assumption": "Assumes each overdose case is an independent event (Transaction Independence)."},
+        {"assumption": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."}
+    ],
+    hyperparameters = [
+        {"name": "min_support", "value": "0.1", "description": "Requires combination to appear in at least 10% of cases."},
+        {"name": "min_threshold", "value": "0.7", "description": "70% confidence baseline for drug pairings."}
+    ],
     model_viz={
         "Frequent Itemsets": {
             "path": apriori_rules_path,
@@ -910,13 +911,13 @@ model_section(
     model_type="Ordinary Least Squares (OLS) Regression",
     description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
     justification="OLS Regression provides highly interpretable coefficients for time and month variables, allowing us to explicitly quantify the effect of time and test the significance of specific months.",
-    assumptions={
-        "Linearity": "Initially violated, but corrected by introducing a polynomial (squared) Year feature.",
-        "Homoscedasticity": "Variance originally increased with predicted values; corrected by applying a log transformation to the target variable."
-    },
-    hyperparameters={
-        "Formula": ["'Log_Deaths ~ C(Month) + Year + I(Year**2)'", "Defines the features, forcing months to be treated as categorical and introducing a quadratic time trend."]
-    },
+    assumptions = [
+        {"assumption": "Linearity (Corrected by introducing a polynomial squared Year feature)."},
+        {"assumption": "Homoscedasticity (Corrected by applying a log transformation to the target)."}
+    ],
+    hyperparameters = [
+        {"name": "Formula", "value": "Log_Deaths ~ C(Month) + Year + I(Year**2)", "description": "Forces categorical months and quadratic time trend."}
+    ],
     model_viz={
         "Regression Summary": {
             "path": reg_summary_path,
