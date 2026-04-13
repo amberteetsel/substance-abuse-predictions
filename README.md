@@ -58,6 +58,9 @@ To run death_rate_model.py (K-Means Clustering):
 3. Data with clustering results: [Death Rate Clusters](data/death_rate_kmeans.csv)
 4. Associated visuals: [Death Rate Cluster Plots](resources/death_rate_plots)
    
+To run Connecticut_model_selection.py:
+1. Clone the repository
+2. `python src/models/Connecticut_model_selection.py:`
 
 ## Milestones
 
