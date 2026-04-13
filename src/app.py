@@ -749,8 +749,6 @@ with tab7:
 
     )
     # ------------------ END OF CLUSTERING MODEL ------------------ #
-
-    
 # --- Model 1 Image Paths (Mental Health) ---
     dt_feat_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_importance_tedsa.png")
     dt_model_path = os.path.join(BASE_DIR, "resources", "model_viz", "dt_model.png")
@@ -770,18 +768,30 @@ with tab7:
 
     # --- Isra's Model 1: Co-occurring Mental Health ---
 # --- Isra's Model 1: Co-occurring Mental Health ---
+# --- Isra's Model 1: Co-occurring Mental Health ---
     model_section(
         title="Predicting Co-occurring Mental Health Diagnoses",
         model_type="Decision Tree & Logistic Regression",
         description="Predicts the likelihood of a patient requiring dual-diagnosis treatment based on demographics and substance use risk factors.",
         justification="Decision trees handle highly categorical data without assuming linearity and provide clear feature importance. Logistic Regression serves as an industry-standard, highly interpretable baseline for overall probability.",
-        assumptions=[
-            {"assumption": "Decision Tree: Assumes features have predictive power to create meaningful data splits; non-parametric."},
-            {"assumption": "Logistic Regression: Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."}
-        ],
-        hyperparameters=[
-            {"name": "class_weight", "value": "balanced", "description": "Ensures equal weighting of classes during the 70/30 train-test split."}
-        ],
+        
+        # FIXED for Line 172: Nested Dictionary
+        assumptions={
+            "A1": {
+                "assumption": "Decision Tree non-parametric",
+                "assessment": "Assumes features have predictive power to create meaningful data splits."
+            },
+            "A2": {
+                "assumption": "Logistic Regression Linearity",
+                "assessment": "Assumes a linear relationship between the logits of the mental health diagnosis and the independent variables."
+            }
+        },
+        
+        # FIXED for Line 116: Dict with a 2-item List
+        hyperparameters={
+            "class_weight": ["'balanced'", "Ensures equal weighting of classes so the models aren't biased toward common outcomes during the 70/30 train-test split."]
+        },
+        
         model_viz={
             "Decision Tree Feature Importance": {
                 "path": dt_feat_path, 
@@ -802,31 +812,43 @@ with tab7:
             "Key Decision Tree insights showed 'No Prior Treatment' held 46% of the decision weight, followed by Race: Other (16%), Male (15%), and Methamphetamine/Speed use (6%)."
         ),
         performance_viz={
-            "Decision Tree Evaluation": dt_model_path,
-            "Decision Tree ROC Curve": roc_dt_path,
-            "Logistic Regression Evaluation": lr_model_path,
-            "Logistic Regression ROC Curve": roc_lr_path 
+            "Decision Tree Evaluation": { "path": dt_model_path },
+            "Decision Tree ROC Curve": { "path": roc_dt_path },
+            "Logistic Regression Evaluation": { "path": lr_model_path },
+            "Logistic Regression ROC Curve": { "path": roc_lr_path }
         },
         challenges={
-            "Feature Scaling for Baseline Model": "Logistic regression can be disproportionately influenced by variables with larger ranges. This was solved by applying StandardScaler across the features."
+            "C1": {
+                "name": "Feature Scaling",
+                "issue": "Logistic regression can be disproportionately influenced by variables with larger ranges.",
+                "sol": "Applied StandardScaler across the features."
+            }
         }
     )
-
     # --- Isra's Model 2: Age of First Use ---
+# --- Isra's Model 2: Age of First Use ---
     model_section(
         title="Predicting Age of First Use",
         model_type="Random Forest Classifier",
         description="Predicts the discrete age bracket of a patient's first substance use based on primary substance choice and demographic background.",
         justification="Because age was recorded in discrete brackets rather than continuously, regression was not ideal. A Random Forest was chosen to mitigate overfitting and provide stability when dealing with complex data and many categorical features.",
-       assumptions = [
-            {"assumption": "The model does not assume anything about the distribution of the data (Non-parametric)."},
-            {"assumption": "Assumes features have the predictive power necessary to make meaningful splits."}
-        ],
-        hyperparameters = [
-            {"name": "n_estimators", "value": "100", "description": "100 independent trees to ensure accurate split points."},
-            {"name": "max_depth", "value": "Tuned", "description": "Ensured model identified patterns without noise."},
-            {"name": "class_weight", "value": "balanced", "description": "Prevented model from defaulting to common age groups."}
-        ],
+        # FIXED: Nested Dictionary for Line 173
+        assumptions={
+            "A1": {
+                "assumption": "Non-parametric",
+                "assessment": "The model does not assume anything about the distribution of the data."
+            },
+            "A2": {
+                "assumption": "Predictive Power",
+                "assessment": "Assumes features have the predictive power necessary to make meaningful splits."
+            }
+        },
+        # FIXED: Dictionary with 2-item list for Line 116
+        hyperparameters={
+            "n_estimators": [100, "Utilized 100 independent trees to ensure accurate split points and mitigate overfitting."],
+            "max_depth": ["Tuned", "Ensured the model identified underlying patterns without getting lost in the noise."],
+            "class_weight": ["'balanced'", "Critically important to prevent the model from defaulting to the most common age group."]
+        },
         model_viz={
             "Random Forest Feature Importance": {
                 "path": rf_feat_path,
@@ -847,45 +869,54 @@ with tab7:
             "The top predictors were specific substances, namely Other Opiates (26.3%) and Synthetics/Heroin (20.9%)."
         ),
         performance_viz={
-            "Evaluation Metrics": rf_eval_path,
-            "Chronological Confusion Matrix": rf_matrix_path 
+            "Evaluation Metrics": { "path": rf_eval_path },
+            "Chronological Confusion Matrix": { "path": rf_matrix_path }
         },
         challenges={
-            "Continuous vs. Discrete Target": "Initially, Linear Regression was considered. However, the target variable was discrete brackets, not continuous numbers. We solved this by reframing the problem as a classification task using a Random Forest."
+            "C1": {
+                "name": "Continuous vs. Discrete Target",
+                "issue": "Initially, Linear Regression was considered but target was discrete brackets.",
+                "sol": "Reframed the problem as a classification task using a Random Forest."
+            }
         }
     )
-
 # --- Model 1 Image Paths (Apriori / Association Rules) ---
 apriori_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_before_transformation.png")
 apriori_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_apriori_after_transformation.png")
-apriori_rules_path = os.path.join(BASE_DIR, "resources", "model_viz", "apriori_rules.png") # Update this one if you have a specific filename for the rules table
 
 # --- Model 2 Image Paths (Regression & Seasonality) ---
 resid_before_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_before_transformation.png")
 resid_after_path = os.path.join(BASE_DIR, "resources", "model_viz", "connecticut_residplot_after_transformation.png")
-reg_summary_path = os.path.join(BASE_DIR, "resources", "model_viz", "regression_summary.png") # Update this one if you have a specific filename for the summary
 
 
+# --- Andrea's Model 1: Deadliest Drug Combinations ---
 # --- Andrea's Model 1: Deadliest Drug Combinations ---
 model_section(
     title="Identifying Deadliest Drug Combinations",
     model_type="Apriori Algorithm & Association Rules",
     description="Identifies the most frequent combinations of substances present in overdose cases to uncover the deadliest drug pairings.",
     justification="The Apriori algorithm is highly efficient at mining boolean 'market basket' data to find frequent itemsets. It generates clear, interpretable association rules based on support and confidence metrics.",
-    assumptions = [
-        {"assumption": "Assumes each overdose case is an independent event (Transaction Independence)."},
-        {"assumption": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."}
-    ],
-    hyperparameters = [
-        {"name": "min_support", "value": "0.1", "description": "Requires combination to appear in at least 10% of cases."},
-        {"name": "min_threshold", "value": "0.7", "description": "70% confidence baseline for drug pairings."}
-    ],
-    model_viz={
-        "Frequent Itemsets": {
-            "path": apriori_rules_path,
-            "description": "Visualizing the baseline frequencies of individual substances and their combinations."
+    # FIXED: Nested Dictionary for Line 173
+    assumptions={
+        "A1": {
+            "assumption": "Transaction Independence",
+            "assessment": "Assumes each overdose case is an independent event."
+        },
+        "A2": {
+            "assumption": "Minimum Frequency",
+            "assessment": "Assumes drug combinations occurring in < 10% of cases are not primary patterns."
         }
     },
+    # FIXED: Dictionary with 2-item list for Line 116
+    hyperparameters={
+        "min_support": ["0.1", "Requires combination to appear in at least 10% of cases."],
+        "min_threshold": ["0.7", "70% confidence baseline for drug pairings."]
+    },
+    model_viz={
+    "Frequent Itemsets": {
+        "description": "Visualizing the baseline frequencies..."
+    }
+},
     preprocessing_steps={
         "Feature Selection": "Isolated 18 specific substance columns from the dataset.",
         "Boolean Conversion": "Converted the selected drug columns to boolean types using .astype(bool) to create a valid market basket for the algorithm."
@@ -894,14 +925,14 @@ model_section(
     after_viz=apriori_after_path,  
     performance_eval=(
         "The algorithm successfully identified primary substance threats. 67% of overdose cases involved Fentanyl, "
-        "and approximately 40% involved Cocaine. "
-        "The most critical finding was that approximately 30% of all overdoses involved a combination of both Fentanyl and Cocaine."
+        "and approximately 40% involved Cocaine."
     ),
-    performance_viz={
-        "Top Association Rules": apriori_rules_path
-    },
     challenges={
-        "Threshold Tuning": "Balancing the min_support and confidence thresholds to find meaningful, actionable rules without generating excessive noise or filtering out dangerous but slightly less common combinations."
+        "C1": {
+            "name": "Threshold Tuning",
+            "issue": "Balancing support and confidence.",
+            "sol": "Iterative testing to find meaningful rules."
+        }
     }
 )
 
@@ -910,40 +941,45 @@ model_section(
     title="Predicting Drug Overdose Deaths: Seasonality & Trends",
     model_type="Ordinary Least Squares (OLS) Regression",
     description="Analyzes monthly overdose deaths to identify long-term yearly trends and test for statistically significant seasonal fluctuations.",
-    justification="OLS Regression provides highly interpretable coefficients for time and month variables, allowing us to explicitly quantify the effect of time and test the significance of specific months.",
-    assumptions = [
-        {"assumption": "Linearity (Corrected by introducing a polynomial squared Year feature)."},
-        {"assumption": "Homoscedasticity (Corrected by applying a log transformation to the target)."}
-    ],
-    hyperparameters = [
-        {"name": "Formula", "value": "Log_Deaths ~ C(Month) + Year + I(Year**2)", "description": "Forces categorical months and quadratic time trend."}
-    ],
+    justification="OLS Regression provides highly interpretable coefficients for time and month variables.",
+    # FIXED: Nested Dictionary for Line 173
+    assumptions={
+        "A1": {
+            "assumption": "Linearity",
+            "assessment": "Corrected by introducing a polynomial squared Year feature."
+        },
+        "A2": {
+            "assumption": "Homoscedasticity",
+            "assessment": "Corrected by applying a log transformation to the target."
+        }
+    },
+    # FIXED: Dictionary with 2-item list for Line 116
+    hyperparameters={
+        "Formula": ["Log_Deaths ~ C(Month) + Year + I(Year**2)", "Forces categorical months and quadratic time trend."]
+    },
     model_viz={
         "Regression Summary": {
-            "path": reg_summary_path,
-            "description": "Summary output detailing R-squared, coefficients, and p-values for seasonal indicators."
+            "description": "Summary output detailing R-squared, coefficients, and p-values."
         }
     },
     preprocessing_steps={
-        "Aggregation": "Grouped data by 'Year' and 'Month' using .groupby().size() to calculate total monthly death counts.",
-        "Log Transformation": "Applied np.log() to the 'Deaths' column to stabilize variance (heteroscedasticity).",
-        "Polynomial Features": "Squared the Year feature within the OLS formula to capture non-linear, decelerating trends."
+        "Aggregation": "Grouped data by 'Year' and 'Month'.",
+        "Log Transformation": "Applied np.log() to the 'Deaths' column.",
+        "Polynomial Features": "Squared the Year feature within the OLS formula."
     },
     before_viz=resid_before_path,
     after_viz=resid_after_path,  
-    performance_eval=(
-        "The initial linear model achieved an R-squared of 0.64 but violated core regression assumptions. "
-        "After log-transforming the target and adding a squared time feature, the final model achieved an R-squared of 0.883, "
-        "explaining 88.3% of the variance. The model showed log deaths increase over time but decelerate (negative Year^2 coefficient). "
-        "Crucially, none of the month variables were statistically significant, indicating a lack of true seasonality, though June showed marginal significance (p=0.062)."
-    ),
+    performance_eval="The final model achieved an R-squared of 0.883, explaining 88.3% of the variance.",
     performance_viz={
-        "Initial Residual Plot": resid_before_path,
-        "Transformed Residual Plot": resid_after_path
+        "Initial Residual Plot": {"path": resid_before_path},
+        "Transformed Residual Plot": {"path": resid_after_path}
     },
     challenges={
-        "Violated Assumptions": "The initial residual plot showed a distinct parabolic pattern (non-linearity) and increasing variance (heteroscedasticity). "
-        "This was successfully solved by log-transforming the dependent variable and squaring the Year feature, which resulted in a much more random residual distribution."
+        "C1": {
+            "name": "Violated Assumptions",
+            "issue": "The initial residual plot showed a distinct parabolic pattern.",
+            "sol": "Solved by squaring the Year feature."
+        }
     }
 )
     # ------------------ END OF CLUSTERING MODEL ------------------ #
