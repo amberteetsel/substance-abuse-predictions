@@ -40,7 +40,8 @@ This research topic is important because substance abuse is alarmingly prevalent
     """)
 
     # Drug Death Visual
-    st.image("resources/DrugDeathGraphic.png", width=1000)
+    # st.image("resources/DrugDeathGraphic.png", width=1000)
+    st.image(os.path.join(BASE_DIR, "resources", "DrugDeathGraphic.png"), width=1000)
     st.caption("U.S. Drug Deaths by Substance [CDC](https://www.cdc.gov/nchs/nvss/vsrr/prov-drug-involved-mortality.htm)")
     
     # Stakeholders
@@ -85,33 +86,6 @@ with tab2:
         9. Can we forecast the next X months of overdose death for specific drugs?
         """)
 
-# # TAB 3: DATA SOURCES
-# with tab3:
-#     st.header("Data Sources")
-#     st.subheader("Potential Datasets for Analysis")
-
-#     st.info("💡 [Accidental Drug Related Deaths 2012-2014](https://catalog.data.gov/dataset/accidental-drug-related-deaths-2012-2018)")
-#     st.write("A listing of each accidental death associated with drug overdose in Connecticut from 2012 to 2024.")
-
-#     st.info("💡 [SUDORS Dashboard: Fatal Drug Overdose Data](https://www.cdc.gov/overdose-prevention/data-research/facts-stats/sudors-dashboard-fatal-overdose-data-accessible.html)")
-#     st.write("CDC data on unintentional and undetermined intent drug overdose deaths from death certificates, medical examiner or coroner reports, and postmortem toxicology results.")
-
-#     st.info("💡 [Treatment Episode Data Set: Admissions/Discharges (TEDS-A/D)](https://www.samhsa.gov/data/data-we-collect/teds-treatment-episode-data-set/datafiles/teds-d-2020)")
-#     st.write("When undergoing substance abuse treatment, individual people can be admitted and discharged from treatment multiple times. The Treatment Episode Data Set (TEDS) system comprises demographic and drug history information about these individuals.")
-
-#     st.info("💡 [Provisional Drug Overdose Death Counts for Specific Drugs](https://catalog.data.gov/dataset/provisional-drug-overdose-death-counts-for-specific-drugs)")
-#     st.write("The provisional data are based on a current flow of mortality data and include reported 12 month-ending provisional counts of drug overdose deaths by jurisdiction of occurrence and specified drug.")
-
-#     st.info("💡 [CDC Social Vulnerability Index](https://www.atsdr.cdc.gov/place-health/php/svi/index.html)")
-#     st.write("Place-based index, database, and mapping application designed to identify and quantify communities experiencing social vulnerability.")
-
-#     st.info("💡 [NCHS - Drug Poisoning Mortality by State: United States](https://data.cdc.gov/National-Center-for-Health-Statistics/NCHS-Drug-Poisoning-Mortality-by-State-United-Stat/xbxb-epbu/data_preview)")
-#     st.write("This dataset describes drug poisoning deaths at the U.S. and state level by selected demographic characteristics, and includes age-adjusted death rates for drug poisoning.")
-
-#     st.info("💡 [National Survey on Drug Use and Health (NSDUH)](https://www.samhsa.gov/data/data-we-collect/nsduh-national-survey-drug-use-and-health/datafiles?utm_source=chatgpt.com)")
-#     st.write("NSDUH measures substance use, mental illness, and treatment in the civilian noninstitutionalized population 12 or older.")
-
-
 # TAB 4: TEAM BIOS
 with tab4:
     st.header("The Team")
@@ -120,7 +94,8 @@ with tab4:
     c1, c2, c3 = st.columns(3)
     
     with c1:
-        st.image("resources/bio/AndreaCaceres_Headshot.jpg", width=150)
+        # st.image("resources/bio/AndreaCaceres_Headshot.jpg", width=150)
+        st.image(os.path.join(BASE_DIR, "resources", "bio", "AndreaCaceres_Headshot.jpg"), width=150)
         st.write("**Andrea Caceres**")
         st.write("Role: Modeling & Visualization Lead")
         st.write("Andrea Caceres is a graduate student at the University of Colorado Boulder with a Bachelors in Statistics from the University of Georgia. She has experience in pension analysis from her prior position at WTW, but is focusing on expanding her data analytical knowledge. ")
@@ -128,7 +103,8 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/andrea-caceres-609609256/)")
 
     with c2:
-        st.image("resources/bio/IsraMarcu_Headshot.JPG", width=150)
+        # st.image("resources/bio/IsraMarcu_Headshot.JPG", width=150)
+        st.image(os.path.join(BASE_DIR, "resources", "bio", "IsraMarcu_Headshot.JPG"), width=150)
         st.write("**Isra Marcu**")
         st.write("Role: Data & Analyzation Lead ")
         st.write("Isra Marcu is a graduate student at the University of Colorado Boulder pursuing a Masters in Data Science. She has a Bachelors in Psychology from the University of North Carolina at Chapel Hill. Isra has experience in ethically conducting research on participants and analyzing corresponding data.")
@@ -136,7 +112,8 @@ with tab4:
         st.caption("[LinkedIn](https://www.linkedin.com/in/isra-marcu-a220a1274/)")
 
     with c3:
-        st.image("resources/bio/Teetsel_Headshot.jpeg", width=150)
+        # st.image("resources/bio/Teetsel_Headshot.jpeg", width=150)
+        st.image(os.path.join(BASE_DIR, "resources", "bio", "Teetsel_Headshot.jpeg"), width=150)
         st.write("**Amber Teetsel**")
         st.write("Role: Web Developer & Data Scientist")
         st.write("Bio: Amber Teetsel is currently pursuiing a Master's in Data Science at the University of Colorado Boulder. She has Bachelor's degrees from Vanderbilt University in Mathematics, Finance, and Women's Studies. Amber began her career in financial services consulting, but her past 4 years of experience have been as data analyst for a multinational corporation.")
@@ -172,172 +149,20 @@ with tab5:
 # TAB 6: DATA EXPLORATION
 
 ## Datasets to display
-nchs_raw = pd.read_csv('data/NCHS_Mortality_Raw.csv')
-nchs_clean = pd.read_csv('data/NCHS_Mortality_State.csv')
-connecticut_raw = pd.read_csv("data/Connecticut_Accidental_Drug_Related_Deaths_Raw.csv")
-connecticut_clean = pd.read_csv("data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
-dea_clean = pd.read_csv('data/dea_full_interpolated.csv')
-ukcpr_raw = pd.read_csv('data/ukcpr_raw.csv')
-ukcpr_clean = pd.read_csv('data/UKCPR_cleaned.csv')
+nchs_raw = pd.read_csv(os.path.join(BASE_DIR, 'data', 'NCHS_Mortality_Raw.csv'))
+nchs_clean = pd.read_csv(os.path.join(BASE_DIR,'data', 'NCHS_Mortality_State.csv'))
+# connecticut_raw = pd.read_csv(os.path.join(BASE_DIR,"data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
+# connecticut_clean = pd.read_csv(os.path.join(BASE_DIR,"data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
+dea_clean = pd.read_csv(os.path.join(BASE_DIR, 'data', 'dea_full_interpolated.csv'))
+ukcpr_raw = pd.read_csv(os.path.join(BASE_DIR,'data', 'ukcpr_raw.csv'))
+ukcpr_clean = pd.read_csv(os.path.join(BASE_DIR, 'data', 'UKCPR_cleaned.csv'))
+connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
+connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
+
+from data_view import data_source_section
 
 with tab6:
     st.header("Data Exploration & Preprocessing")
-
-    # FUNCTION FOR DATA EXPLORATION LAYOUT
-    def data_source_section(
-        title,
-        df_raw, df_clean,
-        source_info,
-        collection_method,
-        description,
-        cleaning_steps,
-        limitations,
-        visuals=None,
-        outliers=None,
-        sum_stats=None,
-        corr=None,
-        advanced=None,
-        notes=None
-    ):
-        """
-        Inputs will be displayed cleanly on the website
-        title - title of dataset
-        Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
-        source_info - where dataset came from
-        collection_method - how you accessed the data (e.g. download, API, etc.)
-        description - briefly describe dataset contents and why it's relevant to the project
-        cleaning_steps - dictionary, {<step name> : <step description>}
-        visuals - list of dictionaries, [{'title': <name of visual>,
-                                        'desc': <description, insights, comments, etc.>,
-                                        'path': <path to image>}]
-        limitations - text describing any potential biases or limitations of data
-        """
-        with st.expander(f"📊 Dataset: {title}", expanded=False):
-            st.subheader(title)
-            
-            # Overview
-            col_meta1, col_meta2 = st.columns(2)
-            with col_meta1:
-                st.write(f"**Source:** {source_info}")
-                st.write(f"**Collection Method:** {collection_method}")
-            with col_meta2:
-                st.markdown(f"**Description:** {description}")
-            
-            st.markdown("---")
-
-            # Raw vs. Clean comparison
-            st.subheader("Data Transformation Preview")
-            col_pre1, col_pre2 = st.columns(2)
-            
-            with col_pre1:
-                st.write("🔍 **Raw Snapshot**")
-
-                # If using DataFrames
-                if isinstance(df_raw, pd.DataFrame):
-                    
-                    st.dataframe(df_raw.head(5), use_container_width=True)
-                    st.caption("Initial data types and values.")
-                    with st.expander("View Raw Schema"):
-                        st.code(df_raw.dtypes)
-
-                # If using links/strings
-                elif isinstance(df_raw, str):
-
-                    st.image(df_raw, use_container_width=True)
-
-
-            with col_pre2:
-                st.write("✨ **Processed Snapshot**")
-
-                if isinstance(df_clean, pd.DataFrame):
-                    st.dataframe(df_clean.head(5), use_container_width=True)
-                    st.caption("Post-cleaning, encoding, and scaling.")
-                    with st.expander("View Processed Schema"):
-                        st.code(df_clean.dtypes)
-                elif isinstance(df_clean, str):
-                    st.image(df_clean, use_container_width=True)
-
-            st.markdown("---")
-
-            # Summary Statistics
-            if (isinstance(df_raw, pd.DataFrame)) and (isinstance(df_clean, pd.DataFrame)):
-                st.subheader("Statistical Profile")
-                st.write("Comparison of descriptive statistics before and after processing.")
-                
-                col_stat1, col_stat2 = st.columns(2)
-                with col_stat1:
-                    st.write("**Raw Summary**")
-                    raw_stats = df_raw.select_dtypes(include=['number']).describe().T
-                    if not raw_stats.empty:
-                        st.table(raw_stats)
-                    else:
-                        st.warning("No numeric data found in Raw dataset.")
-                
-                with col_stat2:
-                    st.write("**Processed Summary**")
-                    clean_stats = df_clean.select_dtypes(include=['number']).describe().T
-                    if not clean_stats.empty:
-                        st.table(clean_stats)
-                    else:
-                        st.warning("No numeric data found in Processed dataset.")
-    
-                st.markdown("---")
-            
-            # Cleaning & Processing Steps
-            st.subheader("Cleaning & Processing Logic")
-            for step_title, step_desc in cleaning_steps.items():
-                st.markdown(f"**{step_title}**")
-                st.info(step_desc)
-
-            st.markdown("---")
-
-            # Visuals
-            st.subheader("Visual Analysis")
-            if visuals:
-                for viz in visuals:
-                    with st.container(border=True):
-                        st.write(f"#### {viz['title']}")
-                        st.write(viz['desc'])
-                        st.image(viz['path'], use_container_width=True)
-            else:
-                st.info("Visualizations for this dataset are currently in progress.")
-
-            # Additional Analysis Sections
-            if outliers:
-                st.subheader("Outlier Detection")
-                with st.container(border=True):
-                    st.image(outliers['image'], use_container_width=True)
-                    st.write(f"**Interpretation:** {outliers['Interpretation']}")
-                    st.write(f"**Action:** {outliers['Action']}")
-                
-            if sum_stats:
-                st.subheader("Summary Statistics")
-                with st.container(border=True):
-                    st.write(f"**Summary:** {sum_stats['Interpretation']}")
-                    st.write(f"**Interpretation:** {sum_stats['Interpretation']}")
-                    
-            if corr:
-                st.subheader("Correlation Analysis")
-                with st.container(border=True):
-                    st.image(corr['image'], use_container_width=True)
-                    st.write(f"**Interpretation:** {corr['Interpretation']}")
-    
-            if advanced:
-                st.subheader("Advanced Analysis")
-                with st.container(border=True):
-                    st.image(advanced['image'], use_container_width=True)
-                    st.write(f"**Interpretation:** {advanced['Interpretation']}")
-                    
-            if notes:
-                st.subheader("Additional Notes")
-                with st.container(border=True):
-                    st.write(notes)
-
-            # Bias/Limitations
-            st.subheader("Limitations")
-            if limitations:
-                with st.container():
-                    st.write(limitations)
 
     # --- SECTION: NCHS Drug Poisoning ---
     data_source_section(
@@ -454,113 +279,6 @@ with tab6:
             "There are always potential biases due to systemic inequalities and prejudices."
         )
     )
-
-    
-    # --- SECTION: DATASET3 ---
-    ## Datasets to display
-connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
-connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
-
-from data_view import data_source_section
-
-with tab6:
-
-    # # FUNCTION FOR DATA EXPLORATION LAYOUT
-    # def data_source_section(title, df_raw, df_clean, source_info, collection_method, description, cleaning_steps, visuals, limitations):
-    #     """
-    #     Inputs will be displayed cleanly on the website
-    #     title - title of dataset
-    #     Ensure you load relevant versions of df_raw, df_clean earlier in this script (see TAB 6 comment above)
-    #     source_info - where dataset came from
-    #     collection_method - how you accessed the data (e.g. download, API, etc.)
-    #     description - briefly describe dataset contents and why it's relevant to the project
-    #     cleaning_steps - dictionary, {<step name> : <step description>}
-    #     visuals - list of dictionaries, [{'title': <name of visual>,
-    #                                     'desc': <description, insights, comments, etc.>,
-    #                                     'path': <path to image>}]
-    #     limitations - text describing any potential biases or limitations of data
-    #     """
-    #     with st.expander(f"📊 Dataset: {title}", expanded=False):
-    #         st.subheader(title)
-            
-    #         # Overview
-    #         col_meta1, col_meta2 = st.columns(2)
-    #         with col_meta1:
-    #             st.write(f"**Source:** {source_info}")
-    #             st.write(f"**Collection Method:** {collection_method}")
-    #         with col_meta2:
-    #             st.markdown(f"**Description:** {description}")
-            
-    #         st.markdown("---")
-
-    #         # Raw vs. Clean comparison
-    #         st.subheader("Data Transformation Preview")
-    #         col_pre1, col_pre2 = st.columns(2)
-            
-    #         with col_pre1:
-    #             st.write("🔍 **Raw Snapshot**")
-    #             st.dataframe(df_raw.head(5), use_container_width=True)
-    #             st.caption("Initial data types and values.")
-    #             with st.expander("View Raw Schema"):
-    #                 st.code(df_raw.dtypes)
-
-    #         with col_pre2:
-    #             st.write("✨ **Processed Snapshot**")
-    #             st.dataframe(df_clean.head(5), use_container_width=True)
-    #             st.caption("Post-cleaning, encoding, and scaling.")
-    #             with st.expander("View Processed Schema"):
-    #                 st.code(df_clean.dtypes)
-
-    #         st.markdown("---")
-
-    #         # Summary Statistics
-    #         st.subheader("Statistical Profile")
-    #         st.write("Comparison of descriptive statistics before and after processing.")
-            
-    #         col_stat1, col_stat2 = st.columns(2)
-    #         with col_stat1:
-    #             st.write("**Raw Summary**")
-    #             raw_stats = df_raw.select_dtypes(include=['number']).describe().T
-    #             if not raw_stats.empty:
-    #                 st.table(raw_stats)
-    #             else:
-    #                 st.warning("No numeric data found in Raw dataset.")
-            
-    #         with col_stat2:
-    #             st.write("**Processed Summary**")
-    #             clean_stats = df_clean.select_dtypes(include=['number']).describe().T
-    #             if not clean_stats.empty:
-    #                 st.table(clean_stats)
-    #             else:
-    #                 st.warning("No numeric data found in Processed dataset.")
-
-    #         st.markdown("---")
-            
-    #         # Cleaning & Processing Steps
-    #         st.subheader("Cleaning & Processing Logic")
-    #         for step_title, step_desc in cleaning_steps.items():
-    #             st.markdown(f"**{step_title}**")
-    #             st.info(step_desc)
-
-    #         st.markdown("---")
-
-    #         # Visuals
-    #         st.subheader("Visual Analysis")
-    #         if visuals:
-    #             for viz in visuals:
-    #                 with st.container(border=True):
-    #                     st.write(f"#### {viz['title']}")
-    #                     st.write(viz['desc'])
-    #                     st.image(viz['path'], use_container_width=True)
-    #         else:
-    #             st.info("Visualizations for this dataset are currently in progress.")
-
-
-    #         # Bias/Limitations
-    #         st.subheader("Limitations")
-    #         if limitations:
-    #             with st.container(border=True):
-    #                 st.write(limitations)
 
     # --- SECTION: Connecticut Accidental Drug Related Deaths ---
     data_source_section(
