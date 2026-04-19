@@ -12,6 +12,7 @@ dependencies:
   - matplotlib
   - seaborn
   - openpyxl
+  - requests
   - pip
   - pip:
       - streamlit==1.55.0

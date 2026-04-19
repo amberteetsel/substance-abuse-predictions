@@ -7,10 +7,12 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
+# Set base directory
+BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), "../.."))
 
-
-df = pd.read_csv("../../data/Clean_Connecticut_Accidental_Drug_Related_Deaths.csv")
+df = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
 df.head()
 
 #remove 'Heroin Morphine Codeine' column from list of drugs as it is redundant with the 'Heroin' column for Apriori analysis.
