@@ -902,6 +902,15 @@ from conclusion_view import (
     future_mort
 )
 
+from conclusion_view import (
+    title_isra,
+    sum_isra,
+    insights_isra,
+    impact_isra,
+    limitations_isra,
+    future_isra
+)
+
 
 with tab8:
     st.header("Conclusions & Results")
@@ -912,6 +921,15 @@ with tab8:
         insights_mort,
         impact_mort,
         limitations_mort,
-        improvements_mort,
-        future_mort
+        future_mort,
+        improvements_mort
+    )
+
+    conclusion_section(
+        title = title_isra,
+        summary = sum_isra,
+        insights = insights_isra,
+        impact = impact_isra,
+        limitations = limitations_isra,
+        future = future_isra
     )
