@@ -1,4 +1,4 @@
-Metric (Log-Scaled),High Risk,Moderate Risk,Difference (Magnitude),Difference (%)
+Metric,High Risk,Mod. Risk,DiffMag,DiffPct
 Mean Min. Wage,0.7864,0.6866,0.0998,0.1453
 Mean Death Rate,0.4759,0.261,0.2149,0.8232
 Mean Oxy Supply,0.6867,-0.1138,0.8005,-
