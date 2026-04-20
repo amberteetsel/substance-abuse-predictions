@@ -65,6 +65,23 @@ There are many imperfect solutions to combat drug overdose and help mitigate dru
 Before beginning with any data preparation, the team will read various scholarly sources on the topic of substance abuse and overdose to better understand the context of the data that will be analyzed. The team will start with data preparation to extract relevant information from a variety of datasets and integrate them. It is important that we use many datasets to ensure we have comprehensive data to analyze. Next, exploratory data analysis will help us understand the United States substance abuse and overdose landscape and identify interesting trends and patterns. For instance, we need to know the frequency of overdose for various drugs and communities with the highest rates of substance abuse. Then we will perform unsupervised learning (e.g. clustering) to determine risk profiles and dive deeper into identified patterns/trends. We plan to look into relationships between socioeconomic factors and substance abuse. Finally we plan to see if we can predict individual treatment outcomes or overdose, or general overdose death in the future. After the final models are completed, we will assess their performance to better understand how valid our findings are. Our findings will then be summarized to help inform public health strategies and also the general public.
     """)
 
+from insight_view import (
+    rq_section,
+    title_econ_protect,
+    econ_research_question_txt,
+    econ_approach_txt,
+    wage_death_all_txt,
+    cluster_comp_txt,
+    min_wage_cluster_txt,
+    lethality_gap_txt,
+    modeling_txt,
+    lethality_efficiency_txt,
+    econ_steps_dict,
+    econ_conclusion_txt,
+    econ_recommendation_txt
+)
+
+### ----------------------- CLUSTERING INPUTS ###
 
 # TAB 2: RESEARCH QUESTIONS
 with tab2:
@@ -78,13 +95,25 @@ with tab2:
         2. How do drug profiles (mix of drugs in system) differ between overdose victims?
         3. How has the age of first use changed over time for different drugs?
         4. Does time of year affect overdose deaths? If so, how does the seasonality of overdose deaths differ between drugs?
-        5. Which socioeconomic factors have the strongest correlation with overdose?
+        5. Economic Protection Hypothesis: Does strong economic support lead to lower death rates?
         6. How do mental health and substance abuse intersect? Does this differ by gender or race?
         7. How does forced vs. involuntary substance abuse treatment impact treatment completion rates?
         8. Can intake demographics allow us to predict whether substance abuse treatment will be completed or not?
         9. What demographic features are the best predictors of polysubstance mortality?
         9. Can we forecast the next X months of overdose death for specific drugs?
         """)
+
+    with st.container():
+        st.markdown("### Analyses")
+
+        rq_section(title_econ_protect,
+                econ_research_question_txt,
+                econ_approach_txt,
+                econ_steps_dict,
+                econ_conclusion_txt,
+                econ_recommendation_txt)
+
+
 
 # TAB 4: TEAM BIOS
 with tab4:
