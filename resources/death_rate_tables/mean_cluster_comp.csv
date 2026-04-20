@@ -1,0 +1,3 @@
+cluster_lab,log_min_wage,log_death_rate,log_oxy,log_fent,log_oxy_fent
+High Risk (Prescription-Driven),0.7864,0.4759,0.6867,3.3926,1.5569
+Moderate Risk,0.6866,0.261,-0.1138,-0.1204,-0.103

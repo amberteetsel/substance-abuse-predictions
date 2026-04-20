@@ -1,0 +1,5 @@
+cluster_lab,Mean Min. Wage,Mean Death Rate,Mean Oxy Supply,Mean Fentanyl Supply,Mean Oxy + Fent Supply
+High Risk (Prescription-Driven),0.7864,0.4759,0.6867,3.3926,1.5569
+Moderate Risk,0.6866,0.261,-0.1138,-0.1204,-0.103
+Difference (Magnitude),0.0998,0.2149,0.8005,3.513,1.6599
+Difference (%),0.1453,0.8232,-7.035,-6.6497,-7.7715
