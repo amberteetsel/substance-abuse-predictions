@@ -189,8 +189,11 @@ nchs_clean = pd.read_csv(os.path.join(BASE_DIR,'data', 'NCHS_Mortality_State.csv
 dea_clean = pd.read_csv(os.path.join(BASE_DIR, 'data', 'dea_full_interpolated.csv'))
 ukcpr_raw = pd.read_csv(os.path.join(BASE_DIR,'data', 'ukcpr_raw.csv'))
 ukcpr_clean = pd.read_csv(os.path.join(BASE_DIR, 'data', 'UKCPR_cleaned.csv'))
+mortality_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate.csv"))
+mortality_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "death_rate_unscaled.csv"))
 connecticut_raw = pd.read_csv(os.path.join(BASE_DIR, "data", "Connecticut_Accidental_Drug_Related_Deaths_Raw.csv"))
 connecticut_clean = pd.read_csv(os.path.join(BASE_DIR, "data", "Clean_Connecticut_Accidental_Drug_Related_Deaths.csv"))
+
 
 from data_view import data_source_section
 
@@ -403,7 +406,7 @@ with tab6:
     # --- SECTION: UKCPR National Welfare Data ---
     try:
         data_source_section(
-            title="UKCPR Dational Welfare Data, 1980-2024",
+            title="UKCPR National Welfare Data, 1980-2024",
             df_raw=ukcpr_raw,
             df_clean=ukcpr_clean,
             source_info="University of Kentucky Center for Poverty Research (UKCPR)",
@@ -419,6 +422,41 @@ with tab6:
             )
     except Exception as e:
         st.error(f"Error loading UKCPR dataset: {e}")
+
+    # --- SECTION: Combined Mortality Dataset --- #
+    with st.expander(f"📊 Dataset: Combined Mortality Data", expanded=False):
+        st.subheader("Combined Mortality Data")
+
+        # Overview
+        col_meta1, col_meta2 = st.columns(2)
+        with col_meta1:
+            st.write("**Source:** NCHS Drug Poisoning Mortality by State, ARCOS Retail Drug Summary Reports, UKCPR National Welfare Data")
+            st.write("**Collection Method:** See individual datasets above")
+        with col_meta2:
+            st.markdown("**Description:** The combined mortality dataset is a result of joining the individual datasets listed on the left by 'year' and 'state'")
+        
+        st.markdown("---")
+
+        st.subheader("Data Transformation Preview")
+        colpre, colpost = st.columns(2)
+
+        with colpre:
+            st.write("🔍 **Raw Snapshot**")
+
+            st.dataframe(mortality_raw.head(10), use_container_width=True)
+            st.caption("Initial data types and values.")
+            with st.expander("View Raw Schema"):
+                st.code(mortality_raw.dtypes)
+
+        with colpost:
+            st.write("✨ **Processed Snapshot**")
+
+            st.dataframe(mortality_clean.head(10), use_container_width=True)
+            st.caption("Post-cleaning, encoding, and scaling.")
+            with st.expander("View Processed Schema"):
+                st.code(mortality_clean.dtypes)
+
+
 
 # ---------------------- TAB 7: MODELS IMPLEMENTED ----------------------
 
