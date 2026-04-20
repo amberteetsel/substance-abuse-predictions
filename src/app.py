@@ -17,12 +17,13 @@ st.markdown("---")
 
 # Initialize tabs
 # tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
-tab1, tab2, tab4, tab5, tab6, tab7 = st.tabs(["Introduction",
+tab1, tab2, tab4, tab5, tab6, tab7, tab8 = st.tabs(["Introduction",
                                               "Research Questions",
                                               "Team Bios",
                                               "References",
                                               "Data Exploration",
-                                              "Models Implemented"])
+                                              "Models Implemented",
+                                              "Conclusion"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -887,4 +888,30 @@ with tab7:
                 "sol": "Solved by squaring the Year feature & log transforming the response variable."
             }
         }
+    )
+
+# ----------- CONCLUSION TAB (END) ----------- #
+from conclusion_view import (
+    conclusion_section,
+    title_mort,
+    sum_mort,
+    insights_mort,
+    impact_mort,
+    limitations_mort,
+    improvements_mort,
+    future_mort
+)
+
+
+with tab8:
+    st.header("Conclusions & Results")
+
+    conclusion_section(
+        title_mort,
+        sum_mort,
+        insights_mort,
+        impact_mort,
+        limitations_mort,
+        improvements_mort,
+        future_mort
     )
