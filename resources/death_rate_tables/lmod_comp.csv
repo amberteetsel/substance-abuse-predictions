@@ -1,0 +1,4 @@
+,R-Squared,WageCoef,FentCoef,OxyCoef,OxyFentCoef,OxyFent:WageCoef
+Naive,0.2307,0.4803*,-,-,-,-
+Controlled,0.3279,0.3192*,0.0519,0.3182*,-,-
+Interactive,0.3288,0.3081*,0.0492,0.3250*,0.0042,-0.0375
