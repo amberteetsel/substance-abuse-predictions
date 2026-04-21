@@ -17,12 +17,13 @@ st.markdown("---")
 
 # Initialize tabs
 # tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(["Introduction", "Research Questions", "Data Sources", "Team Bios", "References", "Data Exploration"])
-tab1, tab2, tab4, tab5, tab6, tab7 = st.tabs(["Introduction",
+tab1, tab2, tab4, tab5, tab6, tab7, tab8 = st.tabs(["Introduction",
                                               "Research Questions",
                                               "Team Bios",
                                               "References",
                                               "Data Exploration",
-                                              "Models Implemented"])
+                                              "Models Implemented",
+                                              "Conclusion"])
 
 # TAB 1: INTRODUCTION
 with tab1:
@@ -887,4 +888,83 @@ with tab7:
                 "sol": "Solved by squaring the Year feature & log transforming the response variable."
             }
         }
+    )
+
+# ----------- CONCLUSION TAB (END) ----------- #
+from conclusion_view import (
+    conclusion_section,
+    title_mort,
+    sum_mort,
+    insights_mort,
+    impact_mort,
+    limitations_mort,
+    improvements_mort,
+    future_mort
+)
+
+from conclusion_view import (
+    title_isra,
+    sum_isra,
+    insights_isra,
+    impact_isra,
+    limitations_isra,
+    future_isra
+)
+
+from conclusion_view import (
+    title_apr,
+    sum_apr,
+    insights_apr,
+    impact_apr,
+    limitations_apr,
+    future_apr,
+    title_reg,
+    sum_reg,
+    insights_reg,
+    impact_reg,
+    limitations_reg,
+    improvements_reg,
+    future_reg
+)
+
+
+with tab8:
+    st.header("Conclusions & Results")
+
+    conclusion_section(
+        title_mort,
+        sum_mort,
+        insights_mort,
+        impact_mort,
+        limitations_mort,
+        future_mort,
+        improvements_mort
+    )
+
+    conclusion_section(
+        title = title_isra,
+        summary = sum_isra,
+        insights = insights_isra,
+        impact = impact_isra,
+        limitations = limitations_isra,
+        future = future_isra
+    )
+
+    conclusion_section(
+        title = title_apr,
+        summary = sum_apr,
+        insights = insights_apr,
+        impact = impact_apr,
+        limitations = limitations_apr,
+        future = future_apr
+    )
+
+    conclusion_section(
+        title = title_reg,
+        summary = sum_reg,
+        insights = insights_reg,
+        impact = impact_reg,
+        limitations = limitations_reg,
+        future = future_reg,
+        improvements = improvements_reg
     )
