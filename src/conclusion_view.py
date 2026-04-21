@@ -65,7 +65,7 @@ sum_mort = """
 insights_mort = {
     'Mortality Trends': "Mortality rates from drug overdose have consistently climbed in the U.S. from 2000-2016, with higher rates among whites, men, and people aged 25-44.",
     'Clustering': "We were able to group states by their drug death risk profiles, providing a view into how the opioid crisis has evolved geographically over time.",
-    'Economic Impact on Drug Death': "We disproved the concept that strong economic protections like high minimum wage reduce drug mortality."
+    'Economic Impact on Drug Death': "Our findings suggest that robust economic protections, such as higher minimum wages, do not inherently correlate with reduced drug mortality within the study period."
 }
 
 impact_mort = """
