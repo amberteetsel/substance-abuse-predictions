@@ -128,3 +128,72 @@ future_isra = {
     'Holistic View': "Incorporation of more data concerning more factors, along with application of predictive model across this field of research, can lead to a more holistic view of SUD and how to treat it."
 }
 # ------------- END ISRA INPUTS ------------- #
+
+# ------------- START ANDREA INPUTS ------------- #
+###### SECTION 1 ######
+title_apr = "Connecticut Overdoses: Apriori Algorithm"
+sum_apr = """
+    We examined drug related deaths in Connecticut because it offered a detailed breakdown of overdose victims and their drug toxicologies.
+    Frequent Pattern Mining provided a view into which combinations of drugs most often appeared in overdose victims.
+"""
+insights_apr = {
+    'Primary Cause of Death': "68 percent of drug related deaths in Connecticut were caused by fentanyl.",
+    'Drug Interactions': "Nearly 1 in 3 deaths were caused by a drug combination of cocaine and fentanyl.",
+    'Fentanyl Contamination of Street Drugs': "If an individual has Xylazine in their system, then there is a 99% chance they also have fentanyl in their system." 
+}
+
+impact_apr = """
+    These metrics could help inform these communities and medical care providers of what combinations of drugs 
+    are the most common and lethal. 
+    Public health campaigns can tailor their messages of warning from simply “drugs are bad” 
+    to a more actionable and specific approach. 
+    Harm reduction could also be implemented through organizations having more test strips for Xylazine, 
+    since we know that there is a high chance there is also fentanyl present if the test is positive for Xylazine.
+"""
+
+limitations_apr = {
+    'Parameter Constraints': "For the Apriori algorithm, there is danger in setting the support threshold too high or too low. If we set the support threshold high to exclude noise, we could miss a new, very lethal combination of drugs that is on the rise but has not caused enough deaths to pass the threshold. But, if we set the support threshold low enough to catch these anomalies, then the algorithm could suffer from this and face a computational halt."
+}
+
+future_apr = {
+    'Scope Expansion': "Conduct similar analyses for more states, branching out and then analyzing whether results are similar or vary by state.",
+    'Historical Data': "Incorporate historical data to see trends in drug use over a longer time frame."
+}
+
+
+###### SECTION 2 ######
+title_reg = "Connecticut Overdoses: Regression Analysis"
+
+sum_reg = """
+    We performed regression analysis using Ordinary Least Squares (OLS) to further investigate possible seasonality
+    of drug deaths.
+"""
+
+insights_reg = {
+    'Seasonality': "Time of year (month) had insignificant predictive power for drug mortality with alpha of 0.05.",
+    'The June Exception': "June had a marginally significant p-value of 0.062",
+    'Peak Mortality': "Connecticut drug mortality hit its peak in 2017."
+}
+
+impact_reg = """
+    Knowing that there is no seasonal effect on overdose is still pivotal for public health awareness campaigns
+    and other resources. 
+    This model also generates a probabilistic forecast with confidence intervals. 
+    This allows decision-makers to weigh the financial cost of an intervention against 
+    the statistical probability of an adverse event.
+"""
+
+limitations_reg = {
+    "Violation of Independent Error Assumption": "Using the Durbin-Watson test we discovered that residuals were correlated, thus decreasing the viability of this model",
+    'Violation of Independent Group Assumption': "Regression assumes that each month is independent, but in reality, high overdose numbers in one month means that there is a high chance they will also be high in the next months due to various underlying systemic factors. This artificially inflates the significance of our predictors."
+}
+
+improvements_reg = {
+    'Model Structure': "Transition from OLS to time-series algorithms such as SARIMA and Prophet",
+    'Training Process': "Splitting the data into training and testing sets would allow us to evaluate its ability to predict future events"
+}
+
+future_reg = {
+    'Time-Series Analysis': "Use ARIMAX to determine how well a model predicts future events, instead of simply analyzing the fit of the model."
+}
+# ------------- END ANDREA INPUTS ------------- #

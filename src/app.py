@@ -911,6 +911,22 @@ from conclusion_view import (
     future_isra
 )
 
+from conclusion_view import (
+    title_apr,
+    sum_apr,
+    insights_apr,
+    impact_apr,
+    limitations_apr,
+    future_apr,
+    title_reg,
+    sum_reg,
+    insights_reg,
+    impact_reg,
+    limitations_reg,
+    improvements_reg,
+    future_reg
+)
+
 
 with tab8:
     st.header("Conclusions & Results")
@@ -932,4 +948,23 @@ with tab8:
         impact = impact_isra,
         limitations = limitations_isra,
         future = future_isra
+    )
+
+    conclusion_section(
+        title = title_apr,
+        summary = sum_apr,
+        insights = insights_apr,
+        impact = impact_apr,
+        limitations = limitations_apr,
+        future = future_apr
+    )
+
+    conclusion_section(
+        title = title_reg,
+        summary = sum_reg,
+        insights = insights_reg,
+        impact = impact_reg,
+        limitations = limitations_reg,
+        future = future_reg,
+        improvements = improvements_reg
     )
